@@ -1,0 +1,14 @@
+{
+  "chuzz": {
+    "metaData": {
+      "name": "chuzz",
+      "category": "chuzzers"
+    },
+    "sizingData": {
+      "colCount": 10,
+      "fontSize": 10,
+      "rowCount": 10
+    },
+    "cellsData": {}
+  }
+}
