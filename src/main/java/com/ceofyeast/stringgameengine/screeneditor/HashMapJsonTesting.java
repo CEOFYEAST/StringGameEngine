@@ -31,7 +31,7 @@ import java.io.IOException;
  *
  * @author bento
  */
-public class HashMapJsonTesting_TestFile {
+public class HashMapJsonTesting {
   
   //<editor-fold defaultstate="collapsed" desc="member vars">
   
