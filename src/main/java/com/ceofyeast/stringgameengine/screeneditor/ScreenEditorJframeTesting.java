@@ -26,7 +26,54 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
+    menuBar = new javax.swing.JMenuBar();
+    fileMenu = new javax.swing.JMenu();
+    loadGame = new javax.swing.JMenu();
+    jSeparator1 = new javax.swing.JPopupMenu.Separator();
+    loadScreen = new javax.swing.JMenu();
+    newScreen = new javax.swing.JMenuItem();
+    saveScreen = new javax.swing.JMenuItem();
+    deleteScreen = new javax.swing.JMenuItem();
+
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+    fileMenu.setText("File");
+
+    loadGame.setText("Load Game");
+    fileMenu.add(loadGame);
+    fileMenu.add(jSeparator1);
+
+    loadScreen.setText("Load Screen");
+    fileMenu.add(loadScreen);
+
+    newScreen.setText("New Screen");
+    newScreen.setToolTipText("NewScreen");
+    newScreen.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        newScreenActionPerformed(evt);
+      }
+    });
+    fileMenu.add(newScreen);
+
+    saveScreen.setText("Save Screen");
+    saveScreen.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        saveScreenActionPerformed(evt);
+      }
+    });
+    fileMenu.add(saveScreen);
+
+    deleteScreen.setText("Delete Screen");
+    deleteScreen.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        deleteScreenActionPerformed(evt);
+      }
+    });
+    fileMenu.add(deleteScreen);
+
+    menuBar.add(fileMenu);
+
+    setJMenuBar(menuBar);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -36,11 +83,23 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 300, Short.MAX_VALUE)
+      .addGap(0, 277, Short.MAX_VALUE)
     );
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
+
+  private void saveScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveScreenActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_saveScreenActionPerformed
+
+  private void newScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScreenActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_newScreenActionPerformed
+
+  private void deleteScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteScreenActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_deleteScreenActionPerformed
 
   /**
    * @param args the command line arguments
@@ -78,5 +137,13 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JMenuItem deleteScreen;
+  private javax.swing.JMenu fileMenu;
+  private javax.swing.JPopupMenu.Separator jSeparator1;
+  private javax.swing.JMenu loadGame;
+  private javax.swing.JMenu loadScreen;
+  private javax.swing.JMenuBar menuBar;
+  private javax.swing.JMenuItem newScreen;
+  private javax.swing.JMenuItem saveScreen;
   // End of variables declaration//GEN-END:variables
 }
