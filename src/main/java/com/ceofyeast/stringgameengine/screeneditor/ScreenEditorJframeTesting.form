@@ -14,7 +14,17 @@
                 <Property name="text" type="java.lang.String" value="Load Game"/>
               </Properties>
             </Menu>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
+            <MenuItem class="javax.swing.JMenuItem" name="newGame">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="New Game"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="deleteGame">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Delete Game"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="gameAndScreenSeperator">
             </MenuItem>
             <Menu class="javax.swing.JMenu" name="loadScreen">
               <Properties>

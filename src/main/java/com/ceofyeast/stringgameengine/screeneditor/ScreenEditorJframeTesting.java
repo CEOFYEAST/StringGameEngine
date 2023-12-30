@@ -29,7 +29,9 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     loadGame = new javax.swing.JMenu();
-    jSeparator1 = new javax.swing.JPopupMenu.Separator();
+    newGame = new javax.swing.JMenuItem();
+    deleteGame = new javax.swing.JMenuItem();
+    gameAndScreenSeperator = new javax.swing.JPopupMenu.Separator();
     loadScreen = new javax.swing.JMenu();
     newScreen = new javax.swing.JMenuItem();
     saveScreen = new javax.swing.JMenuItem();
@@ -41,7 +43,13 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
 
     loadGame.setText("Load Game");
     fileMenu.add(loadGame);
-    fileMenu.add(jSeparator1);
+
+    newGame.setText("New Game");
+    fileMenu.add(newGame);
+
+    deleteGame.setText("Delete Game");
+    fileMenu.add(deleteGame);
+    fileMenu.add(gameAndScreenSeperator);
 
     loadScreen.setText("Load Screen");
     fileMenu.add(loadScreen);
@@ -137,12 +145,14 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JMenuItem deleteGame;
   private javax.swing.JMenuItem deleteScreen;
   private javax.swing.JMenu fileMenu;
-  private javax.swing.JPopupMenu.Separator jSeparator1;
+  private javax.swing.JPopupMenu.Separator gameAndScreenSeperator;
   private javax.swing.JMenu loadGame;
   private javax.swing.JMenu loadScreen;
   private javax.swing.JMenuBar menuBar;
+  private javax.swing.JMenuItem newGame;
   private javax.swing.JMenuItem newScreen;
   private javax.swing.JMenuItem saveScreen;
   // End of variables declaration//GEN-END:variables
