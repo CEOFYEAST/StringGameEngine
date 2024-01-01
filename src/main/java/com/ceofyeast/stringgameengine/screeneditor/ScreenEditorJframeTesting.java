@@ -26,6 +26,12 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
+    newGamePanel = new javax.swing.JPanel();
+    newGameInfoTip = new javax.swing.JLabel();
+    jPanel1 = new javax.swing.JPanel();
+    buttonPanel = new javax.swing.JPanel();
+    jButton1 = new javax.swing.JButton();
+    jButton2 = new javax.swing.JButton();
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     loadGame = new javax.swing.JMenu();
@@ -39,12 +45,60 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+    newGamePanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+    newGamePanel.setToolTipText("");
+    newGamePanel.setPreferredSize(new java.awt.Dimension(320, 214));
+    newGamePanel.setLayout(new java.awt.GridLayout(0, 1));
+
+    newGameInfoTip.setBackground(new java.awt.Color(51, 153, 255));
+    newGameInfoTip.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+    newGameInfoTip.setForeground(new java.awt.Color(255, 255, 255));
+    newGameInfoTip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    newGameInfoTip.setText("Enter New Game Info.");
+    newGameInfoTip.setAlignmentX(0.5F);
+    newGameInfoTip.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+    newGameInfoTip.setOpaque(true);
+    newGamePanel.add(newGameInfoTip);
+
+    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 278, Short.MAX_VALUE)
+    );
+    jPanel1Layout.setVerticalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 37, Short.MAX_VALUE)
+    );
+
+    newGamePanel.add(jPanel1);
+
+    buttonPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(153, 153, 153)));
+    java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout();
+    flowLayout1.setAlignOnBaseline(true);
+    buttonPanel.setLayout(flowLayout1);
+
+    jButton1.setText("Submit");
+    jButton1.setPreferredSize(new java.awt.Dimension(75, 25));
+    buttonPanel.add(jButton1);
+
+    jButton2.setText("Cancel");
+    jButton2.setPreferredSize(new java.awt.Dimension(75, 25));
+    buttonPanel.add(jButton2);
+
+    newGamePanel.add(buttonPanel);
+
     fileMenu.setText("File");
 
     loadGame.setText("Load Game");
     fileMenu.add(loadGame);
 
     newGame.setText("New Game");
+    newGame.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        newGameActionPerformed(evt);
+      }
+    });
     fileMenu.add(newGame);
 
     deleteGame.setText("Delete Game");
@@ -87,11 +141,17 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 400, Short.MAX_VALUE)
+      .addGroup(layout.createSequentialGroup()
+        .addGap(40, 40, 40)
+        .addComponent(newGamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(52, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 277, Short.MAX_VALUE)
+      .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(newGamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(141, Short.MAX_VALUE))
     );
 
     pack();
@@ -108,6 +168,11 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   private void deleteScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteScreenActionPerformed
     // TODO add your handling code here:
   }//GEN-LAST:event_deleteScreenActionPerformed
+
+  private void newGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameActionPerformed
+    // TODO add your handling code here:
+    
+  }//GEN-LAST:event_newGameActionPerformed
 
   /**
    * @param args the command line arguments
@@ -145,14 +210,20 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JPanel buttonPanel;
   private javax.swing.JMenuItem deleteGame;
   private javax.swing.JMenuItem deleteScreen;
   private javax.swing.JMenu fileMenu;
   private javax.swing.JPopupMenu.Separator gameAndScreenSeperator;
+  private javax.swing.JButton jButton1;
+  private javax.swing.JButton jButton2;
+  private javax.swing.JPanel jPanel1;
   private javax.swing.JMenu loadGame;
   private javax.swing.JMenu loadScreen;
   private javax.swing.JMenuBar menuBar;
   private javax.swing.JMenuItem newGame;
+  private javax.swing.JLabel newGameInfoTip;
+  private javax.swing.JPanel newGamePanel;
   private javax.swing.JMenuItem newScreen;
   private javax.swing.JMenuItem saveScreen;
   // End of variables declaration//GEN-END:variables
