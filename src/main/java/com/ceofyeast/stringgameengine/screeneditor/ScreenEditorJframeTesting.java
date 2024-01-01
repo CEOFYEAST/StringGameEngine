@@ -28,7 +28,10 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
 
     newGamePanel = new javax.swing.JPanel();
     newGameInfoTip = new javax.swing.JLabel();
-    jPanel1 = new javax.swing.JPanel();
+    optionsPanel = new javax.swing.JPanel();
+    nameOption = new javax.swing.JPanel();
+    nameLabel = new javax.swing.JLabel();
+    nameField = new javax.swing.JTextField();
     buttonPanel = new javax.swing.JPanel();
     jButton1 = new javax.swing.JButton();
     jButton2 = new javax.swing.JButton();
@@ -60,18 +63,29 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
     newGameInfoTip.setOpaque(true);
     newGamePanel.add(newGameInfoTip);
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 278, Short.MAX_VALUE)
-    );
-    jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 37, Short.MAX_VALUE)
-    );
+    optionsPanel.setPreferredSize(new java.awt.Dimension(278, 0));
+    optionsPanel.setLayout(new java.awt.GridLayout(0, 1));
 
-    newGamePanel.add(jPanel1);
+    nameOption.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
+
+    nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+    nameLabel.setText("Name:");
+    nameLabel.setPreferredSize(new java.awt.Dimension(70, 16));
+    nameOption.add(nameLabel);
+
+    nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+    nameField.setText("jTextField1");
+    nameField.setPreferredSize(new java.awt.Dimension(140, 16));
+    nameField.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        nameFieldActionPerformed(evt);
+      }
+    });
+    nameOption.add(nameField);
+
+    optionsPanel.add(nameOption);
+
+    newGamePanel.add(optionsPanel);
 
     buttonPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(153, 153, 153)));
     java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout();
@@ -174,6 +188,10 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
     
   }//GEN-LAST:event_newGameActionPerformed
 
+  private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_nameFieldActionPerformed
+
   /**
    * @param args the command line arguments
    */
@@ -217,14 +235,17 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   private javax.swing.JPopupMenu.Separator gameAndScreenSeperator;
   private javax.swing.JButton jButton1;
   private javax.swing.JButton jButton2;
-  private javax.swing.JPanel jPanel1;
   private javax.swing.JMenu loadGame;
   private javax.swing.JMenu loadScreen;
   private javax.swing.JMenuBar menuBar;
+  private javax.swing.JTextField nameField;
+  private javax.swing.JLabel nameLabel;
+  private javax.swing.JPanel nameOption;
   private javax.swing.JMenuItem newGame;
   private javax.swing.JLabel newGameInfoTip;
   private javax.swing.JPanel newGamePanel;
   private javax.swing.JMenuItem newScreen;
+  private javax.swing.JPanel optionsPanel;
   private javax.swing.JMenuItem saveScreen;
   // End of variables declaration//GEN-END:variables
 }
