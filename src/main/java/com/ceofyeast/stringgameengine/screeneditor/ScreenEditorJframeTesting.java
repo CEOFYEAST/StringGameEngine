@@ -4,6 +4,9 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor;
 
+import java.io.File;  
+import java.io.IOException;
+
 /**
  *
  * @author bento
@@ -15,6 +18,8 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
    */
   public ScreenEditorJframeTesting() {
     initComponents();
+    
+    newGamePanel.setVisible( false );
   }
 
   /**
@@ -27,14 +32,14 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   private void initComponents() {
 
     newGamePanel = new javax.swing.JPanel();
-    newGameInfoTip = new javax.swing.JLabel();
-    optionsPanel = new javax.swing.JPanel();
-    nameOption = new javax.swing.JPanel();
-    nameLabel = new javax.swing.JLabel();
-    nameField = new javax.swing.JTextField();
-    buttonPanel = new javax.swing.JPanel();
-    jButton1 = new javax.swing.JButton();
-    jButton2 = new javax.swing.JButton();
+    infoTip_newGame = new javax.swing.JLabel();
+    optionsPanel_newGame = new javax.swing.JPanel();
+    nameOption_newGame = new javax.swing.JPanel();
+    nameFieldLabel_newGame = new javax.swing.JLabel();
+    nameField_newGame = new javax.swing.JTextField();
+    submissionButtonPanel_newGame = new javax.swing.JPanel();
+    submitButton__newGame = new javax.swing.JButton();
+    cancelButton_newGame = new javax.swing.JButton();
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     loadGame = new javax.swing.JMenu();
@@ -53,54 +58,58 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
     newGamePanel.setPreferredSize(new java.awt.Dimension(320, 214));
     newGamePanel.setLayout(new java.awt.GridLayout(0, 1));
 
-    newGameInfoTip.setBackground(new java.awt.Color(51, 153, 255));
-    newGameInfoTip.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-    newGameInfoTip.setForeground(new java.awt.Color(255, 255, 255));
-    newGameInfoTip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    newGameInfoTip.setText("Enter New Game Info.");
-    newGameInfoTip.setAlignmentX(0.5F);
-    newGameInfoTip.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-    newGameInfoTip.setOpaque(true);
-    newGamePanel.add(newGameInfoTip);
+    infoTip_newGame.setBackground(new java.awt.Color(51, 153, 255));
+    infoTip_newGame.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+    infoTip_newGame.setForeground(new java.awt.Color(255, 255, 255));
+    infoTip_newGame.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    infoTip_newGame.setText("Enter New Game Info.");
+    infoTip_newGame.setAlignmentX(0.5F);
+    infoTip_newGame.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
+    infoTip_newGame.setOpaque(true);
+    newGamePanel.add(infoTip_newGame);
 
-    optionsPanel.setPreferredSize(new java.awt.Dimension(278, 0));
-    optionsPanel.setLayout(new java.awt.GridLayout(0, 1));
+    optionsPanel_newGame.setPreferredSize(new java.awt.Dimension(278, 0));
+    optionsPanel_newGame.setLayout(new java.awt.GridBagLayout());
 
-    nameOption.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
+    nameOption_newGame.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 0));
 
-    nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-    nameLabel.setText("Name:");
-    nameLabel.setPreferredSize(new java.awt.Dimension(70, 16));
-    nameOption.add(nameLabel);
+    nameFieldLabel_newGame.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+    nameFieldLabel_newGame.setText("Name:");
+    nameFieldLabel_newGame.setPreferredSize(new java.awt.Dimension(70, 16));
+    nameOption_newGame.add(nameFieldLabel_newGame);
 
-    nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-    nameField.setText("jTextField1");
-    nameField.setPreferredSize(new java.awt.Dimension(140, 16));
-    nameField.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        nameFieldActionPerformed(evt);
-      }
-    });
-    nameOption.add(nameField);
+    nameField_newGame.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+    nameField_newGame.setPreferredSize(new java.awt.Dimension(140, 25));
+    nameOption_newGame.add(nameField_newGame);
 
-    optionsPanel.add(nameOption);
+    optionsPanel_newGame.add(nameOption_newGame, new java.awt.GridBagConstraints());
 
-    newGamePanel.add(optionsPanel);
+    newGamePanel.add(optionsPanel_newGame);
 
-    buttonPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(153, 153, 153)));
+    submissionButtonPanel_newGame.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(153, 153, 153)));
     java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout();
     flowLayout1.setAlignOnBaseline(true);
-    buttonPanel.setLayout(flowLayout1);
+    submissionButtonPanel_newGame.setLayout(flowLayout1);
 
-    jButton1.setText("Submit");
-    jButton1.setPreferredSize(new java.awt.Dimension(75, 25));
-    buttonPanel.add(jButton1);
+    submitButton__newGame.setText("Submit");
+    submitButton__newGame.setPreferredSize(new java.awt.Dimension(75, 25));
+    submitButton__newGame.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        submitButton__newGameActionPerformed(evt);
+      }
+    });
+    submissionButtonPanel_newGame.add(submitButton__newGame);
 
-    jButton2.setText("Cancel");
-    jButton2.setPreferredSize(new java.awt.Dimension(75, 25));
-    buttonPanel.add(jButton2);
+    cancelButton_newGame.setText("Cancel");
+    cancelButton_newGame.setPreferredSize(new java.awt.Dimension(75, 25));
+    cancelButton_newGame.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cancelButton_newGameActionPerformed(evt);
+      }
+    });
+    submissionButtonPanel_newGame.add(cancelButton_newGame);
 
-    newGamePanel.add(buttonPanel);
+    newGamePanel.add(submissionButtonPanel_newGame);
 
     fileMenu.setText("File");
 
@@ -124,27 +133,12 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
 
     newScreen.setText("New Screen");
     newScreen.setToolTipText("NewScreen");
-    newScreen.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        newScreenActionPerformed(evt);
-      }
-    });
     fileMenu.add(newScreen);
 
     saveScreen.setText("Save Screen");
-    saveScreen.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        saveScreenActionPerformed(evt);
-      }
-    });
     fileMenu.add(saveScreen);
 
     deleteScreen.setText("Delete Screen");
-    deleteScreen.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        deleteScreenActionPerformed(evt);
-      }
-    });
     fileMenu.add(deleteScreen);
 
     menuBar.add(fileMenu);
@@ -163,34 +157,56 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
+        .addGap(75, 75, 75)
         .addComponent(newGamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(141, Short.MAX_VALUE))
+        .addContainerGap(85, Short.MAX_VALUE))
     );
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-  private void saveScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveScreenActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_saveScreenActionPerformed
-
-  private void newScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScreenActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_newScreenActionPerformed
-
-  private void deleteScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteScreenActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_deleteScreenActionPerformed
-
   private void newGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameActionPerformed
     // TODO add your handling code here:
-    
+    newGamePanel.setVisible( true );
   }//GEN-LAST:event_newGameActionPerformed
 
-  private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+  private void submitButton__newGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButton__newGameActionPerformed
     // TODO add your handling code here:
-  }//GEN-LAST:event_nameFieldActionPerformed
+    String newGameName = nameField_newGame.getText();
+    
+    try 
+    {
+      String gamesFolderPath = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/gamestest/";
+      
+      File myObj = new File( gamesFolderPath + newGameName + ".json" );
+      
+      if (myObj.createNewFile()) 
+      {
+        System.out.println( "File created: " + myObj.getName() );
+        
+        nameField_newGame.setText( "" );
+        
+        newGamePanel.setVisible( false );
+      } 
+      else 
+      {
+        System.out.println( "File already exists." );
+        
+        nameField_newGame.setText( "File already exists." );
+      }
+    } catch (IOException e) {
+      System.out.println( "An error occurred." );
+      
+      e.printStackTrace();
+    }
+  }//GEN-LAST:event_submitButton__newGameActionPerformed
+
+  private void cancelButton_newGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton_newGameActionPerformed
+    // TODO add your handling code here:
+    nameField_newGame.setText( "" );
+    
+    newGamePanel.setVisible( false );
+  }//GEN-LAST:event_cancelButton_newGameActionPerformed
 
   /**
    * @param args the command line arguments
@@ -228,24 +244,24 @@ public class ScreenEditorJframeTesting extends javax.swing.JFrame {
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JPanel buttonPanel;
+  private javax.swing.JButton cancelButton_newGame;
   private javax.swing.JMenuItem deleteGame;
   private javax.swing.JMenuItem deleteScreen;
   private javax.swing.JMenu fileMenu;
   private javax.swing.JPopupMenu.Separator gameAndScreenSeperator;
-  private javax.swing.JButton jButton1;
-  private javax.swing.JButton jButton2;
+  private javax.swing.JLabel infoTip_newGame;
   private javax.swing.JMenu loadGame;
   private javax.swing.JMenu loadScreen;
   private javax.swing.JMenuBar menuBar;
-  private javax.swing.JTextField nameField;
-  private javax.swing.JLabel nameLabel;
-  private javax.swing.JPanel nameOption;
+  private javax.swing.JLabel nameFieldLabel_newGame;
+  private javax.swing.JTextField nameField_newGame;
+  private javax.swing.JPanel nameOption_newGame;
   private javax.swing.JMenuItem newGame;
-  private javax.swing.JLabel newGameInfoTip;
   private javax.swing.JPanel newGamePanel;
   private javax.swing.JMenuItem newScreen;
-  private javax.swing.JPanel optionsPanel;
+  private javax.swing.JPanel optionsPanel_newGame;
   private javax.swing.JMenuItem saveScreen;
+  private javax.swing.JPanel submissionButtonPanel_newGame;
+  private javax.swing.JButton submitButton__newGame;
   // End of variables declaration//GEN-END:variables
 }
