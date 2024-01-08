@@ -11,6 +11,19 @@ import java.awt.GraphicsDevice;
   // Used to close window
 import java.awt.event.WindowEvent;
 
+  // Used to size cells based on font size
+import java.awt.Font;
+import java.awt.font.TextAttribute;
+import java.awt.FontMetrics;
+import java.text.AttributedCharacterIterator;
+
+import javax.swing.BorderFactory;
+import javax.swing.border.*;
+import java.awt.Color;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author bento
@@ -29,18 +42,18 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   /**
    * Number of columns of cells in the screen
    */
-  static int columnCount = 6;
+  static int columnCount = 10;
   
   /**
    * Number of rows of cells in the screen
    */
-  static int rowCount = 3;
+  static int rowCount = 10;
   
   /**
    * Scale to apply to base ratio of 6x13 pixels, also to font-size
    * Ex: Scale of two would result in cells with width 12 pixels and height 26 pixels (2 * 6, 13 )
    */
-  static int faceSize = 12;
+  static int faceSize = 48;
   
   /**
    * Grid JPanel used to represent a Screen object graphically
@@ -67,28 +80,39 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   public void initializeCellsMatrix() {
     cellsMatrix = new javax.swing.JPanel();
     
-    cellsMatrix.setLayout( new java.awt.GridLayout( rowCount, columnCount ) );
+      // This block of code sets the font to be used for the cells in cellsMatrix
+    Font cellsFont = new Font( "Arial", Font.PLAIN, faceSize ); // Initializes the font
+    Map< AttributedCharacterIterator.Attribute, String > attributes = new HashMap<>(); // Contains extra attributes to add to font
+    attributes.put( TextAttribute.FAMILY, "monospaced" ); // Adds monospaced attribute to attributes
+    cellsFont = cellsFont.deriveFont( attributes ); // Updates cellsFont with attributes in attributes 
     
-    for( int i = 0; i < rowCount * columnCount; i++ )
+    for( int i = 1; i <= rowCount * columnCount; i++ )
     {
       javax.swing.JTextField cellToAdd = new javax.swing.JTextField();
       
+      cellToAdd.setBorder( new MatteBorder( 1, 1, 1, 1, Color.BLACK ) );
+      
       cellToAdd.setHorizontalAlignment( javax.swing.JTextField.CENTER );
       
-      cellToAdd.setText( "R" );
+      cellToAdd.setFont( cellsFont );
       
-      cellToAdd.setBorder( javax.swing.BorderFactory.createLineBorder( new java.awt.Color( 0, 0, 0 ) ) );
+      cellToAdd.setText( "E" );
       
       cellToAdd.setMargin( new java.awt.Insets(0, 0, 0, 0) );
       
       cellsMatrix.add( cellToAdd );
     }
     
+    cellsMatrix.setLayout( new java.awt.GridLayout( rowCount, columnCount, 0, 0 ) );
+    
     getContentPane().add( cellsMatrix );
     
-    int cellsMatrixWidth = BASE_WIDTH * faceSize * columnCount;
-    
-    int cellsMatrixHeight = BASE_HEIGHT * faceSize * rowCount;
+      // Code block sets dimensions of cellsMatrix by getting dimensions of a single cell and multiplying them out by row/column counts
+    FontMetrics cellsFontMetrics = getFontMetrics( cellsFont ); // Gets object containing information about cellsFont dimensions
+    int cellWidth = cellsFontMetrics.charWidth( 'A' );
+    int cellHeight = cellsFontMetrics.getHeight();
+    int cellsMatrixWidth = cellWidth * columnCount;
+    int cellsMatrixHeight = cellHeight * rowCount;
     
     cellsMatrix.setBounds( 0, 0, cellsMatrixWidth, cellsMatrixHeight );
   }
@@ -103,6 +127,10 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   private void initComponents() {
 
     jPanel1 = new javax.swing.JPanel();
+    jTextField1 = new javax.swing.JTextField();
+    jTextField2 = new javax.swing.JTextField();
+    jTextField3 = new javax.swing.JTextField();
+    jTextField4 = new javax.swing.JTextField();
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     closeMenuItem = new javax.swing.JMenuItem();
@@ -110,9 +138,22 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     getContentPane().setLayout(null);
 
-    jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    jPanel1.setLayout(new java.awt.GridLayout(2, 2));
+
+    jTextField1.setText("jTextField1");
+    jPanel1.add(jTextField1);
+
+    jTextField2.setText("jTextField2");
+    jPanel1.add(jTextField2);
+
+    jTextField3.setText("jTextField3");
+    jPanel1.add(jTextField3);
+
+    jTextField4.setText("jTextField4");
+    jPanel1.add(jTextField4);
+
     getContentPane().add(jPanel1);
-    jPanel1.setBounds(90, 10, 100, 100);
+    jPanel1.setBounds(80, 10, 100, 110);
 
     fileMenu.setText("File");
 
@@ -175,6 +216,10 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   private javax.swing.JMenuItem closeMenuItem;
   private javax.swing.JMenu fileMenu;
   private javax.swing.JPanel jPanel1;
+  private javax.swing.JTextField jTextField1;
+  private javax.swing.JTextField jTextField2;
+  private javax.swing.JTextField jTextField3;
+  private javax.swing.JTextField jTextField4;
   private javax.swing.JMenuBar menuBar;
   // End of variables declaration//GEN-END:variables
 }
