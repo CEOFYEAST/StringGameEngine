@@ -53,7 +53,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
    * Scale to apply to base ratio of 6x13 pixels, also to font-size
    * Ex: Scale of two would result in cells with width 12 pixels and height 26 pixels (2 * 6, 13 )
    */
-  static int faceSize = 48;
+  static int faceSize = 12;
   
   /**
    * Grid JPanel used to represent a Screen object graphically
@@ -86,8 +86,12 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     attributes.put( TextAttribute.FAMILY, "monospaced" ); // Adds monospaced attribute to attributes
     cellsFont = cellsFont.deriveFont( attributes ); // Updates cellsFont with attributes in attributes 
     
+    FontMetrics cellsFontMetrics = getFontMetrics( cellsFont );
+    
+    char cellText = '┃';
+    
     for( int i = 1; i <= rowCount * columnCount; i++ )
-    {
+    { 
       javax.swing.JTextField cellToAdd = new javax.swing.JTextField();
       
       cellToAdd.setBorder( new MatteBorder( 1, 1, 1, 1, Color.BLACK ) );
@@ -96,9 +100,15 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
       
       cellToAdd.setFont( cellsFont );
       
-      cellToAdd.setText( "E" );
+      cellToAdd.setText( String.valueOf( cellText ) );
       
       cellToAdd.setMargin( new java.awt.Insets(0, 0, 0, 0) );
+      
+        // Gets object containing information about cellsFont dimensions in the context of the cellToAdd text field
+      if( i == 1 ) // ensures cellsFontMetrics is only set once
+      {
+        cellsFontMetrics = cellToAdd.getFontMetrics( cellToAdd.getFont() );
+      }
       
       cellsMatrix.add( cellToAdd );
     }
@@ -108,9 +118,8 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     getContentPane().add( cellsMatrix );
     
       // Code block sets dimensions of cellsMatrix by getting dimensions of a single cell and multiplying them out by row/column counts
-    FontMetrics cellsFontMetrics = getFontMetrics( cellsFont ); // Gets object containing information about cellsFont dimensions
-    int cellWidth = cellsFontMetrics.charWidth( 'A' );
-    int cellHeight = cellsFontMetrics.getHeight();
+    int cellHeight = cellsFontMetrics.getMaxAscent() + cellsFontMetrics.getMaxDescent();
+    int cellWidth = cellHeight/2;
     int cellsMatrixWidth = cellWidth * columnCount;
     int cellsMatrixHeight = cellHeight * rowCount;
     
