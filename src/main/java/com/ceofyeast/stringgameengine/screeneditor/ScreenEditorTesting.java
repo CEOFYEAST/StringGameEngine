@@ -53,7 +53,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
    * Scale to apply to base ratio of 6x13 pixels, also to font-size
    * Ex: Scale of two would result in cells with width 12 pixels and height 26 pixels (2 * 6, 13 )
    */
-  static int faceSize = 12;
+  static int faceSize = 20;
   
   /**
    * Grid JPanel used to represent a Screen object graphically
@@ -74,27 +74,33 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     
     initializeCellsMatrix();
     
-    device.setFullScreenWindow( this );
+    //device.setFullScreenWindow( this );
   }
   
   public void initializeCellsMatrix() {
     cellsMatrix = new javax.swing.JPanel();
     
+    cellsMatrix.setBackground( Color.BLUE );
+    
       // This block of code sets the font to be used for the cells in cellsMatrix
-    Font cellsFont = new Font( "Arial", Font.PLAIN, faceSize ); // Initializes the font
+    Font cellsFont = new Font( "DejaVu", Font.PLAIN, faceSize ); // Initializes the font
     Map< AttributedCharacterIterator.Attribute, String > attributes = new HashMap<>(); // Contains extra attributes to add to font
     attributes.put( TextAttribute.FAMILY, "monospaced" ); // Adds monospaced attribute to attributes
     cellsFont = cellsFont.deriveFont( attributes ); // Updates cellsFont with attributes in attributes 
     
     FontMetrics cellsFontMetrics = getFontMetrics( cellsFont );
     
-    char cellText = '┃';
+    char cellText = 'R';
     
     for( int i = 1; i <= rowCount * columnCount; i++ )
     { 
       javax.swing.JTextField cellToAdd = new javax.swing.JTextField();
       
-      cellToAdd.setBorder( new MatteBorder( 1, 1, 1, 1, Color.BLACK ) );
+      cellToAdd.setOpaque( true );
+      
+      cellToAdd.setBackground( Color.RED );
+      
+      cellToAdd.setBorder( new LineBorder( Color.PINK, 0 ) );
       
       cellToAdd.setHorizontalAlignment( javax.swing.JTextField.CENTER );
       
@@ -119,7 +125,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     
       // Code block sets dimensions of cellsMatrix by getting dimensions of a single cell and multiplying them out by row/column counts
     int cellHeight = cellsFontMetrics.getMaxAscent() + cellsFontMetrics.getMaxDescent();
-    int cellWidth = cellHeight/2;
+    int cellWidth = cellHeight;
     int cellsMatrixWidth = cellWidth * columnCount;
     int cellsMatrixHeight = cellHeight * rowCount;
     
@@ -135,34 +141,18 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    jPanel1 = new javax.swing.JPanel();
-    jTextField1 = new javax.swing.JTextField();
-    jTextField2 = new javax.swing.JTextField();
-    jTextField3 = new javax.swing.JTextField();
-    jTextField4 = new javax.swing.JTextField();
+    jScrollPane1 = new javax.swing.JScrollPane();
+    jTextArea1 = new javax.swing.JTextArea();
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     closeMenuItem = new javax.swing.JMenuItem();
 
+    jTextArea1.setColumns(20);
+    jTextArea1.setRows(5);
+    jScrollPane1.setViewportView(jTextArea1);
+
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     getContentPane().setLayout(null);
-
-    jPanel1.setLayout(new java.awt.GridLayout(2, 2));
-
-    jTextField1.setText("jTextField1");
-    jPanel1.add(jTextField1);
-
-    jTextField2.setText("jTextField2");
-    jPanel1.add(jTextField2);
-
-    jTextField3.setText("jTextField3");
-    jPanel1.add(jTextField3);
-
-    jTextField4.setText("jTextField4");
-    jPanel1.add(jTextField4);
-
-    getContentPane().add(jPanel1);
-    jPanel1.setBounds(80, 10, 100, 110);
 
     fileMenu.setText("File");
 
@@ -224,11 +214,8 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JMenuItem closeMenuItem;
   private javax.swing.JMenu fileMenu;
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JTextField jTextField1;
-  private javax.swing.JTextField jTextField2;
-  private javax.swing.JTextField jTextField3;
-  private javax.swing.JTextField jTextField4;
+  private javax.swing.JScrollPane jScrollPane1;
+  private javax.swing.JTextArea jTextArea1;
   private javax.swing.JMenuBar menuBar;
   // End of variables declaration//GEN-END:variables
 }
