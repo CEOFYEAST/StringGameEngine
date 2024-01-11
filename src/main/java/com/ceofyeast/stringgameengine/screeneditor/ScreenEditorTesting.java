@@ -5,6 +5,7 @@
 package com.ceofyeast.stringgameengine.screeneditor;
 
   // Used to enable full-screen mode
+import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 
@@ -29,18 +30,23 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   /**
    * Number of columns of cells in the screen
    */
-  static int columnCount = 10;
+  static int columnCount = 60;
   
   /**
    * Number of rows of cells in the screen
    */
-  static int rowCount = 10;
+  static int rowCount = 18;
   
   /**
    * Scale to apply to base ratio of 6x13 pixels, also to font-size
    * Ex: Scale of two would result in cells with width 12 pixels and height 26 pixels (2 * 6, 13 )
    */
-  static int faceSize = 20;
+  static int faceSize = 25;
+  
+  /**
+   * Used to control the size of the border between cells in the cell matrix
+   */
+  static int cellMatrixBorderSize = 3;
   
   /**
    * Grid JPanel used to represent a Screen object graphically
@@ -62,55 +68,74 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     initializeCellsMatrix();
     
     device.setFullScreenWindow( this );
+    
+      // Code block sizes cellMatrixContainer, making cellsMatrix visible 
+    javax.swing.JTextField cellInCellMatrix = ( javax.swing.JTextField ) cellsMatrix.getComponent( 0 );
+    java.awt.Dimension cellDimensions = cellInCellMatrix.getSize();
+    int cellWidth = (int) cellDimensions.getWidth();
+    int cellHeight = (int) cellDimensions.getHeight();
+    cellsMatrix.getParent().setBounds( 
+      10, 
+      10,
+      ( cellWidth * columnCount ) + ( cellMatrixBorderSize * ( columnCount - 1 ) ) + ( cellMatrixBorderSize * 2 ), 
+      ( cellHeight * rowCount ) + ( cellMatrixBorderSize * ( rowCount - 1 ) ) + ( cellMatrixBorderSize * 2 )
+      // for last two args ( width/height )
+        // 1st () accounts for added width/height from cells
+        // 2nd () accounts for added width/height from borders between cells
+        // 3rd () accounts for added width/height from outside borders
+    );
+    cellsMatrix.setBackground( Color.GRAY );
+    cellsMatrix.getParent().setBackground( Color.GRAY );
   }
   
   public void initializeCellsMatrix() {
+      // Code block initializes an outer panel to contain the cellsMatrix panel. The Flow layout manager allows for the inner panel to be sized by the size of its contents, despite being a grid.
     javax.swing.JPanel cellsMatrixContainer = new javax.swing.JPanel();
-    
-    cellsMatrixContainer.setLayout( new java.awt.FlowLayout() );
+    cellsMatrixContainer.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER, 0, cellMatrixBorderSize ) );
     
     cellsMatrix = new javax.swing.JPanel();
     
-    cellsMatrix.setLayout( new java.awt.GridLayout( rowCount, columnCount, 0, 0 ) );
-    
-      // This block of code sets the font to be used for the cells in cellsMatrix
-    Font cellsFont = new Font( "DejaVu", Font.BOLD, faceSize ); // Initializes the font
-    Map< AttributedCharacterIterator.Attribute, String > attributes = new HashMap<>(); // Contains extra attributes to add to font
-    attributes.put( TextAttribute.FAMILY, "monospaced" ); // Adds monospaced attribute to attributes
-    cellsFont = cellsFont.deriveFont( attributes ); // Updates cellsFont with attributes in attributes 
-    
-    char cellText = 'R';
+    cellsMatrix.setLayout( new java.awt.GridLayout( rowCount, columnCount, cellMatrixBorderSize, cellMatrixBorderSize ) );
     
     for( int i = 1; i <= rowCount * columnCount; i++ )
     { 
-      javax.swing.JTextField cellToAdd = new javax.swing.JTextField();
-      
-      cellToAdd.setOpaque( true );
-      
-      cellToAdd.setBorder( new EmptyBorder( 0,0,0,0 ) );
-      
-      cellToAdd.setHorizontalAlignment( javax.swing.JTextField.CENTER );
-      
-      cellToAdd.setFont( cellsFont );
-      
-      
-      try {
-        cellText = ( char ) ( i + 64 );
-      } catch( Exception e ){}
-      
-      
-      cellToAdd.setText( String.valueOf( cellText ) );
-      
-      cellToAdd.setMargin( new java.awt.Insets(0, 0, 0, 0) );
-      
-      cellsMatrix.add( cellToAdd );
+      cellsMatrix.add( initializeCell( ' ' ) );
     }
     
     cellsMatrixContainer.add( cellsMatrix );
-    
-    cellsMatrixContainer.setBounds( 0,0,1000,1000 );
-    
+ 
     getContentPane().add( cellsMatrixContainer );
+  }
+  
+  public javax.swing.JTextField initializeCell( char cellText ){
+    javax.swing.JTextField toReturn = new javax.swing.JTextField();
+      
+    toReturn.setOpaque( true );
+
+    toReturn.setBorder( new EmptyBorder( 0,0,0,0 ) );
+
+    toReturn.setHorizontalAlignment( javax.swing.JTextField.CENTER );
+
+    Font cellsFont = initializeFont();
+    
+    toReturn.setFont( cellsFont );
+
+    toReturn.setText( String.valueOf( cellText ) );
+
+    toReturn.setMargin( new java.awt.Insets( 0,0,0,0 ) );
+
+    return toReturn;
+  }
+  
+  public Font initializeFont(){
+    Font toReturn = new Font( "DejaVu", Font.BOLD, faceSize ); // Initializes the font
+    
+    Map< AttributedCharacterIterator.Attribute, String > toReturnAttributes = new HashMap<>(); // Contains extra attributes to add to font
+    
+    toReturnAttributes.put( TextAttribute.FAMILY, "monospaced" ); // Adds monospaced attribute to attributes
+    
+    toReturn = toReturn.deriveFont( toReturnAttributes ); // Updates cellsFont with attributes in attributes 
+    return toReturn;
   }
 
   /**
@@ -124,11 +149,6 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
 
     jScrollPane1 = new javax.swing.JScrollPane();
     jTextArea1 = new javax.swing.JTextArea();
-    jPanel1 = new javax.swing.JPanel();
-    jTextField1 = new javax.swing.JTextField();
-    jTextField2 = new javax.swing.JTextField();
-    jTextField3 = new javax.swing.JTextField();
-    jTextField4 = new javax.swing.JTextField();
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     closeMenuItem = new javax.swing.JMenuItem();
@@ -139,26 +159,6 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     getContentPane().setLayout(null);
-
-    jTextField1.setText("jTextField1");
-    jPanel1.add(jTextField1);
-
-    jTextField2.setText("jTextField2");
-    jPanel1.add(jTextField2);
-
-    jTextField3.setText("jTextField3");
-    jPanel1.add(jTextField3);
-
-    jTextField4.setText("jTextField4");
-    jTextField4.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jTextField4ActionPerformed(evt);
-      }
-    });
-    jPanel1.add(jTextField4);
-
-    getContentPane().add(jPanel1);
-    jPanel1.setBounds(230, 40, 160, 220);
 
     fileMenu.setText("File");
 
@@ -181,10 +181,6 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     // TODO add your handling code here:
     this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
   }//GEN-LAST:event_closeActionPerformed
-
-  private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_jTextField4ActionPerformed
 
   /**
    * @param args the command line arguments
@@ -224,13 +220,8 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JMenuItem closeMenuItem;
   private javax.swing.JMenu fileMenu;
-  private javax.swing.JPanel jPanel1;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JTextArea jTextArea1;
-  private javax.swing.JTextField jTextField1;
-  private javax.swing.JTextField jTextField2;
-  private javax.swing.JTextField jTextField3;
-  private javax.swing.JTextField jTextField4;
   private javax.swing.JMenuBar menuBar;
   // End of variables declaration//GEN-END:variables
 }
