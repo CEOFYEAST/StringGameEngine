@@ -85,7 +85,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     /**
      * Contains the font to be applied to the cells in the cellsMatrix.
      */
-    private Font font;
+    private Font font = new Font( "DejaVu Sans Mono", Font.PLAIN, 20 );
     
     /**
      * Parent of the cellsMatrix, and allows the cellsMatrix to be sized by it's contents. 
@@ -213,107 +213,107 @@ s
    */
   class Cell extends javax.swing.JTextField {
     /**
-     * Constructs a cell using a given fontSize and cellFont. 
-     * 
-     * @param fontSize specifies the font size of the cell being constructed
-     * @param cellFont specifies the font of the cell being constructed
+     * Initializes the char that the cell contains. Default value is a space.
      */
-    public Cell( int fontSize, Font cellFont )
+    char cellText = ' ';
+    
+    /**
+     * Initializes the font size of the cell. Default value is 20.
+     */
+    int fontSize = 20;
+    
+    /**
+     * Specifies the font of the cell. Default font is a plain DejaVu Sans Mono with a font size of 20.
+     */
+    Font cellFont = new Font( "DejaVu Sans Mono", Font.PLAIN, 20 );
+    
+    /**
+     * Constructs a cell using a given cellText char, fontSize and cellFont. 
+     * 
+     * @param cellText fills the cellText member variable
+     * @param fontSize fills the fontSize member variable
+     * @param cellFont fills the cellFont member variable
+     */
+    public Cell( char cellText, int fontSize, Font cellFont )
     {
-      
+      this.setOpaque( true );
+
+      this.setBorder( new EmptyBorder( 0,0,0,0 ) );
+
+      this.setHorizontalAlignment( javax.swing.JTextField.CENTER );
+
+      this.setFont( cellFont );
+
+      this.setText( String.valueOf( cellText ) );
+
+      this.setMargin( new java.awt.Insets( 0,0,0,0 ) );
     }
   }
+  
+  /*
+  Font Stuff:
+  
+    // prints all available fonts
+  String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+  for (int i = 0; i < fonts.length; i++) {
+    System.out.println(fonts[i]);
+  }
+  
+    // makes a font available to the system
+  try {
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(
+      "src/main/java/com/ceofyeast/stringgameengine/screeneditor/DejaVuSansMono.ttf"
+    )));
+
+    System.out.println( "Success" );
+
+  } catch (Exception e) {
+      e.printStackTrace();
+  } 
+  
+    // potentially useful method of constructing a font 
+  Map< AttributedCharacterIterator.Attribute, String > toReturnAttributes = new HashMap<>(); // Contains extra attributes to add to font
+  toReturnAttributes.put( TextAttribute.FAMILY, "Monospaced" ); // Adds monospaced attribute to attributes
+  toReturnAttributes.put( TextAttribute.FAMILY, "SansSerif" );
+  toReturnAttributes.put( TextAttribute.FAMILY, "sans_serif" ); // Adds sans serif attribute to attributes
+  toReturn = toReturn.deriveFont( toReturnAttributes ); // Updates cellsFont with attributes in attributes 
+  
+  */
+  
+  /*
+  Sizing cellsMatrix after going full screen and adding cellsMatrixContainer to the displayComponent:
+  
+  
+    // Code block sizes cellMatrixContainer, making cellsMatrix visible 
+  javax.swing.JTextField cellInCellMatrix = ( javax.swing.JTextField ) cellsMatrix.getComponent( 0 );
+  java.awt.Dimension cellDimensions = cellInCellMatrix.getSize();
+  int cellWidth = (int) cellDimensions.getWidth();
+  int cellHeight = (int) cellDimensions.getHeight();
+  cellsMatrix.getParent().setBounds( 
+    10, 
+    10,
+    ( cellWidth * columnCount ) + ( cellMatrixBorderSize * ( columnCount - 1 ) ) + ( cellMatrixBorderSize * 2 ), 
+    ( cellHeight * rowCount ) + ( cellMatrixBorderSize * ( rowCount - 1 ) ) + ( cellMatrixBorderSize * 2 )
+    // for last two args ( width/height )
+      // 1st () accounts for added width/height from cells
+      // 2nd () accounts for added width/height from borders between cells
+      // 3rd () accounts for added width/height from outside borders
+  );
+  cellsMatrix.setBackground( Color.GRAY );
+  cellsMatrix.getParent().setBackground( Color.GRAY );
+  
+  */
   
   /**
    * Creates new form ScreenEditorTesting
    */
-  public ScreenEditorTesting() {
-    /**
-    String fonts[] = 
-      GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-    for (int i = 0; i < fonts.length; i++) {
-      System.out.println(fonts[i]);
-    }
-    */
-    
-    try {
-      GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-      
-      ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(
-        "src/main/java/com/ceofyeast/stringgameengine/screeneditor/DejaVuSansMono.ttf"
-      )));
-      
-      System.out.println( "Success" );
-      
-    } catch (Exception e) {
-        e.printStackTrace();
-    } 
-
-    
+  public ScreenEditorTesting() 
+  {
     initComponents();
     
-    initializeCellsMatrix();
-    
     device.setFullScreenWindow( this );
-    
-      // Code block sizes cellMatrixContainer, making cellsMatrix visible 
-    javax.swing.JTextField cellInCellMatrix = ( javax.swing.JTextField ) cellsMatrix.getComponent( 0 );
-    java.awt.Dimension cellDimensions = cellInCellMatrix.getSize();
-    int cellWidth = (int) cellDimensions.getWidth();
-    int cellHeight = (int) cellDimensions.getHeight();
-    cellsMatrix.getParent().setBounds( 
-      10, 
-      10,
-      ( cellWidth * columnCount ) + ( cellMatrixBorderSize * ( columnCount - 1 ) ) + ( cellMatrixBorderSize * 2 ), 
-      ( cellHeight * rowCount ) + ( cellMatrixBorderSize * ( rowCount - 1 ) ) + ( cellMatrixBorderSize * 2 )
-      // for last two args ( width/height )
-        // 1st () accounts for added width/height from cells
-        // 2nd () accounts for added width/height from borders between cells
-        // 3rd () accounts for added width/height from outside borders
-    );
-    cellsMatrix.setBackground( Color.GRAY );
-    cellsMatrix.getParent().setBackground( Color.GRAY );
-  }
-  
-  public void initializeCellsMatrix() {
-  }
-  
-  public javax.swing.JTextField initializeCell( char cellText ){
-    javax.swing.JTextField toReturn = new javax.swing.JTextField();
-      
-    toReturn.setOpaque( true );
-
-    toReturn.setBorder( new EmptyBorder( 0,0,0,0 ) );
-
-    toReturn.setHorizontalAlignment( javax.swing.JTextField.CENTER );
-
-    Font cellsFont = initializeFont();
-    
-    toReturn.setFont( cellsFont );
-
-    toReturn.setText( String.valueOf( cellText ) );
-
-    toReturn.setMargin( new java.awt.Insets( 0,0,0,0 ) );
-
-    return toReturn;
-  }
-  
-  public Font initializeFont(){
-    Font toReturn =  // Initializes the font
-    
-    //Map< AttributedCharacterIterator.Attribute, String > toReturnAttributes = new HashMap<>(); // Contains extra attributes to add to font
-    
-    //toReturnAttributes.put( TextAttribute.FAMILY, "Monospaced" ); // Adds monospaced attribute to attributes
-    
-    //toReturnAttributes.put( TextAttribute.FAMILY, "SansSerif" );
-    
-    //toReturnAttributes.put( TextAttribute.FAMILY, "sans_serif" ); // Adds sans serif attribute to attributes
-    
-    //toReturn = toReturn.deriveFont( toReturnAttributes ); // Updates cellsFont with attributes in attributes 
-    
-    System.out.println(toReturn.getFamily() + ", " + toReturn.getName() + ", " + toReturn.getFontName());
-    
-    return toReturn;
   }
 
   /**
