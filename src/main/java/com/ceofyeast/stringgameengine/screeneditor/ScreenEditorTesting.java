@@ -118,17 +118,13 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
       ) );
       
       this.setLayout( new java.awt.GridLayout( rowCount, columnCount, borderThickness, borderThickness ) );
-s
-        // fills cellsMatrix
-      for( int i = 1; i <= rowCount * columnCount; i++ )
-      { 
-        try{
-          char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
-          this.add( initializeCell( toFillWith[i] ) );
-        } catch( Exception  e ){
-          this.add( initializeCell( ' ' ) );
-        }
+      
+      for( int i = 0; i < rowCount * columnCount; i++ )
+      {
+        Cell toAdd = new Cell( 'R', fontSize, font );
       }
+      
+      //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
 
       cellsMatrixContainer.add( this );
     };
@@ -160,17 +156,13 @@ s
       cellsMatrixContainer.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER, 0, 0 ) );
       
       this.setLayout( new java.awt.GridLayout( rowCount, columnCount, 0, 0 ) );
-s
-        // fills cellsMatrix
-      for( int i = 1; i <= rowCount * columnCount; i++ )
-      { 
-        try{
-          char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
-          this.add( initializeCell( toFillWith[i] ) );
-        } catch( Exception  e ){
-          this.add( initializeCell( ' ' ) );
-        }
+      
+      for( int i = 0; i < rowCount * columnCount; i++ )
+      {
+        Cell toAdd = new Cell( 'R', fontSize, font );
       }
+      
+      //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
 
       cellsMatrixContainer.add( this );
     }
@@ -250,14 +242,24 @@ s
     }
   }
   
+  public void fillFontsMenu()
+  {
+    String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+    for( int i = 0; i < fonts.length; i++ )
+    {
+      javax.swing.JMenuItem fontToAdd = new javax.swing.JMenuItem();
+      
+      fontToAdd.setText( fonts[i] );
+      
+      chooseFontMenu.add( fontToAdd );
+    }
+  }
+  
   /*
   Font Stuff:
   
     // prints all available fonts
-  String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-  for (int i = 0; i < fonts.length; i++) {
-    System.out.println(fonts[i]);
-  }
+  
   
     // makes a font available to the system
   try {
@@ -327,10 +329,11 @@ s
 
     jScrollPane1 = new javax.swing.JScrollPane();
     jTextArea1 = new javax.swing.JTextArea();
-    jTextField1 = new javax.swing.JTextField();
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     closeMenuItem = new javax.swing.JMenuItem();
+    chooseFontMenu = new javax.swing.JMenu();
+    fontMenuItem = new javax.swing.JMenuItem();
 
     jTextArea1.setColumns(20);
     jTextArea1.setRows(5);
@@ -338,10 +341,6 @@ s
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     getContentPane().setLayout(null);
-
-    jTextField1.setText("jTextField1");
-    getContentPane().add(jTextField1);
-    jTextField1.setBounds(340, 80, 70, 22);
 
     fileMenu.setText("File");
 
@@ -352,6 +351,13 @@ s
       }
     });
     fileMenu.add(closeMenuItem);
+
+    chooseFontMenu.setText("Choose Font");
+
+    fontMenuItem.setText("Font");
+    chooseFontMenu.add(fontMenuItem);
+
+    fileMenu.add(chooseFontMenu);
 
     menuBar.add(fileMenu);
 
@@ -401,11 +407,12 @@ s
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JMenu chooseFontMenu;
   private javax.swing.JMenuItem closeMenuItem;
   private javax.swing.JMenu fileMenu;
+  private javax.swing.JMenuItem fontMenuItem;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JTextArea jTextArea1;
-  private javax.swing.JTextField jTextField1;
   private javax.swing.JMenuBar menuBar;
   // End of variables declaration//GEN-END:variables
 }
