@@ -42,7 +42,17 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   {
     initComponents();
     
-    device.setFullScreenWindow( this );
+    System.out.println( getContentPane().getSize() + ", " + this.getSize() );
+    
+    enableWindowedFullscreen();
+    
+    System.out.println( getContentPane().getSize() + ", " + this.getSize() );
+    
+    CellsMatrix cellsMatrix = new CellsMatrix( 10, 10 );
+    
+    cellsMatrix.loadCellsMatrixToScreen();
+    
+    System.out.println( getContentPane().getSize() + ", " + this.getSize() );
   }
   
   /**
@@ -132,6 +142,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
       for( int i = 0; i < rowCount * columnCount; i++ )
       {
         Cell toAdd = new Cell( 'R', fontSize, font );
+        this.add( toAdd );
       }
       
       //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
@@ -188,8 +199,33 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
       return cellsMatrixContainer;
     }
     
+    public void loadCellsMatrixToScreen()
+    {
+      getContentPane().add( cellsMatrixContainer );
+      
+        // Code block sizes cellMatrixContainer, making cellsMatrix visible 
+      javax.swing.JTextField cellInCellMatrix = ( javax.swing.JTextField ) this.getComponent( 0 );
+      java.awt.Dimension cellDimensions = cellInCellMatrix.getSize();
+      int cellWidth = (int) cellDimensions.getWidth();
+      int cellHeight = (int) cellDimensions.getHeight();
+      cellsMatrixContainer.setBounds( 
+        10, 
+        10,
+        ( cellWidth * columnCount ) + ( borderThickness * ( columnCount - 1 ) ) + ( borderThickness * 2 ), 
+        ( cellHeight * rowCount ) + ( borderThickness * ( rowCount - 1 ) ) + ( borderThickness * 2 )
+        // for last two args ( width/height )
+          // 1st () accounts for added width/height from cells
+          // 2nd () accounts for added width/height from borders between cells
+          // 3rd () accounts for added width/height from outside borders
+      );
+      
+      this.setBackground( Color.GRAY );
+      
+      cellsMatrixContainer.setBackground( Color.GRAY );
+    }
+    
     /**
-     * Initializes font using the fontName and fontSize member variables
+     * Initializes font using the fontName and fontSize member variables.
      */
     public void initializeFont()
     {
@@ -253,21 +289,6 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   }
   
   /*
-  Font Stuff:
-    // makes a font available to the system
-  try {
-    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-
-    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(
-      "src/main/java/com/ceofyeast/stringgameengine/screeneditor/DejaVuSansMono.ttf"
-    )));
-
-    System.out.println( "Success" );
-
-  } catch (Exception e) {
-      e.printStackTrace();
-  } 
-  
     // potentially useful method of constructing a font 
   Map< AttributedCharacterIterator.Attribute, String > toReturnAttributes = new HashMap<>(); // Contains extra attributes to add to font
   toReturnAttributes.put( TextAttribute.FAMILY, "Monospaced" ); // Adds monospaced attribute to attributes
@@ -301,6 +322,12 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   
   */
 
+  public void enableWindowedFullscreen()
+  {
+    java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    this.setSize( screenSize.width, screenSize.height );
+  }
+  
   public void addFontsInFontFile()
   {
     try
@@ -325,7 +352,58 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
       }
       
     } 
-    catch( Exception e){ e.printStackTrace(); }
+    catch( Exception e ){ e.printStackTrace(); }
+  }
+  
+  /**
+   * Placeholder method to save code for later.
+   */
+  public void displayAvailableFonts()
+  {
+      /*
+      code block constructs JList, with a visible row count of 16, of available font -
+      family names (called fontsList) 
+      */
+    String[] fontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+    javax.swing.JList<String> fontsList = new javax.swing.JList<>( fontFamilyNames );
+    fontsList.setVisibleRowCount( 16 );
+    
+      // constructs scroll pane, used to scroll vertically through fontsList
+    javax.swing.JScrollPane fontsListScrollPane = new javax.swing.JScrollPane( fontsList );
+    
+      // removes horizontal scroll bar from fontsListScrollPane
+    fontsListScrollPane.setHorizontalScrollBarPolicy( javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER );
+    
+      /*
+      information about the displayFontsButton (the button used to display the fonts list)
+
+      this information is used to find the bounds of fontsList as well as the unit increment for the -
+      vertical scroll bar
+      */
+    int displayFontsButtonXPos = displayFontsButton.getX();
+    int displayFontsButtonYPos = displayFontsButton.getY();
+    int displayFontsButtonWidth = displayFontsButton.getWidth();
+    int displayFontsButtonHeight = displayFontsButton.getHeight();
+    
+      /*
+      information about the fontsList
+
+      this information is used to set the bounds of fontsList as well as the unit increment for the -
+        vertical scroll bar
+      */
+    int fontsListWidth = fontsList.getPreferredScrollableViewportSize().width;
+    int fontsListHeight = fontsList.getPreferredScrollableViewportSize().height;
+    int fontsListXPos = displayFontsButtonXPos + displayFontsButtonWidth;
+    int fontsListYPos = ( displayFontsButtonYPos + displayFontsButtonHeight ) - fontsListHeight;
+    
+    getContentPane().add( fontsListScrollPane );
+    
+    fontsListScrollPane.setBounds(
+      fontsListXPos,
+      fontsListYPos,
+      fontsListWidth,
+      fontsListHeight
+    );
   }
   
   /**
@@ -384,51 +462,6 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
 
   private void displayFontsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayFontsButtonActionPerformed
     System.out.println( "displaying fonts" );
-    
-      /*
-      code block constructs JList, with a visible row count of 16, of available font -
-      family names (called fontsList) 
-      */
-    String[] fontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-    javax.swing.JList<String> fontsList = new javax.swing.JList<>( fontFamilyNames );
-    fontsList.setVisibleRowCount( 16 );
-    
-      // constructs scroll pane, used to scroll vertically through fontsList
-    javax.swing.JScrollPane fontsListScrollPane = new javax.swing.JScrollPane( fontsList );
-    
-      // removes horizontal scroll bar from fontsListScrollPane
-    fontsListScrollPane.setHorizontalScrollBarPolicy( javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER );
-    
-      /*
-      information about the displayFontsButton (the button used to display the fonts list)
-
-      this information is used to find the bounds of fontsList as well as the unit increment for the -
-      vertical scroll bar
-      */
-    int displayFontsButtonXPos = displayFontsButton.getX();
-    int displayFontsButtonYPos = displayFontsButton.getY();
-    int displayFontsButtonWidth = displayFontsButton.getWidth();
-    int displayFontsButtonHeight = displayFontsButton.getHeight();
-    
-      /*
-      information about the fontsList
-
-      this information is used to set the bounds of fontsList as well as the unit increment for the -
-        vertical scroll bar
-      */
-    int fontsListWidth = fontsList.getPreferredScrollableViewportSize().width;
-    int fontsListHeight = fontsList.getPreferredScrollableViewportSize().height;
-    int fontsListXPos = displayFontsButtonXPos + displayFontsButtonWidth;
-    int fontsListYPos = ( displayFontsButtonYPos + displayFontsButtonHeight ) - fontsListHeight;
-    
-    getContentPane().add( fontsListScrollPane );
-    
-    fontsListScrollPane.setBounds(
-      fontsListXPos,
-      fontsListYPos,
-      fontsListWidth,
-      fontsListHeight
-    );
   }//GEN-LAST:event_displayFontsButtonActionPerformed
 
   /**
