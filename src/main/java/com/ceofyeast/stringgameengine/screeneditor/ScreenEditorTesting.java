@@ -40,19 +40,22 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
    */
   public ScreenEditorTesting() 
   {
+    //System.out.println( getContentPane().getSize() + ", " + this.getSize() );
+    //System.out.println( cellsMatrix.getSize() + ", " + cellsMatrix.getCellsMatrixContainer().getSize() ); 
+    
     initComponents();
-    
-    System.out.println( getContentPane().getSize() + ", " + this.getSize() );
-    
-    enableWindowedFullscreen();
-    
-    System.out.println( getContentPane().getSize() + ", " + this.getSize() );
     
     CellsMatrix cellsMatrix = new CellsMatrix( 10, 10 );
     
+    getContentPane().add( cellsMatrix.getCellsMatrixContainer() );
+    
+    device.setFullScreenWindow( this );
+    
+    //enableWindowedFullscreen();
+    
     cellsMatrix.loadCellsMatrixToScreen();
     
-    System.out.println( getContentPane().getSize() + ", " + this.getSize() );
+    
   }
   
   /**
@@ -201,8 +204,6 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     
     public void loadCellsMatrixToScreen()
     {
-      getContentPane().add( cellsMatrixContainer );
-      
         // Code block sizes cellMatrixContainer, making cellsMatrix visible 
       javax.swing.JTextField cellInCellMatrix = ( javax.swing.JTextField ) this.getComponent( 0 );
       java.awt.Dimension cellDimensions = cellInCellMatrix.getSize();
@@ -325,7 +326,10 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   public void enableWindowedFullscreen()
   {
     java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    
     this.setSize( screenSize.width, screenSize.height );
+    
+    getContentPane().setSize( screenSize.width, screenSize.height );
   }
   
   public void addFontsInFontFile()
