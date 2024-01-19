@@ -92,7 +92,7 @@ class CellsMatrix extends javax.swing.JPanel {
 
     for( int i = 0; i < rowCount * columnCount; i++ )
     {
-      ScreenEditorTesting.Cell toAdd = new ScreenEditorTesting.Cell( 'R', fontSize, font );
+      Cell toAdd = new Cell( 'R', fontSize, font );
       this.add( toAdd );
     }
 
@@ -131,7 +131,7 @@ class CellsMatrix extends javax.swing.JPanel {
 
     for( int i = 0; i < rowCount * columnCount; i++ )
     {
-      ScreenEditorTesting.Cell toAdd = new ScreenEditorTesting.Cell( 'R', fontSize, font );
+      Cell toAdd = new Cell( 'R', fontSize, font );
     }
 
     //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
