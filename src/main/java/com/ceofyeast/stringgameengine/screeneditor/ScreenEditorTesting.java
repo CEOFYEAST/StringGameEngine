@@ -40,198 +40,13 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
    */
   public ScreenEditorTesting() 
   {
-    //System.out.println( getContentPane().getSize() + ", " + this.getSize() );
-    //System.out.println( cellsMatrix.getSize() + ", " + cellsMatrix.getCellsMatrixContainer().getSize() ); 
+    enableWindowedFullscreen();
     
     initComponents();
     
     CellsMatrix cellsMatrix = new CellsMatrix( 10, 10 );
     
-    getContentPane().add( cellsMatrix.getCellsMatrixContainer() );
-    
-    device.setFullScreenWindow( this );
-    
-    //enableWindowedFullscreen();
-    
-    cellsMatrix.loadCellsMatrixToScreen();
-    
-    
-  }
-  
-  /**
-   * Defines a JPanel subclass that represents a grid of text fields, referred to as cells; the grid itself 
-   * is referred to as the cellsMatrix. The purpose of the cellsMatrix is to emulate the look and feel of a 
-   * console, whilst also allowing the individual cells/characters to be edited.
-   * 
-   * <p>The cellsMatrix resides in a cellsMatrixContainer, a JPanel with a FlowLayout manager that allows 
-   *    the cellsMatrix to be sized by the size of its contents. This container serves further use, such as 
-   *    controlling the border color of the cellsMatrix, and is therefore stored as a member  of cellsMatrix.
-   * 
-   * <p>The CellsMatrix has two modes, which are defined as constructors; these modes are edit mode, and view mode.
-   *    Edit mode is designed for the editing of a screen, while view mode is designed for the viewing of a screen
-   *    as it will look in the console. 
-   */
-  class CellsMatrix extends javax.swing.JPanel {
-    /**
-     * Specifies number of columns of cells in cellsMatrix. Can't be negative or zero, and has a default value
-     * of 10.
-     */
-    private int columnCount = 10;
-    
-    /**
-     * Specifies number of rows of cells in cellsMatrix. Can't be negative or zero, and has a default value
-     * of 10.
-     */
-    private int rowCount = 10;
-    
-    /**
-     * Specifies thickness of border between cells, and between cellsMatrix and 
-     * cellsContainer (acts as sides/top/bottom border). Has a default value of 3.
-     * 
-     * The "border" referred to is actually just the horizontal and vertical gap between the cells 
-     * in cellsMatrix, as well as the margin between cellsMatrix and its container; this space is 
-     * specified by borderThickness. Therefore, the border's color is set by changing the color of 
-     * the cellsMatrixContainer; the container is opaque, while the cellsMatrix is translucent.
-     */
-    private int borderThickness = 3;
-    
-    /**
-     * Specifies the font size of the cells (text fields) in cellsMatrix. Has a default value of 20.
-     */
-    private int fontSize = 20;
-    
-    /**
-     * Specifies the name of the font to be used.
-     */
-    private String fontName = "DejaVu Sans Mono";
-    
-    /**
-     * Contains the font to be applied to the cells in the cellsMatrix.
-     */
-    private Font font = new Font( "DejaVu Sans Mono", Font.PLAIN, 20 );
-    
-    /**
-     * Parent of the cellsMatrix, and allows the cellsMatrix to be sized by it's contents. 
-     */
-    private javax.swing.JPanel cellsMatrixContainer;
-    
-    /**
-     * Edit mode.
-     * 
-     * This constructor initializes the cellsMatrix in edit mode. Edit mode is the intended mode for 
-     * editing the cellsMatrix due to three factors. One factor is the addition of borders between the cells,
-     * as well as between the cellsMatrix and its container; this change allows for a clear separation 
-     * between cells. Another factor is the widening of the cells. This allows for more space inside the 
-     * cells themselves so the characters they contain are more legible. The final change is the 
-     * implementation of a constant, large font size for increased legibility. 
-     * 
-     * @param columnCount initializes columnCount member
-     * @param rowCount initializes rowCount member
-     * @param borderThickness initializes borderThickness member
-     */
-    public CellsMatrix( int columnCount, int rowCount )
-    {
-      this.columnCount = columnCount;
-      this.rowCount = rowCount;
-      
-      cellsMatrixContainer = new javax.swing.JPanel();
-      cellsMatrixContainer.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER, 0, 
-        borderThickness // Vertical gap is required in order to get margin above cellsMatrix, which 
-                        // is a problem that doesn't exist for the horizontal gap
-      ) );
-      
-      this.setLayout( new java.awt.GridLayout( rowCount, columnCount, borderThickness, borderThickness ) );
-      
-      for( int i = 0; i < rowCount * columnCount; i++ )
-      {
-        Cell toAdd = new Cell( 'R', fontSize, font );
-        this.add( toAdd );
-      }
-      
-      //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
-
-      cellsMatrixContainer.add( this );
-    };
-    
-    /**
-     * View Mode.
-     * 
-     * This constructor initializes the cellsMatrix in view mode. View mode is the intended mode for viewing a 
-     * representation of screensMatrix as it will appear in the console; this is accomplished using three tricks.
-     * For one, the width and height of the cells are set to the max width and height of a character from the font 
-     * being used. Seeing as only mono-spaced fonts are allowed, and that no more or less than one character can 
-     * exist in a cell, this ensures that the cells are packed as tightly as possible. This reflects the behavior
-     * of a console, where the cells in the console are each the size of one mono-spaced character. The second
-     * way is the setting of the font size by the user. This ensures that the cellsMatrix replicates the user's
-     * console environment as thoroughly as possible. The third and final way is the absence of borders between
-     * the cells. This also serves to ensure that the cells are packed together.
-     * 
-     * @param columnCount initializes columnCount member
-     * @param rowCount initializes rowCount member
-     * @param faceSize initializes faceSize member
-     */
-    public CellsMatrix( int columnCount, int rowCount, int fontSize )
-    {
-      this.columnCount = columnCount;
-      this.rowCount = rowCount;
-      this.fontSize = fontSize;
-      
-      cellsMatrixContainer = new javax.swing.JPanel();
-      cellsMatrixContainer.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER, 0, 0 ) );
-      
-      this.setLayout( new java.awt.GridLayout( rowCount, columnCount, 0, 0 ) );
-      
-      for( int i = 0; i < rowCount * columnCount; i++ )
-      {
-        Cell toAdd = new Cell( 'R', fontSize, font );
-      }
-      
-      //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
-
-      cellsMatrixContainer.add( this );
-    }
-    
-    /**
-     * Returns cellsMatrixContainer. It's possible to get the cellsMatrixContainer using cellsMatrix.getParent(), 
-     * but using this method makes it more clear what action is being taken.
-     * 
-     * @return the cellsMatrixContainer
-     */
-    public javax.swing.JPanel getCellsMatrixContainer()
-    {
-      return cellsMatrixContainer;
-    }
-    
-    public void loadCellsMatrixToScreen()
-    {
-        // Code block sizes cellMatrixContainer, making cellsMatrix visible 
-      javax.swing.JTextField cellInCellMatrix = ( javax.swing.JTextField ) this.getComponent( 0 );
-      java.awt.Dimension cellDimensions = cellInCellMatrix.getSize();
-      int cellWidth = (int) cellDimensions.getWidth();
-      int cellHeight = (int) cellDimensions.getHeight();
-      cellsMatrixContainer.setBounds( 
-        10, 
-        10,
-        ( cellWidth * columnCount ) + ( borderThickness * ( columnCount - 1 ) ) + ( borderThickness * 2 ), 
-        ( cellHeight * rowCount ) + ( borderThickness * ( rowCount - 1 ) ) + ( borderThickness * 2 )
-        // for last two args ( width/height )
-          // 1st () accounts for added width/height from cells
-          // 2nd () accounts for added width/height from borders between cells
-          // 3rd () accounts for added width/height from outside borders
-      );
-      
-      this.setBackground( Color.GRAY );
-      
-      cellsMatrixContainer.setBackground( Color.GRAY );
-    }
-    
-    /**
-     * Initializes font using the fontName and fontSize member variables.
-     */
-    public void initializeFont()
-    {
-      this.font = new Font( fontName, Font.PLAIN, fontSize );
-    }
+    cellsMatrix.addToContentPane( ( javax.swing.JPanel ) getContentPane() );
   }
   
   /**
@@ -298,38 +113,14 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   toReturn = toReturn.deriveFont( toReturnAttributes ); // Updates cellsFont with attributes in attributes 
   
   */
-  
-  /*
-  Sizing cellsMatrix after going full screen and adding cellsMatrixContainer to the displayComponent:
-  
-  
-    // Code block sizes cellMatrixContainer, making cellsMatrix visible 
-  javax.swing.JTextField cellInCellMatrix = ( javax.swing.JTextField ) cellsMatrix.getComponent( 0 );
-  java.awt.Dimension cellDimensions = cellInCellMatrix.getSize();
-  int cellWidth = (int) cellDimensions.getWidth();
-  int cellHeight = (int) cellDimensions.getHeight();
-  cellsMatrix.getParent().setBounds( 
-    10, 
-    10,
-    ( cellWidth * columnCount ) + ( cellMatrixBorderSize * ( columnCount - 1 ) ) + ( cellMatrixBorderSize * 2 ), 
-    ( cellHeight * rowCount ) + ( cellMatrixBorderSize * ( rowCount - 1 ) ) + ( cellMatrixBorderSize * 2 )
-    // for last two args ( width/height )
-      // 1st () accounts for added width/height from cells
-      // 2nd () accounts for added width/height from borders between cells
-      // 3rd () accounts for added width/height from outside borders
-  );
-  cellsMatrix.setBackground( Color.GRAY );
-  cellsMatrix.getParent().setBackground( Color.GRAY );
-  
-  */
 
   public void enableWindowedFullscreen()
-  {
+  { 
     java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     
-    this.setSize( screenSize.width, screenSize.height );
+    this.setMinimumSize( screenSize );
     
-    getContentPane().setSize( screenSize.width, screenSize.height );
+    this.getContentPane().setMinimumSize( screenSize );
   }
   
   public void addFontsInFontFile()
