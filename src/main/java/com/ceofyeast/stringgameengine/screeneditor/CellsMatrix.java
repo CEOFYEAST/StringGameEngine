@@ -192,7 +192,7 @@ class CellsMatrix extends javax.swing.JPanel {
     int cellHeight = (int) cellDimensions.getHeight();
 
       /*
-      Code block utilizes single-cell sizing data to set the bounds of the entire cellsMatrix based
+      Code block utilizes single-cell sizing data initialized above to set the bounds of the entire cellsMatrix based
       on the number of cells inside the cellsMatrix, as well as the thickness of the borders within the
       cellsMatrix
       */

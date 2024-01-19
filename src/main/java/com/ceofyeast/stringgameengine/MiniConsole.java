@@ -9,71 +9,95 @@ import java.util.Scanner;
 import java.awt.Point; // class representing an (x, y) coordinate
 
 /**
-* static class representing a mini-console that can be printed from any (x, y) coordinate on the screen and can be any width/height
-* has capability to display possible choices for the user and take input to decide between these choices
-* the console's border is constant as only the Strings inside the console are cleared
-*/
+ * Static class representing a mini-console designed to present a series of choices to the user and
+ * prompt a response.
+ * 
+ * <p> Can be printed from any (x, y) coordinate in the console, and can be any width or height. The 
+ *     mini-console is designed to be placed wherever the developer desires; usually this is where it will be
+ *     most noticeable to the end user.
+ * 
+ * <p> The lines inside the mini-console can be cleared to make room for new lines, or to simply appear empty;
+ *     however, the mini-console's border is never cleared/re-printed. This makes for a more seamless experience.
+ * 
+ * <p> The user can specify that spacing lines be added to the mini-console, as well as the number of spacing 
+ *     lines added. These spacing lines go between printed lines to give the mini-console more breathing room.
+ *     The {@link MiniConsole#spacingBetweenLines spacingBetweenLines} variable dictates how many lines should 
+ *     be placed between two printed lines.
+ *     
+ * <p> A single line is split across multiple lines in the display, called line pieces, if its too long to fit  
+ *     inside the width of the display; this is done in {@link MiniConsole#addLineToLines(String) addLineToLines}. 
+ *     This makes it so the developer doesn't have to be concerned about the width when adding a line to the 
+ *     mini-console.
+ * 
+ * <p> Only as many lines can be added to lines as will fit in {@link  MiniConsole#lines  lines}; this includes
+ *     spacing lines as well as line pieces. If an extra line is attempted to be added, a warning will be 
+ *     thrown and addLineToLines will return.
+ * 
+ * @author Benton Diebold
+ */
 class MiniConsole 
-{
-    //// MiniConsole members
-
-  // width of the display section of the mini-console, including the width offset
-  // doesn't include:
-  //   - the right-most column because its part of the border
-  //   - the left-most column because its part of the border
+{ 
+  /**
+   * Width of the display section of the mini-console, including the width offset; the border isn't included.
+   */
   private static int width;
 
-  // height of the display section of the mini console, including the height offset
-  // doesn't include:
-  //   - the first line because its part of the border
-  //   - the last line because its part of the border
-  //   - the input line
-  //   - the line above the input line because its part of the border
+  /**
+   * Height of the display section of the mini-console, including the height offset; the border, and the input
+   * line aren't included.
+   */
   private static int height;
 
-  // filled with # of spaces on initialization equating to width of console display
-  // used to clear the console by printing line of spaces over existing characters
+  /**
+   * Initialized with # of spaces on construction equating to width of console display; used to clear the
+   * mini-console by printing a line of spaces over existing characters.
+   */
   private static String spaces;
 
-  // used to specify the number of blank lines that should be printed in between lines in the console
+  /**
+   * Used to specify the number of blank lines that should be printed in-between lines in the console.
+   */
   private static int spacingBetweenLines = 0;
 
-  // Used to specify whether spacingBetweenLines should be included between pieces of the same line (a single line is split across multiple lines in the display if its too long to fit within the width of the display. This is done in addLineToLines)
+  /**
+   * Used to specify whether spacingBetweenLines should be included between pieces of the same line.
+   */
   private static boolean includeSpacingBetweenLinePieces = false;
 
-  // contains lines to be printed in mini-console
+  /**
+   * Contains the lines to be printed in the mini-console.
+   */
   private static ArrayList<String> lines = new ArrayList<>(); 
 
-  // point to print contents of mini console display from
-  // will be top-left corner of display
+  /**
+   * The point to print the contents of the mini-console display from; will be the top-left corner of the display,
+   * disregarding the border.
+   */
   private static Point printDisplayFrom;
 
-  // static scanner available to all mini methods
+  /**
+   * Scanner initialization.
+   */
   private static Scanner scanner = new Scanner( System.in ); 
 
-  // distance from the right and left sides of mini-console display to print contents of lines
+  /**
+   * Distance from the right and left sides of mini-console display to print contents of lines.
+   */
   private static final int WIDTH_OFFSET = 1;
 
-  // distance from the top and bottom lines of mini-console display to print contents of lines
+  /**
+   * Distance from the top and bottom lines of mini-console display to print contents of lines.
+   */
   private static final int HEIGHT_OFFSET = 0;
-  
-
-    
-    //// main method
-  
-  public static void main(String[] args) {}
-  
-  
-    //// MiniConsole "constructor"
 
   /**
-  * Prints the menu console after recieving a width, height and top left corner to print the mini console from  
-  * Input: 
-    - width: width of mini console
-    - height: height of mini console
-    - printConsoleFrom: left corner of mini console 
-  * Output: N/A
-  */
+   * Prints the mini-console after receiving a width, height and top-left corner to print the mini-console from;
+   * is the base constructor that the overloaded constructors call.
+   * 
+   * @param width used to initialize the width member
+   * @param height used to initialize the height member
+   * @param printConsoleFrom used to initialize the printConsoleFrom member
+   */
   public static void initializeMiniConsole( int width, int height, Point printConsoleFrom )
   {
       // initializes member variables
@@ -118,13 +142,15 @@ class MiniConsole
   }
 
   /**
-  * initializeMiniConsole overload
-  * Input: 
-    - original initializeMiniConsole input
-    - spacingBetweenLines: used to set spacingBetweenLines member var
-  * Output: N/A
-  */
-  public static void initializeMiniConsole( int width, int height, int spacingBetweenLines, Point printConsoleFrom )
+   * Overloaded constructor that additionally allows the user to specify the amount of spacing between lines; the
+   * default amount is zero.
+   * 
+   * @param width used to initialize the width member
+   * @param height used to initialize the height member
+   * @param printConsoleFrom used to initialize the printConsoleFrom member
+   * @param spacingBetweenLines used to initialize the spacingBetweenLines member
+   */
+  public static void initializeMiniConsole( int width, int height, Point printConsoleFrom, int spacingBetweenLines )
   {
     initializeMiniConsole( width, height, printConsoleFrom );
 
@@ -132,63 +158,56 @@ class MiniConsole
   }
 
   /**
-  * initializeMiniConsole overload
-  * Input: 
-    - original initializeMiniConsole input
-    - spacingBetweenLines: used to set spacingBetweenLines member var
-    - includeSpacingBetweenLinePieces: used to set includeSpacingBetweenLinePieces member var
-  * Output: N/A
-  */
-  public static void initializeMiniConsole( int width, int height, int spacingBetweenLines, boolean includeSpacingBetweenLinePieces, Point printConsoleFrom )
+   * Overloaded constructor that additionally allows the user to specify the amount of spacing between lines as
+   * well as whether spacing should be included between line pieces.
+   * 
+   * @param width used to initialize the width member
+   * @param height used to initialize the height member
+   * @param printConsoleFrom used to initialize the printConsoleFrom member
+   * @param spacingBetweenLines used to initialize the spacingBetweenLines member
+   * @param includeSpacingBetweenLinePieces used to initialize the includeSpacingBetweenLinePieces member
+   */
+  public static void initializeMiniConsole( int width, int height, Point printConsoleFrom, int spacingBetweenLines, boolean includeSpacingBetweenLinePieces )
   {
-    initializeMiniConsole( width, height, spacingBetweenLines, printConsoleFrom );
+    initializeMiniConsole( width, height, printConsoleFrom, spacingBetweenLines );
 
     MiniConsole.includeSpacingBetweenLinePieces = includeSpacingBetweenLinePieces;
   }
-  
-
-  
-    //// MiniConsole getter methods
 
   /**
-  * Used to get String at index indexToGet in the lines arraylist
-  * Input:
-    - indexToGet: index of String in lines to get
-  * Output:
-    - String value at index indexToGet in lines
-  */
+   * Used to get the String at the index indexToGet in {@link  MiniConsole#lines  lines}.
+   * 
+   * @param indexToGet the index of the String in lines to get
+   * @return the String in lines at indexToGet
+   */
   public static String getLineInLines( int indexToGet )
   {
     return lines.get( indexToGet );
   }
 
-  
-  
-    //// MiniConsole setter methods
-
   /**
-  * Used to change spacing between lines post console-initialization
-  * Input: 
-    - spacingBetweenLines: used to set spacingBetweenLines member var
-  * Output: N/A
-  */
+   * Sets {@link  MiniConsole#spacingBetweenLines  spacingBetweenLines}.
+   * 
+   * @param spacingBetweenLines the int to set spacingBetweenLines to
+   */
   public static void setSpacingBetweenLines( int spacingBetweenLines )
   {
     MiniConsole.spacingBetweenLines = spacingBetweenLines;
   }
-
-  
-  
-    //// MiniConsole public utility methods
   
   /**
-  * Adds given line to lines as long as lines isn't full (size doesn't equal height of mini console)
-  * Is capable of adding lines that are longer than the width of the mini console. If this is the case, the line is split into lines that are the width of the mini console, which are then added to lines individually.
-  * Input:
-    - lineToAdd: specifies line to be appended to lines
-  * Output:
-    - indicesOfAddedLines: contains all the indices in lines of the line pieces (or the index of lineToAdd only if its not split up) added to lines during the course of the method's execution
-  */
+   * Adds given line to lines as long as {@link  MiniConsole#lines  lines} isn't full, meaning it's size doesn't
+   * equal the {@link  MiniConsole#height  height} of the mini console.
+   * 
+   * <p> Is capable of adding lines that are longer than the {@link  MiniConsole#width  width} of the mini-console; 
+   *     in this case, lineToAdd is split into smaller lines (called line pieces) that are less than or equal to 
+   *     the width of the mini-console.
+   * 
+   * @param lineToAdd
+   * @return an ArrayList of integers corresponding to the indices of any lines added to lines. There will be more
+   *         than one index in the ArrayList if lineToAdd was split into multiple line pieces, only one index in 
+   *         the ArrayList if lineToAdd wasn't split, and no index if no lines were added.
+   */
   public static ArrayList<Integer> addLineToLines( String lineToAdd )
   { 
     ArrayList<Integer> indicesOfAddedLines = new ArrayList<Integer>();
@@ -230,10 +249,11 @@ class MiniConsole
   }
 
   /**
-  * Prints every line in lines within the confines of the mini-console
-  * Input: N/A
-  * Output: N/A
-  */
+   * Prints every String present in {@link  MiniConsole#lines  lines} within the confines of the mini-console. 
+   * There's no handling of the case where the size of lines exceeds the {@link  MiniConsole#height  height} of
+   * the mini-console because {@link MiniConsole#addLineToLines(String) addLineToLines} simply returns upon
+   * an attempt to exceed this limit.
+   */
   public static void printLinesInMiniConsole( )
   {
       // prints out every line in lines inside the console in order
@@ -246,10 +266,8 @@ class MiniConsole
   } 
 
   /**
-  * Clears every line in the display of the mini console by printing over it with spaces
-  * Input: N/A
-  * Output: N/A
-  */
+   * Clears every line in the display of the mini console by printing over it with spaces.
+   */
   public static void clearLinesInMiniConsole()
   {
       // makes room for spaces lines
@@ -275,6 +293,15 @@ class MiniConsole
   * Output: 
     - decision: represents index of player's decision given the decisions in decisionsToDisplay
   */
+  /**
+   * Displays a list of decisions, specified in decisionsToDisplay, that the user can make. Each decision 
+   * corresponds to a number that the user can type into the mini-console to select said decision; this number
+   * in turn corresponds to the index of the chosen decision in decisionsToDisplay. This number is then 
+   * returned.
+   * 
+   * @param decisionsToDisplay a list of decisions for the user to choose between
+   * @return the index of the chosen decision in decisionsToDisplay
+   */
   public static int displayDecisionsInMiniConsole( String[] decisionsToDisplay )
   {
     ArrayList<ArrayList<Integer>> indicesOfDecisionsInDisplay = new ArrayList<ArrayList<Integer>>();
@@ -318,16 +345,11 @@ class MiniConsole
     }
   } 
 
-  
-
-    //// MiniConsole private utility methods
-
   /**
-  * Method used to traverse to the beggining of a line in the mini console's display
-  * Input:
-    - indexToTraverseTo: index of line to traverse to beggining of
-  * Output: N/A
-  */
+   * Used to move the cursor to the beginning of a line in the mini-console's display.
+   * 
+   * @param indexToTraverseTo the index of the line in the mini-console to traverse to
+   */
   private static void traverseToLineInMiniConsole( int indexToTraverseTo )
   {
     Screen.moveCursorToPoint( // moves cursor to beggining of line at indexToTraverseTo
@@ -339,10 +361,8 @@ class MiniConsole
   }
 
   /**
-  * Method used to traverse to the beggining of the input line in the mini console's display
-  * Input: N/A
-  * Output: N/A
-  */
+   * Used to move the cursor to the beginning of the input line in the mini-console's display.
+   */
   private static void traverseToInputLineInMiniConsole()
   {
     Screen.moveCursorToPoint( // moves cursor to beginning of input line
@@ -359,6 +379,12 @@ class MiniConsole
   * Output: 
     - toReturn: represents user input in the form of a String
   */
+  /**
+   * Used to take input from the user inside the mini-console by navigating to the input line, prompting the user
+   * for input in form of a String, and returning said String.
+   * 
+   * @return the String input by the user when prompted
+   */
   private static String takeInputInMiniConsole()
   {
     traverseToInputLineInMiniConsole();
@@ -375,10 +401,8 @@ class MiniConsole
   }
 
   /**
-  * used to clear (print spaces over) input line
-  * Input: N/A
-  * Output: N/A
-  */
+   * Used to clear the input line by printing spaces over it.
+   */
   private static void clearInputLineInMiniConsole()
   {
     traverseToInputLineInMiniConsole();
@@ -387,14 +411,13 @@ class MiniConsole
   }
 
   /**
-  * Method used to chop a String into pieces with lengths <= maxLengthOfPieces
-  * Extra logic is used to hyphenate words that are split between two pieces
-  * Input:
-    - lineToCut: line to cut into pieces
-    - maxLengthOfPieces: maximum length of various pieces of lineToCut
-  * Output:
-    - ArrayList<String> piecesOfLine: contains pieces of line cut from lineToCut with length <= maxLengthOfPieces
-  */
+   * Used to chop a String into pieces (called line pieces) with lengths less than or equal to MaxLengthOfPieces;
+   * Extra logic is employed to hyphenate words that are split between two line pieces.
+   * 
+   * @param lineToCut the line to cut into line pieces with lengths less than or equal to MaxLengthOfPieces
+   * @param maxLengthOfPieces the max length a line piece can be
+   * @return an ArrayList of the line pieces derived from lineToCut
+   */
   private static ArrayList<String> cutLineIntoPieces( String lineToCut, int maxLengthOfPieces )
   {
     ArrayList<String> piecesOfLine = new ArrayList<String>();
@@ -443,14 +466,16 @@ class MiniConsole
   }
   
   /**
-  * Method meant to "blink" a line in the mini console
-  * Used to provide feedback to a user that the decision they chose was accepted by the system
-  * Input:
-    - indexOfLineToBlink: the index of the line in lines to blink
-    - durationOfBlink: the amount of time one blink cycle takes
-    - numBlinks: the number of times one blink cycle will occur
-  * Output: N/A
-  */
+   * Used to blink a line in the mini-console; this consists of rapidly erasing and re-printing the line in order
+   * to provide a blinking effect. This is intended to provide visual feedback to a user that the decision
+   * they chose was acknowledged by the system.
+   * 
+   * @param indexOfLineToBlink the index of the line in {@link  MiniConsole#lines  lines} to blink
+   * @param durationOfBlink the amount of time, in milliseconds, that one blink cycle takes; a cycle consists of a
+   *                        single line erasure and re-printing
+   * @param numBlinks the number of blink cycles that should occur
+   * @see MiniConsole#blinkLinesInMiniConsole(java.util.ArrayList, int, int) blinkLinesInMiniConsole
+   */
   private static void blinkLineInMiniConsole( int indexOfLineToBlink, int durationOfBlink, int numBlinks )
   {
     for( int i = 0; i < numBlinks; i++ )
@@ -481,14 +506,16 @@ class MiniConsole
   }
 
   /**
-  * Method meant to "blink" multiple lines in the console at the same time
-  * Used to provide feedback to a user that the decision they chose was accepted by the system
-  * Input:
-    - indicesToblink: the indices of the various lines in lines to blink
-    - durationOfBlink: the amount of time one blink cycle takes
-    - numBlinks: the number of times one blink cycle will occur
-  * Output: N/A
-  */
+   * Used to blink multiple lines in the mini-console within the same blink cycle; this consists of rapidly 
+   * erasing and re-printing the lines in order to provide a blinking effect. This is intended to provide 
+   * visual feedback to a user that the decision they chose was acknowledged by the system. 
+   * 
+   * @param indicesToBlink the indices of the lines in {@link  MiniConsole#lines  lines} to blink
+   * @param durationOfBlink the amount of time, in milliseconds, that one blink cycle takes; a cycle consists of a
+   *                        single erasure and re-printing
+   * @param numBlinks the number of blink cycles that should occur
+   * @see MiniConsole#blinkLineInMiniConsole(int, int, int) blinkLineInMiniConsole
+   */
   private static void blinkLinesInMiniConsole( ArrayList<Integer> indicesToBlink, int durationOfBlink, int numBlinks )
   {
     for( int i = 0; i < numBlinks; i++ ) // loops for number of blinks
@@ -520,5 +547,4 @@ class MiniConsole
       }
     }
   }
-  
-} // end of MiniConsole
+}
