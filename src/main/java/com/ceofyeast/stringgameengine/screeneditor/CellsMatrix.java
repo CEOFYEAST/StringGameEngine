@@ -212,10 +212,28 @@ class CellsMatrix extends javax.swing.JPanel {
       ( borderThickness * 2 ); // accounts for added height from outside borders
     cellsMatrixContainer.setSize( cellsMatrixWidth, cellsMatrixHeight );
     
-      /*
+    cellsMatrixContainerScrollPane.setSize(
+      cellsMatrixContainerScrollPanelJFrame.getSize().width - 10,
+      cellsMatrixContainerScrollPanelJFrame.getSize().height - 100
+    );
+    
+    /**
+    java.awt.Dimension cellsMatrixContainerScrollPaneParentSize = cellsMatrixContainerScrollPanelJFrame.getSize();
+    
+    cellsMatrixContainerScrollPane.setMaximizedBounds(  );
+    
+    cellsMatrixContainerScrollPane.revalidate();
+    cellsMatrixContainerScrollPane.repaint();
+    
+    cellsMatrixContainerScrollPane.setSize( cellsMatrixWidth, cellsMatrixHeight );
+    
+    cellsMatrixContainerScrollPane.revalidate();
+    cellsMatrixContainerScrollPane.repaint();
+    
+         /*
       Code block initializes variables containing the width and height of the cellsMatrixContainerScrollPanel's  
       JFrame parent
-      */
+      
     int cellsMatrixContainerScrollPanelParentWidth = 
       ( int ) cellsMatrixContainerScrollPanelJFrame.getSize().getWidth();
     int cellsMatrixSContainerScrollPanelParentHeight = 
@@ -227,7 +245,7 @@ class CellsMatrix extends javax.swing.JPanel {
       Code block ensures that the bounds of cellsMatrixContainerScrollPane don't exceed the bounds of the JFrame it 
       resides in. This, in turn, ensures that if the bounds of cellsMatrixContainer exceed the bounds of said JFrame, 
       a scroll bar will appear.
-      */
+      
     if( cellsMatrixWidth > cellsMatrixContainerScrollPanelParentWidth )
     {
       cellsMatrixContainerScrollPaneBounds.width = cellsMatrixContainerScrollPanelParentWidth ;
@@ -240,7 +258,7 @@ class CellsMatrix extends javax.swing.JPanel {
       /*
       Sets the bounds of the cellsMatrixContainer scroll pane to 
       */
-    cellsMatrixContainerScrollPane.setSize( cellsMatrixContainerScrollPaneBounds );
+    //cellsMatrixContainerScrollPane.setSize( cellsMatrixContainerScrollPaneBounds );
   }
 
   /**
