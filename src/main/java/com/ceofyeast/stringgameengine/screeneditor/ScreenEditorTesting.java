@@ -37,13 +37,16 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     
     initComponents();
     
-    CellsMatrix cellsMatrix = new CellsMatrix( 90, 60, 30 );
+    CellsMatrix cellsMatrix = new CellsMatrix( 80, 60, 30 );
     
     cellsMatrix.addToContentPane( ( javax.swing.JPanel ) getContentPane() );
     
-    System.out.println( this.getSize() + ", " + 
-      cellsMatrix.cellsMatrixContainerScrollPane.getSize() + ", " + 
-      cellsMatrix.cellsMatrixContainer.getSize()
+    System.out.println( 
+      "JFrame size: " + this.getSize() + "\n" + 
+      "contentPane size: " + this.getContentPane().getSize() + "\n" +
+      "cellsMatrix size: " + cellsMatrix.getSize() + "\n" +
+      "cellsMatrixContainer size: " + cellsMatrix.getCellsMatrixContainer().getSize() + "\n" +
+      "cellsMatrixContainerScrollPane size: " + cellsMatrix.getCellsMatrixContainerScrollPane().getSize() + "\n" 
       );
   }
   
@@ -57,13 +60,18 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   
   */
 
+  /**
+   * Sets the JFrame to a "windowed-fullscreen" mode where the JFrame, including it's decoration, fills 
+   * the entire screen; the content pane is set to it's maximum size which is the size of the JFrame minus it's 
+   * decoration.
+   */
   public void enableWindowedFullscreen()
   { 
     java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     
     this.setMinimumSize( screenSize );
     
-    this.getContentPane().setMinimumSize( screenSize );
+    this.getContentPane().setSize( this.getContentPane().getMaximumSize() );
   }
   
   public void addFontsInFontFile()

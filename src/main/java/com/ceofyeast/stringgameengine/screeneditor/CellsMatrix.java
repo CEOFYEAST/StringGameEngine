@@ -11,10 +11,22 @@ import java.awt.Font;
  * is referred to as the cellsMatrix. The purpose of the cellsMatrix is to emulate the look and feel of a 
  * console, whilst also allowing the individual cells/characters to be edited.
  * 
- * <p>The cellsMatrix resides in a cellsMatrixContainer, a JPanel with a FlowLayout manager that allows 
- *    the cellsMatrix to be sized by the size of its contents. This container serves further use, such as 
- *    controlling the border color of the cellsMatrix, and is therefore stored as a member  of cellsMatrix.
- * 
+ * <p>The cellsMatrix resides in {@link CellsMatrix#cellsMatrixContainer cellsMatrixContainer}, a JPanel
+ *    with a FlowLayout manager that allows the cellsMatrix to be sized by the size of its contents.
+ *    This container serves the further use of controlling the border color of the cellsMatrix, and
+ *    is therefore stored as a member of cellsMatrix. The cellsMatrixContainer is initialized 
+ *    upon construction of the cellsMatrix.
+ *    
+ * <p>The cellsMatrixContainer then resides in 
+ *    {@link CellsMatrix#cellsMatrixContainerScrollPane cellsMatrixContainerScrollPane},
+ *    a JScrollPane designed to provide a scrolling function to the cellsMatrix when it's bounds exceed 
+ *    those of the content pane it resides in. This is the top-level parent of the cellsMatrix,
+ *    and is therefore what's added/removed from the content pane. Two methods are included in CellsMatrix
+ *    to facilitate the removal and addition of the cellsMatrix from the content pane due to this added 
+ *    complexity, and it's highly recommended that they be used. The methods in question are
+ *    {@link CellsMatrix#removeFromParent() removeFromParent} and 
+ *    {@link CellsMatrix#addToContentPane(javax.swing.JPanel) addToContentPane}.
+ *    
  * <p>The CellsMatrix has two modes, which are defined as constructors; these modes are edit mode, and view mode.
  *    Edit mode is designed for the editing of a screen, while view mode is designed for the viewing of a screen
  *    as it will look in the console. 
@@ -39,7 +51,7 @@ class CellsMatrix extends javax.swing.JPanel {
    * specified by borderThickness. Therefore, the border's color is set by changing the color of 
    * the cellsMatrixContainer; the container is opaque, while the cellsMatrix is translucent.
    */
-  public int borderThickness = 3;
+  private int borderThickness = 3;
 
   /**
    * Specifies the font size of the cells (text fields) in cellsMatrix; has a default value of 20.
@@ -59,13 +71,13 @@ class CellsMatrix extends javax.swing.JPanel {
   /**
    * Parent of the cellsMatrix, and allows the cellsMatrix to be sized by it's contents. 
    */
-  public javax.swing.JPanel cellsMatrixContainer;
+  private javax.swing.JPanel cellsMatrixContainer;
   
   /**
    * Parent of the cellsMatrixContainer, and allows the cellMatrix to be scrolled if it takes up more space
    * than the window.
    */
-  public javax.swing.JScrollPane cellsMatrixContainerScrollPane;
+  private javax.swing.JScrollPane cellsMatrixContainerScrollPane;
 
   /**
    * Edit mode.
@@ -156,9 +168,15 @@ class CellsMatrix extends javax.swing.JPanel {
   {
     return cellsMatrixContainer;
   }
+  
+  public javax.swing.JScrollPane getCellsMatrixContainerScrollPane()
+  {
+    return cellsMatrixContainerScrollPane;
+  }
 
   /**
-   * Removes cellsMatrix from its parent.
+   * Removes cellsMatrix from its parent by removing it's top-level parent, in this case the 
+   * {@link CellsMatrix#cellsMatrixContainerScrollPane cellsMatrixContainerScrollPane} from it's parent.
    */
   public void removeFromParent( )
   {
@@ -166,30 +184,35 @@ class CellsMatrix extends javax.swing.JPanel {
   }
 
   /**
-   * Adds cellsMatrix to the given JFrame.
+   * Adds cellsMatrix to the given content pane toAddTo by adding it's top-level parent, in this case the 
+   * {@link CellsMatrix#cellsMatrixContainerScrollPane cellsMatrixContainerScrollPane} to toAddTo. This method
+   * also takes the liberty of calling the {@link CellsMatrix#setSize(javax.swing.JPanel) setSize} method,
+   * which properly size the cellsMatrix so it can actually be displayed after being added.
    * 
-   * @param toAddTo JFrame to add cellsMatrix to
+   * @param toAddTo content pane to add cellsMatrix to
    */
   public void addToContentPane( javax.swing.JPanel toAddTo )
   {
     toAddTo.add( cellsMatrixContainerScrollPane );
 
-      // gets the Jframe associated with the content panel
+      // gets the Jframe associated with the content pane
     javax.swing.JFrame toAddToJFrame = ( javax.swing.JFrame ) javax.swing.SwingUtilities.getWindowAncestor( toAddTo );
 
-      // packs the JFrame associated with the content panel
+      // packs the JFrame associated with the content pane
     toAddToJFrame.pack();
     
-    resize( toAddToJFrame );
+    setSize( toAddTo );
   }
 
   /**
-   * Sizes cellsMatrix and its parent, cellsMatrixContainer. This  operation must only be carried
-   * out on a cellsMatrix after said cellsMatrix has been added to the content pane. This is because 
-   * the sizing is based on the size of a single cell in the cellsMatrix, and the individual cells are only
-   * assigned sizes when their parent is added to the content pane.
+   * Sizes cellsMatrix by sizing its parent, {@link CellsMatrix#cellsMatrixContainer cellsMatrixContainer}, as
+   * well as the {@link CellsMatrix#cellsMatrixContainerScrollPane scroll pane} that the 
+   * cellsMatrixContainer resides in. This method should be called right after adding the cellsMatrix to the 
+   * content pane; this is for two reasons. For one, the sizing depends on the size of a single cell in the 
+   * cellsMatrix, and the individual cells only gain sizes after being added to the content pane. For two, 
+   * the size of the cellsMatrix must be set before it can be displayed.
    */
-  private void resize( javax.swing.JFrame cellsMatrixContainerScrollPanelJFrame )
+  public void setSize( javax.swing.JPanel cellsMatrixContainerContentPane )
   {
       // Code block gathers sizing data about a single cell in the cellsMatrix
     javax.swing.JTextField cellInCellMatrix = ( javax.swing.JTextField ) this.getComponent( 0 );
@@ -212,53 +235,16 @@ class CellsMatrix extends javax.swing.JPanel {
       ( borderThickness * 2 ); // accounts for added height from outside borders
     cellsMatrixContainer.setSize( cellsMatrixWidth, cellsMatrixHeight );
     
-    cellsMatrixContainerScrollPane.setSize(
-      cellsMatrixContainerScrollPanelJFrame.getSize().width - 10,
-      cellsMatrixContainerScrollPanelJFrame.getSize().height - 100
-    );
-    
-    /**
-    java.awt.Dimension cellsMatrixContainerScrollPaneParentSize = cellsMatrixContainerScrollPanelJFrame.getSize();
-    
-    cellsMatrixContainerScrollPane.setMaximizedBounds(  );
-    
-    cellsMatrixContainerScrollPane.revalidate();
-    cellsMatrixContainerScrollPane.repaint();
-    
-    cellsMatrixContainerScrollPane.setSize( cellsMatrixWidth, cellsMatrixHeight );
-    
-    cellsMatrixContainerScrollPane.revalidate();
-    cellsMatrixContainerScrollPane.repaint();
-    
-         /*
-      Code block initializes variables containing the width and height of the cellsMatrixContainerScrollPanel's  
-      JFrame parent
-      
-    int cellsMatrixContainerScrollPanelParentWidth = 
-      ( int ) cellsMatrixContainerScrollPanelJFrame.getSize().getWidth();
-    int cellsMatrixSContainerScrollPanelParentHeight = 
-      ( int ) cellsMatrixContainerScrollPanelJFrame.getSize().getHeight();
-    
-    java.awt.Dimension cellsMatrixContainerScrollPaneBounds = new java.awt.Dimension( cellsMatrixContainer.getSize() );
-    
       /*
-      Code block ensures that the bounds of cellsMatrixContainerScrollPane don't exceed the bounds of the JFrame it 
-      resides in. This, in turn, ensures that if the bounds of cellsMatrixContainer exceed the bounds of said JFrame, 
-      a scroll bar will appear.
-      
-    if( cellsMatrixWidth > cellsMatrixContainerScrollPanelParentWidth )
-    {
-      cellsMatrixContainerScrollPaneBounds.width = cellsMatrixContainerScrollPanelParentWidth ;
-    }
-    if( cellsMatrixHeight > cellsMatrixSContainerScrollPanelParentHeight )
-    {
-      cellsMatrixContainerScrollPaneBounds.height = cellsMatrixSContainerScrollPanelParentHeight ;
-    }
-    
-      /*
-      Sets the bounds of the cellsMatrixContainer scroll pane to 
+      Code block sizes the cellsMatrixContainerScrollPane to be the size of the content pane, minus the widths of 
+      the scrollbars
       */
-    //cellsMatrixContainerScrollPane.setSize( cellsMatrixContainerScrollPaneBounds );
+    int vertScollBarWidth = cellsMatrixContainerScrollPane.getVerticalScrollBar().getWidth();
+    int horizontalScollBarWidth = cellsMatrixContainerScrollPane.getHorizontalScrollBar().getWidth();
+    cellsMatrixContainerScrollPane.setSize(
+      cellsMatrixContainerContentPane.getSize().width - vertScollBarWidth,
+      cellsMatrixContainerContentPane.getSize().height - horizontalScollBarWidth
+    );
   }
 
   /**
