@@ -12,26 +12,26 @@ import java.awt.Point; // class representing an (x, y) coordinate
  * Static class representing a mini-console designed to present a series of choices to the user and
  * prompt a response.
  * 
- * <p> Can be printed from any (x, y) coordinate in the console, and can be any width or height. The 
- *     mini-console is designed to be placed wherever the developer desires; usually this is where it will be
- *     most noticeable to the end user.
+ * <p>Can be printed from any (x, y) coordinate in the console, and can be any width or height. The 
+ *    mini-console is designed to be placed wherever the developer desires; usually this is where it will be
+ *    most noticeable to the end user.
  * 
- * <p> The lines inside the mini-console can be cleared to make room for new lines, or to simply appear empty;
- *     however, the mini-console's border is never cleared/re-printed. This makes for a more seamless experience.
+ * <p>The lines inside the mini-console can be cleared to make room for new lines, or to simply appear empty;
+ *    however, the mini-console's border is never cleared/re-printed. This makes for a more seamless experience.
  * 
- * <p> The user can specify that spacing lines be added to the mini-console, as well as the number of spacing 
- *     lines added. These spacing lines go between printed lines to give the mini-console more breathing room.
- *     The {@link MiniConsole#spacingBetweenLines spacingBetweenLines} variable dictates how many lines should 
- *     be placed between two printed lines.
+ * <p>The user can specify that spacing lines be added to the mini-console, as well as the number of spacing 
+ *    lines added. These spacing lines go between printed lines to give the mini-console more breathing room.
+ *    The {@link MiniConsole#spacingBetweenLines spacingBetweenLines} variable dictates how many lines should 
+ *    be placed between two printed lines.
  *     
- * <p> A single line is split across multiple lines in the display, called line pieces, if its too long to fit  
- *     inside the width of the display; this is done in {@link MiniConsole#addLineToLines(String) addLineToLines}. 
- *     This makes it so the developer doesn't have to be concerned about the width when adding a line to the 
- *     mini-console.
+ * <p>A single line is split across multiple lines in the display, called line pieces, if its too long to fit  
+ *    inside the width of the display; this is done in {@link MiniConsole#addLineToLines(String) addLineToLines}. 
+ *    This makes it so the developer doesn't have to be concerned about the width when adding a line to the 
+ *    mini-console.
  * 
- * <p> Only as many lines can be added to lines as will fit in {@link  MiniConsole#lines  lines}; this includes
- *     spacing lines as well as line pieces. If an extra line is attempted to be added, a warning will be 
- *     thrown and addLineToLines will return.
+ * <p>Only as many lines can be added to lines as will fit in {@link  MiniConsole#lines  lines}; this includes
+ *    spacing lines as well as line pieces. If an extra line is attempted to be added, a warning will be 
+ *    thrown and addLineToLines will return.
  * 
  * @author Benton Diebold
  */
@@ -199,9 +199,9 @@ class MiniConsole
    * Adds given line to lines as long as {@link  MiniConsole#lines  lines} isn't full, meaning it's size doesn't
    * equal the {@link  MiniConsole#height  height} of the mini console.
    * 
-   * <p> Is capable of adding lines that are longer than the {@link  MiniConsole#width  width} of the mini-console; 
-   *     in this case, lineToAdd is split into smaller lines (called line pieces) that are less than or equal to 
-   *     the width of the mini-console.
+   * <p>Is capable of adding lines that are longer than the {@link  MiniConsole#width  width} of the mini-console; 
+   *    in this case, lineToAdd is split into smaller lines (called line pieces) that are less than or equal to 
+   *    the width of the mini-console.
    * 
    * @param lineToAdd
    * @return an ArrayList of integers corresponding to the indices of any lines added to lines. There will be more

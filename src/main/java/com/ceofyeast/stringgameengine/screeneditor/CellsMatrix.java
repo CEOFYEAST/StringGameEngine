@@ -75,13 +75,12 @@ class CellsMatrix extends javax.swing.JPanel {
   
   /**
    * Parent of the cellsMatrixContainer, and allows the cellMatrix to be scrolled if it takes up more space
-   * than the window.
+   * than the window; is also the top-level parent of the cellsMatrix, and is therefore what's added/removed from
+   * the content pane.
    */
   private javax.swing.JScrollPane cellsMatrixContainerScrollPane;
 
   /**
-   * Edit mode.
-   * 
    * This constructor initializes the cellsMatrix in edit mode. Edit mode is the intended mode for 
    * editing the cellsMatrix due to three factors. One factor is the addition of borders between the cells,
    * as well as between the cellsMatrix and its container; this change allows for a clear separation 
@@ -118,8 +117,6 @@ class CellsMatrix extends javax.swing.JPanel {
   };
 
   /**
-   * View Mode.
-   * 
    * This constructor initializes the cellsMatrix in view mode. View mode is the intended mode for viewing a 
    * representation of screensMatrix as it will appear in the console; this is accomplished using three tricks.
    * For one, the width and height of the cells are set to the max width and height of a character from the font 
@@ -169,6 +166,11 @@ class CellsMatrix extends javax.swing.JPanel {
     return cellsMatrixContainer;
   }
   
+  /**
+   * Returns cellsMatrixContainerScrollPane.
+   * 
+   * @return the cellsMatrixContainerScrollPane
+   */
   public javax.swing.JScrollPane getCellsMatrixContainerScrollPane()
   {
     return cellsMatrixContainerScrollPane;
