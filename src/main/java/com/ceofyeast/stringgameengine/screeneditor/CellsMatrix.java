@@ -107,13 +107,15 @@ class CellsMatrix extends javax.swing.JPanel {
 
     for( int i = 0; i < rowCount * columnCount; i++ )
     {
-      Cell toAdd = new Cell( 'R', fontSize, font );
+      Cell toAdd = new Cell( 'R', font );
       this.add( toAdd );
     }
 
     //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
 
     cellsMatrixContainer.add( this );
+    
+    cellsMatrixContainerScrollPane = new javax.swing.JScrollPane( cellsMatrixContainer );
   };
 
   /**
@@ -136,6 +138,7 @@ class CellsMatrix extends javax.swing.JPanel {
     this.columnCount = columnCount;
     this.rowCount = rowCount;
     this.fontSize = fontSize;
+    initializeFont();
     
     cellsMatrixContainer = new javax.swing.JPanel();
     cellsMatrixContainer.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER, 0, 0 ) );
@@ -144,7 +147,7 @@ class CellsMatrix extends javax.swing.JPanel {
 
     for( int i = 0; i < rowCount * columnCount; i++ )
     {
-      Cell toAdd = new Cell( 'R', fontSize, font );
+      Cell toAdd = new Cell( 'R', font );
       this.add( toAdd );
     }
 
@@ -247,6 +250,15 @@ class CellsMatrix extends javax.swing.JPanel {
       cellsMatrixContainerContentPane.getSize().width - vertScollBarWidth,
       cellsMatrixContainerContentPane.getSize().height - horizontalScollBarWidth
     );
+    
+      /*
+      Code block ensures that using the scrollbar arrows, as well as clicking within the scrollbar area, both 
+      increment the scroll bar by the width/height (depends on the scrollbar's orientation) of a single cell 
+      */
+    cellsMatrixContainerScrollPane.getHorizontalScrollBar().setUnitIncrement( cellWidth );
+    cellsMatrixContainerScrollPane.getHorizontalScrollBar().setBlockIncrement( cellWidth );
+    cellsMatrixContainerScrollPane.getVerticalScrollBar().setUnitIncrement( cellHeight );
+    cellsMatrixContainerScrollPane.getVerticalScrollBar().setBlockIncrement( cellHeight );
   }
 
   /**

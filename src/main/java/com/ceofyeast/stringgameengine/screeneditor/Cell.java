@@ -25,19 +25,9 @@ import javax.swing.border.EmptyBorder;
  */
 class Cell extends javax.swing.JTextField {
   /**
-   * Initializes the char that the cell contains. Default value is a space.
+   * Declares the char that the cell contains.
    */
-  char cellText = ' ';
-
-  /**
-   * Initializes the font size of the cell. Default value is 20.
-   */
-  int fontSize = 20;
-
-  /**
-   * Specifies the font of the cell. Default font is a plain DejaVu Sans Mono with a font size of 20.
-   */
-  Font cellFont = new Font( "DejaVu Sans Mono", Font.PLAIN, 20 );
+  char cellText;
 
   /**
    * Constructs a cell using a given cellText char, fontSize and cellFont. 
@@ -46,8 +36,10 @@ class Cell extends javax.swing.JTextField {
    * @param fontSize fills the fontSize member variable
    * @param cellFont fills the cellFont member variable
    */
-  public Cell( char cellText, int fontSize, Font cellFont )
+  public Cell( char cellText, Font cellFont )
   {
+    this.cellText = cellText;
+    
     this.setOpaque( true );
 
     this.setBorder( new EmptyBorder( 0,0,0,0 ) );
