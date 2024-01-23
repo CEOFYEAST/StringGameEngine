@@ -25,31 +25,23 @@ import javax.swing.border.EmptyBorder;
  */
 class Cell extends javax.swing.JTextField {
   /**
-   * Declares the char that the cell contains.
-   */
-  char cellText;
-
-  /**
-   * Constructs a cell using a given cellText char, fontSize and cellFont. 
+   * Constructs a cell using a given cellText char and cellFont. 
    * 
    * @param cellText fills the cellText member variable
-   * @param fontSize fills the fontSize member variable
    * @param cellFont fills the cellFont member variable
    */
   public Cell( char cellText, Font cellFont )
   {
-    this.cellText = cellText;
+    this.setText( String.valueOf( cellText ) );
+    
+    this.setFont( cellFont );
     
     this.setOpaque( true );
 
-    this.setBorder( new EmptyBorder( 0,0,0,0 ) );
-
     this.setHorizontalAlignment( javax.swing.JTextField.CENTER );
 
-    this.setFont( cellFont );
-
-    this.setText( String.valueOf( cellText ) );
-
+    this.setBorder( new EmptyBorder( 0,0,0,0 ) );
+    
     this.setMargin( new java.awt.Insets( 0,0,0,0 ) );
   }
 }
