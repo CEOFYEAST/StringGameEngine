@@ -43,17 +43,6 @@ class CellsMatrix extends javax.swing.JPanel {
   private int rowCount;
 
   /**
-   * Specifies thickness of border between cells, and between cellsMatrix and 
-   * cellsContainer (acts as sides/top/bottom border); has a default value of 3.
-   * 
-   * The "border" referred to is actually just the horizontal and vertical gap between the cells 
-   * in cellsMatrix, as well as the margin between cellsMatrix and its container; this space is 
-   * specified by borderThickness. Therefore, the border's color is set by changing the color of 
-   * the cellsMatrixContainer; the container is opaque, while the cellsMatrix is translucent.
-   */
-  private int borderThickness = 3;
-
-  /**
    * Specifies the font size of the cells (text fields) in cellsMatrix; has a default value of 20.
    */
   private int fontSize = 20;
@@ -81,6 +70,17 @@ class CellsMatrix extends javax.swing.JPanel {
   private javax.swing.JScrollPane cellsMatrixContainerScrollPane;
 
   /**
+   * Specifies thickness of border between cells, and between cellsMatrix and 
+   * cellsContainer (acts as sides/top/bottom border); has a default value of 3.
+   * 
+   * The "border" referred to is actually just the horizontal and vertical gap between the cells 
+   * in cellsMatrix, as well as the margin between cellsMatrix and its container; this space is 
+   * specified by BORDER_THICKNESS. Therefore, the border's color is set by changing the color of 
+   * the cellsMatrixContainer; the container is opaque, while the cellsMatrix is translucent.
+   */
+  private final int BORDER_THICKNESS = 3;
+
+  /**
    * This constructor initializes the cellsMatrix in edit mode. Edit mode is the intended mode for 
    * editing the cellsMatrix due to three factors. One factor is the addition of borders between the cells,
    * as well as between the cellsMatrix and its container; this change allows for a clear separation 
@@ -90,7 +90,7 @@ class CellsMatrix extends javax.swing.JPanel {
    * 
    * @param columnCount initializes columnCount member
    * @param rowCount initializes rowCount member
-   * @param borderThickness initializes borderThickness member
+   * @param BORDER_THICKNESS initializes BORDER_THICKNESS member
    */
   public CellsMatrix( int columnCount, int rowCount )
   {
@@ -99,11 +99,11 @@ class CellsMatrix extends javax.swing.JPanel {
 
     cellsMatrixContainer = new javax.swing.JPanel();
     cellsMatrixContainer.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER, 0, 
-      borderThickness // Vertical gap is required in order to get margin above cellsMatrix, which 
+      BORDER_THICKNESS // Vertical gap is required in order to get margin above cellsMatrix, which 
                       // is a problem that doesn't exist for the horizontal gap
     ) );
 
-    this.setLayout( new java.awt.GridLayout( rowCount, columnCount, borderThickness, borderThickness ) );
+    this.setLayout( new java.awt.GridLayout( rowCount, columnCount, BORDER_THICKNESS, BORDER_THICKNESS ) );
 
     for( int i = 0; i < rowCount * columnCount; i++ )
     {
@@ -232,12 +232,12 @@ class CellsMatrix extends javax.swing.JPanel {
       */
     int cellsMatrixWidth = 
       ( cellWidth * columnCount ) + // accounts for added width from cells
-      ( borderThickness * ( columnCount - 1 ) ) + // accounts for added width from borders between cells
-      ( borderThickness * 2 ); // accounts for added width from outside borders
+      ( BORDER_THICKNESS * ( columnCount - 1 ) ) + // accounts for added width from borders between cells
+      ( BORDER_THICKNESS * 2 ); // accounts for added width from outside borders
     int cellsMatrixHeight = 
       ( cellHeight * rowCount ) + // accounts for added height from cells
-      ( borderThickness * ( rowCount - 1 ) ) + // accounts for added height from borders between cells
-      ( borderThickness * 2 ); // accounts for added height from outside borders
+      ( BORDER_THICKNESS * ( rowCount - 1 ) ) + // accounts for added height from borders between cells
+      ( BORDER_THICKNESS * 2 ); // accounts for added height from outside borders
     cellsMatrixContainer.setSize( cellsMatrixWidth, cellsMatrixHeight );
     
       /*
