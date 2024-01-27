@@ -219,12 +219,16 @@ class CellsMatrix extends javax.swing.JPanel {
    */
   public void setSize( javax.swing.JPanel cellsMatrixContentPane )
   {
+      /*
+      Sizes the cellsMatrixContainer non-explicitly by forcing it to re-calculate it's own preferred size, which is 
+      now based on the preferred size of it's child, the cellsMatrix.
+      */
     cellsMatrixContainer.setPreferredSize( cellsMatrixContainer.getPreferredSize() );
     
-    /*
+      /*
       Code block sizes the cellsMatrixContainerScrollPane to be the size of the content pane, minus the widths of 
       the scrollbars
-    */
+      */
     int vertScollBarWidth = cellsMatrixContainerScrollPane.getVerticalScrollBar().getWidth();
     int horizontalScollBarWidth = cellsMatrixContainerScrollPane.getHorizontalScrollBar().getWidth();
     cellsMatrixContainerScrollPane.setSize(
@@ -235,12 +239,14 @@ class CellsMatrix extends javax.swing.JPanel {
       /*
       Code block ensures that using the scrollbar arrows, as well as clicking within the scrollbar area, both 
       increment the scroll bar by the width/height (depends on the scrollbar's orientation) of a single cell 
-      
+      */
+    java.awt.FontMetrics fontMetrics = getToolkit().getFontMetrics( font );
+    int cellWidth = (int) Math.floor( fontMetrics.getMaxAdvance() + 1 );
+    int cellHeight = (int) Math.floor( fontMetrics.getAscent() + fontMetrics.getDescent() + 1 );
     cellsMatrixContainerScrollPane.getHorizontalScrollBar().setUnitIncrement( cellWidth );
     cellsMatrixContainerScrollPane.getHorizontalScrollBar().setBlockIncrement( cellWidth );
     cellsMatrixContainerScrollPane.getVerticalScrollBar().setUnitIncrement( cellHeight );
     cellsMatrixContainerScrollPane.getVerticalScrollBar().setBlockIncrement( cellHeight );
-      */
   }
 
   /**
