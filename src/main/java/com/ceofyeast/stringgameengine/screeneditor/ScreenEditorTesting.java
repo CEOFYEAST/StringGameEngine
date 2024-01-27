@@ -33,13 +33,17 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
    */
   public ScreenEditorTesting() 
   {
+    addFontsInFontFile();
+    
     enableWindowedFullscreen();
     
     initComponents();
     
-    CellsMatrix cellsMatrix = new CellsMatrix( 10, 10 );
+    CellsMatrix cellsMatrix = new CellsMatrix( 20, 20, 100 );
     
     cellsMatrix.addToContentPane( ( javax.swing.JPanel ) getContentPane() );
+    
+    javax.swing.JPanel contentPane = (javax.swing.JPanel) getContentPane();
     
     System.out.println( 
       "JFrame size: " + this.getSize() + "\n" + 
