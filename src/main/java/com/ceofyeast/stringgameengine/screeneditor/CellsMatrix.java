@@ -11,10 +11,11 @@ import java.awt.Font;
  * is referred to as the cellsMatrix. The purpose of the cellsMatrix is to emulate the look and feel of a 
  * console, whilst also allowing the individual cells/characters to be edited.
  * 
- * <p>The cellsMatrix resides in {@link CellsMatrix#scrollPaneView scrollPaneView}, a JPanel
- *    with a GridBag layout manager that allows the cellsMatrix to be centered within the scroll pane.
+ * <p>The cellsMatrix resides in {@link CellsMatrix#cellsMatrixScrollPaneView cellsMatrixScrollPaneView}, a JPanel
+ *    with a GridBag layout manager that allows the cellsMatrix to be centered within the scroll pane. This JPanel 
+ *    also serves as the view for the cellsMatrixScrollPane.
  *    
- * <p>The scrollPaneView then resides in 
+ * <p>The cellsMatrixScrollPaneView then resides in 
  *    {@link CellsMatrix#cellsMatrixScrollPane cellsMatrixScrollPane},
  *    a JScrollPane designed to provide a scrolling function to the cellsMatrix when it's bounds exceed 
  *    those of the content pane it resides in. This is the top-level parent of the cellsMatrix,
@@ -55,9 +56,9 @@ class CellsMatrix extends javax.swing.JPanel {
   private Font font = new Font( "DejaVu Sans Mono", Font.PLAIN, 20 );
   
   /**
-   * Parent of {@link CellsMatrix#scrollPaneView scrollPaneView}, and allows the cellMatrix to be scrolled if it 
-   * takes up more space than the window; is also the top-level parent of the cellsMatrix, and is therefore what's 
-   * added/removed from the content pane.
+   * Parent of {@link CellsMatrix#cellsMatrixScrollPaneView cellsMatrixScrollPaneView}, and allows the cellMatrix to 
+   * be scrolled if it takes up more space than the window; is also the top-level parent of the cellsMatrix, 
+   * and is therefore what's added/removed from the content pane.
    */
   private javax.swing.JScrollPane cellsMatrixScrollPane;
   
@@ -65,18 +66,16 @@ class CellsMatrix extends javax.swing.JPanel {
    * Parent of the cellsMatrix, and whose sole purpose is to center the cellsMatrix inside the scroll pane; is
    * also the view of the cellsMatrixScrollPane, as the name implies.
    */
-  private javax.swing.JPanel scrollPaneView;
+  private javax.swing.JPanel cellsMatrixScrollPaneView;
 
   /**
    * Specifies thickness of border between cells; has a default value of 3.
    * 
    * The "border" referred to is actually just the horizontal and vertical gap between the cells in cellsMatrix; 
-   * this space is specified by BORDER_THICKNESS. Therefore, the border's color is set by changing the color of 
-   * the cellsMatrix.
+   * this space is specified by BORDER_THICKNESS. Therefore, the border's color is set by changing the background 
+   * color of the cellsMatrix.
    */
   private final int BORDER_THICKNESS = 3;
-  
-  
 
   /**
    * This constructor initializes the cellsMatrix in edit mode. Edit mode is the intended mode for 
@@ -104,11 +103,11 @@ class CellsMatrix extends javax.swing.JPanel {
 
     //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
 
-    scrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
+    cellsMatrixScrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
     
-    scrollPaneView.add( this );
+    cellsMatrixScrollPaneView.add( this );
     
-    cellsMatrixScrollPane = new javax.swing.JScrollPane( scrollPaneView );
+    cellsMatrixScrollPane = new javax.swing.JScrollPane( cellsMatrixScrollPaneView );
   };
 
   /**
@@ -119,8 +118,8 @@ class CellsMatrix extends javax.swing.JPanel {
    * exist in a cell, this ensures that the cells are packed as tightly as possible. This reflects the behavior
    * of a console, where the cells in the console are each the size of one mono-spaced character. The second
    * way is the setting of the font size by the user. This ensures that the cellsMatrix replicates the user's
-   * console environment as thoroughly as possible. The third and final way is the absence of borders between
-   * the cells. This also serves to ensure that the cells are packed together.
+   * console environment as thoroughly as possible. The third and final way is the removal of borders between
+   * the cells; this also serves to ensure that the cells are packed together.
    * 
    * @param columnCount initializes columnCount member
    * @param rowCount initializes rowCount member
@@ -143,11 +142,11 @@ class CellsMatrix extends javax.swing.JPanel {
 
     //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
     
-    scrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
+    cellsMatrixScrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
     
-    scrollPaneView.add( this );
+    cellsMatrixScrollPaneView.add( this );
     
-    cellsMatrixScrollPane = new javax.swing.JScrollPane( scrollPaneView );
+    cellsMatrixScrollPane = new javax.swing.JScrollPane( cellsMatrixScrollPaneView );
   }
   
   /**
@@ -191,9 +190,9 @@ class CellsMatrix extends javax.swing.JPanel {
   }
 
   /**
-   * Sizes cellsMatrix by sizing its parent, {@link CellsMatrix#scrollPaneView scrollPaneView}, as
-   * well as the {@link CellsMatrix#cellsMatrixScrollPane scroll pane} that the 
-   * scrollPaneView resides in. This method should be called right after adding the cellsMatrix to the 
+   * Sizes cellsMatrix by sizing its parent, {@link CellsMatrix#cellsMatrixScrollPaneView cellsMatrixScrollPaneView}, 
+   * as well as the {@link CellsMatrix#cellsMatrixScrollPane scroll pane} that the 
+   * cellsMatrixScrollPaneView resides in. This method should be called right after adding the cellsMatrix to the 
    * content pane; this is because the size of the cellsMatrix must be set before it can be displayed.
    */
   public void setSize( javax.swing.JPanel cellsMatrixContentPane )
@@ -216,11 +215,11 @@ class CellsMatrix extends javax.swing.JPanel {
     );
     
       /* 
-      Ensures the scrollPaneView is at-least as large as the cellsMatrixScrollPane. This in turn ensures that the 
-      cellsMatrix will always appear centered in the scrollPaneView as long as the cellsMatrix is smaller than the 
-      scrollPaneView
+      Ensures the cellsMatrixScrollPaneView is at-least as large as the cellsMatrixScrollPane. This in turn ensures 
+      that the cellsMatrix will always appear centered in the cellsMatrixScrollPaneView as long as the cellsMatrix 
+      is smaller than the cellsMatrixScrollPaneView
       */
-    scrollPaneView.setMinimumSize( cellsMatrixScrollPane.getSize() );
+    cellsMatrixScrollPaneView.setMinimumSize( cellsMatrixScrollPane.getSize() );
     
       /*
       Code block ensures that using the scrollbar arrows, as well as clicking within the scrollbar area, both 
