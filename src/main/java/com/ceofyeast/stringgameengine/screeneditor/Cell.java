@@ -4,9 +4,6 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor;
 
-import java.awt.Font;
-import javax.swing.border.EmptyBorder;
-
 /**
  * Defines a JTextField subclass that represents a cell in the cellsMatrix. The cellsMatrix is an editable
  * representation of the console, which means that the cells inside the cellsMatrix are editable representations 
@@ -23,42 +20,4 @@ import javax.swing.border.EmptyBorder;
  *    java swing, as long as they're initialized containing a single character from a mono-spaced font with zero 
  *    margin.
  */
-class Cell extends javax.swing.JTextField {
-  private static int scrollCount = 0;
-  
-  /*
-  @Override public void scrollRectToVisible( java.awt.Rectangle r)
-  {
-    
-    scrollCount += 1;
-    
-    System.out.println("Scrolling (" + scrollCount + ")");
-    System.out.println("Rectangle (" + r.toString() + ")");
-    
-    return;
-  }
-  */
-  
-  /**
-   * Constructs a cell using a given cellText char and cellFont. 
-   * 
-   * @param cellText fills the cellText member variable
-   * @param cellFont fills the cellFont member variable
-   */
-  public Cell( char cellText, Font cellFont )
-  { 
-    this.setHorizontalAlignment(CENTER);
-    
-    this.setText( String.valueOf( cellText ) );
-    
-    this.setFont( cellFont );
-    
-    this.setOpaque( true );
-    
-    this.setBorder( new EmptyBorder( 0,0,0,0 ) );
-    
-    this.setMargin( new java.awt.Insets( 0,0,0,0 ) );
-    
-    this.setColumns( 1 );
-  }
-}
+abstract class Cell extends javax.swing.JTextField {}

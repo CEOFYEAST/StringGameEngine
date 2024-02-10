@@ -12,6 +12,11 @@ import java.awt.Font;
  * is referred to as the cellsMatrix. The purpose of the cellsMatrix is to emulate the look and feel of a 
  * console, whilst also allowing the individual cells/characters to be edited.
  * 
+ * <p>The CellsMatrix has two modes, which are defined as subclasses; these modes are edit mode, and view mode.
+ *    These subclasses are the only way to instantiate a cellsMatrix. Edit mode is designed for the editing of 
+ *    a screen, while view mode is designed for the viewing of a screen as it will look in the console. Each 
+ *    class has it's own inner Cell implementation.
+ * 
  * <p>The cellsMatrix resides in {@link CellsMatrix#cellsMatrixScrollPaneView cellsMatrixScrollPaneView}, a JPanel
  *    with a GridBag layout manager that allows the cellsMatrix to be centered within the scroll pane. This JPanel 
  *    also serves as the view for the cellsMatrixScrollPane.
@@ -25,49 +30,45 @@ import java.awt.Font;
  *    complexity, and it's highly recommended that they be used. The methods in question are
  *    {@link CellsMatrix#removeFromParent() removeFromParent} and 
  *    {@link CellsMatrix#addToContentPane(javax.swing.JPanel) addToContentPane}.
- *    
- * <p>The CellsMatrix has two modes, which are defined as constructors; these modes are edit mode, and view mode.
- *    Edit mode is designed for the editing of a screen, while view mode is designed for the viewing of a screen
- *    as it will look in the console. 
  */
-class CellsMatrix extends javax.swing.JPanel {
+abstract class CellsMatrix extends javax.swing.JPanel {
   /**
    * Specifies number of columns of cells in cellsMatrix; can't be negative or zero.
    */
-  private int columnCount;
+  protected int columnCount;
 
   /**
    * Specifies number of rows of cells in cellsMatrix; can't be negative or zero.
    */
-  private int rowCount;
+  protected int rowCount;
 
   /**
    * Specifies the font size of the cells (text fields) in cellsMatrix; has a default value of 20.
    */
-  private int fontSize = 20;
+  protected int fontSize = 20;
 
   /**
    * Specifies the name of the font to be used.
    */
-  private String fontName = "DejaVu Sans Mono";
+  protected String fontName = "DejaVu Sans Mono";
 
   /**
    * Contains the font to be applied to the cells in the cellsMatrix.
    */
-  private Font font = new Font( "DejaVu Sans Mono", Font.PLAIN, 19 );
+  protected Font font = new Font( "DejaVu Sans Mono", Font.PLAIN, 19 );
   
   /**
    * Parent of {@link CellsMatrix#cellsMatrixScrollPaneView cellsMatrixScrollPaneView}, and allows the cellMatrix to 
    * be scrolled if it takes up more space than the window; is also the top-level parent of the cellsMatrix, 
    * and is therefore what's added/removed from the content pane.
    */
-  private javax.swing.JScrollPane cellsMatrixScrollPane;
+  protected javax.swing.JScrollPane cellsMatrixScrollPane;
   
   /**
    * Parent of the cellsMatrix, and whose sole purpose is to center the cellsMatrix inside the scroll pane; is
    * also the view of the cellsMatrixScrollPane, as the name implies.
    */
-  private javax.swing.JPanel cellsMatrixScrollPaneView;
+  protected javax.swing.JPanel cellsMatrixScrollPaneView;
 
   /**
    * Specifies thickness of border between cells; has a default value of 3.
@@ -76,102 +77,7 @@ class CellsMatrix extends javax.swing.JPanel {
    * this space is specified by BORDER_THICKNESS. Therefore, the border's color is set by changing the background 
    * color of the cellsMatrix.
    */
-  private final int BORDER_THICKNESS = 3;
-
-  /**
-   * This constructor initializes the cellsMatrix in edit mode. Edit mode is the intended mode for 
-   * editing the cellsMatrix due to three factors. One factor is the addition of borders between the cells; 
-   * this change allows for a clear separation between cells. Another factor is the widening of the cells.
-   * This allows for more space inside the cells themselves so the characters they contain are more legible. 
-   * The final change is the implementation of a constant, large font size for increased legibility. 
-   * 
-   * @param columnCount initializes columnCount member
-   * @param rowCount initializes rowCount member
-   * @param BORDER_THICKNESS initializes BORDER_THICKNESS member
-   */
-  public CellsMatrix( int columnCount, int rowCount )
-  {
-    this.columnCount = columnCount;
-    this.rowCount = rowCount;
-
-    this.setLayout( new java.awt.GridLayout( rowCount, columnCount, BORDER_THICKNESS, BORDER_THICKNESS ) );
-
-    String toFillWith = "ceofyeast@LAPTOP-MPS827DS:~$";
-    
-    for( int i = 0; i < rowCount * columnCount; i++ )
-    {
-      Cell toAdd;
-      try{
-        toAdd = new Cell( 
-          toFillWith.charAt(i), 
-          font );
-      } catch(Exception e){
-        toAdd = new Cell( ' ', font );
-      }
-      
-      this.add( toAdd );
-    }
-
-    cellsMatrixScrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
-    
-    cellsMatrixScrollPaneView.add( this );
-    
-    cellsMatrixScrollPane = new javax.swing.JScrollPane( cellsMatrixScrollPaneView );
-  };
-
-  /**
-   * This constructor initializes the cellsMatrix in view mode. View mode is the intended mode for viewing a 
-   * representation of screensMatrix as it will appear in the console; this is accomplished using three tricks.
-   * For one, the width and height of the cells are set to the max width and height of a character from the font 
-   * being used. Seeing as only mono-spaced fonts are allowed, and that no more or less than one character can 
-   * exist in a cell, this ensures that the cells are packed as tightly as possible. This reflects the behavior
-   * of a console, where the cells in the console are each the size of one mono-spaced character. The second
-   * way is the setting of the font size by the user. This ensures that the cellsMatrix replicates the user's
-   * console environment as thoroughly as possible. The third and final way is the removal of borders between
-   * the cells; this also serves to ensure that the cells are packed together.
-   * 
-   * @param columnCount initializes columnCount member
-   * @param rowCount initializes rowCount member
-   * @param faceSize initializes faceSize member
-   */
-  public CellsMatrix( int columnCount, int rowCount, int fontSize )
-  {
-    this.columnCount = columnCount;
-    this.rowCount = rowCount;
-    this.fontSize = fontSize;
-    initializeFont();
-
-    this.setLayout( new java.awt.GridLayout( rowCount, columnCount, 0, 0 ) );
-
-    String toFillWith = "ceofyeast@LAPTOP-MPS827DS:~$";
-    
-    for( int i = 0; i < rowCount * columnCount; i++ )
-    {
-      Cell toAdd;
-      try{
-        toAdd = new Cell( 
-          toFillWith.charAt(i), 
-          font );
-      } catch(Exception e){
-        toAdd = new Cell( ' ', font );
-      }
-      
-      toAdd.setBackground(Color.BLUE);
-      
-      if( i % 2 == 1)
-      {
-        toAdd.setBackground(Color.RED);
-      }
-      
-      this.add( toAdd );
-    }
-    
-    cellsMatrixScrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
-    
-    cellsMatrixScrollPaneView.add( this );
-    
-    cellsMatrixScrollPane = new javax.swing.JScrollPane( cellsMatrixScrollPaneView );
-  }
+  protected final int BORDER_THICKNESS = 3;
   
   /**
    * Returns cellsMatrixScrollPane.
@@ -261,7 +167,7 @@ class CellsMatrix extends javax.swing.JPanel {
   /**
    * Initializes font using the fontName and fontSize member variables.
    */
-  private void initializeFont()
+  protected void initializeFont()
   {
     this.font = new Font( fontName, Font.PLAIN, fontSize );
   }
