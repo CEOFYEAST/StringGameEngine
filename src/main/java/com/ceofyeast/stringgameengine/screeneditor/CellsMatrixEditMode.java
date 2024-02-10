@@ -9,19 +9,20 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.EmptyBorder;
 
 /**
-* This subclass defines an edit mode version of implementation of CellsMatrix. Edit mode is the intended mode 
-* for editing the cellsMatrix, and certain changes are made within the constructor to better facilitate this; 
-* An inner-class implementation of Cell is also employed.
-* @author bento
+* This subclass defines an edit-mode implementation of CellsMatrix. Edit mode is the intended mode 
+* for editing the cellsMatrix, and certain changes are made within the constructor to better facilitate this.
+* 
+* <p>A protected, edit-mode implementation of Cell is also included within this class 
+*    ({@link CellEditMode CellEditMode}); this class is tailor-made for edit-mode.
+* 
+* @author Benton Diebold (ceofyeast)
 */
 public class CellsMatrixEditMode extends CellsMatrix {
-  
    /**
-   * This constructor initializes the cellsMatrix in edit mode. Edit mode is the intended mode for 
-   * editing the cellsMatrix due to three factors. One factor is the addition of borders between the cells; 
-   * this change allows for a clear separation between cells. Another factor is the widening of the cells.
-   * This allows for more space inside the cells themselves so the characters they contain are more legible. 
-   * The final change is the implementation of a constant, large font size for increased legibility. 
+   * To support edit-mode, the constructor employs three techniques. One technique is the addition of borders 
+   * between the cells; this change allows for a clear separation between cells. Another technique is the widening 
+   * of the cells. This allows for more space inside the cells themselves so the characters they contain are more 
+   * legible. The final technique is the implementation of a constant, large font size for increased legibility. 
    * 
    * @param columnCount initializes columnCount member
    * @param rowCount initializes rowCount member
@@ -57,10 +58,17 @@ public class CellsMatrixEditMode extends CellsMatrix {
     cellsMatrixScrollPane = new javax.swing.JScrollPane( cellsMatrixScrollPaneView );
   }
   
+  /**
+   * This subclass defines an edit-mode implementation of Cell to aid the edit-mode implementation of its
+   * container class, CellsMatrixEditMode.
+   * 
+   * @author Benton Diebold (ceofyeast)
+   */
   protected class CellEditMode extends Cell
   {
     /**
-     * Constructs a cell using a given cellText char and cellFont. 
+     * To reinforce edit-mode, the constructor adds padding to the inside of the cell to make its contents more
+     * legible.
      * 
      * @param cellText fills the cellText member variable
      * @param cellFont fills the cellFont member variable
@@ -77,9 +85,9 @@ public class CellsMatrixEditMode extends CellsMatrix {
 
      this.setBorder( new EmptyBorder( 0,0,0,0 ) );
 
-     this.setMargin( new java.awt.Insets( 0,0,0,0 ) );
-
      this.setColumns( 1 );
+     
+     this.setMargin( new java.awt.Insets( 0,5,0,5 ) );
     }
   }
 }

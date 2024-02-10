@@ -4,7 +4,6 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor;
 
-import java.awt.Color;
 import java.awt.Font;
 
 /**
@@ -12,10 +11,12 @@ import java.awt.Font;
  * is referred to as the cellsMatrix. The purpose of the cellsMatrix is to emulate the look and feel of a 
  * console, whilst also allowing the individual cells/characters to be edited.
  * 
- * <p>The CellsMatrix has two modes, which are defined as subclasses; these modes are edit mode, and view mode.
+ * <p>The CellsMatrix has two modes, which are defined as subclasses; these modes are edit mode, and view mode
+ *    ({@link CellsMatrixEditMode CellsMatrixEditMode}, {@link CellsMatrixViewMode CellsMatrixViewMode}).
  *    These subclasses are the only way to instantiate a cellsMatrix. Edit mode is designed for the editing of 
- *    a screen, while view mode is designed for the viewing of a screen as it will look in the console. Each 
- *    class has it's own inner Cell implementation.
+ *    a screen, while view mode is designed for the viewing of a screen as it will look in the console. These
+ *    classes then have their own protected Cell implementations, {@link CellViewMode CellViewMode} and 
+ *    {@link CellEditMode CellEditMode}; these classes are tailor built to aid their respective console mode.
  * 
  * <p>The cellsMatrix resides in {@link CellsMatrix#cellsMatrixScrollPaneView cellsMatrixScrollPaneView}, a JPanel
  *    with a GridBag layout manager that allows the cellsMatrix to be centered within the scroll pane. This JPanel 
@@ -30,6 +31,8 @@ import java.awt.Font;
  *    complexity, and it's highly recommended that they be used. The methods in question are
  *    {@link CellsMatrix#removeFromParent() removeFromParent} and 
  *    {@link CellsMatrix#addToContentPane(javax.swing.JPanel) addToContentPane}.
+ * 
+ * @author Benton Diebold (ceofyeast)
  */
 abstract class CellsMatrix extends javax.swing.JPanel {
   /**
