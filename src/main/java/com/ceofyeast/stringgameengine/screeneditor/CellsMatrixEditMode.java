@@ -10,19 +10,18 @@ import javax.swing.border.EmptyBorder;
 
 /**
 * This subclass defines an edit-mode implementation of CellsMatrix. Edit mode is the intended mode 
-* for editing the cellsMatrix, and certain changes are made within the constructor to better facilitate this.
+* for editing the cellsMatrix, and the entire class is built around reinforcing this.
 * 
 * <p>A protected, edit-mode implementation of Cell is also included within this class 
-*    ({@link CellEditMode CellEditMode}); this class is tailor-made for edit-mode.
+*    ({@link CellEditMode CellEditMode}); this class is tailor-made to support edit-mode.
 * 
 * @author Benton Diebold (ceofyeast)
 */
 public class CellsMatrixEditMode extends CellsMatrix {
    /**
-   * To support edit-mode, the constructor employs three techniques. One technique is the addition of borders 
-   * between the cells; this change allows for a clear separation between cells. Another technique is the widening 
-   * of the cells. This allows for more space inside the cells themselves so the characters they contain are more 
-   * legible. The final technique is the implementation of a constant, large font size for increased legibility. 
+   * To support edit-mode, the constructor employs two techniques. One technique is the addition of borders 
+   * between the cells; this change allows for a clear separation between cells. The other technique is the 
+   * implementation of a constant, large font size for increased legibility.
    * 
    * @param columnCount initializes columnCount member
    * @param rowCount initializes rowCount member

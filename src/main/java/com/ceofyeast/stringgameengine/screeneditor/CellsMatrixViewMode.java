@@ -10,13 +10,17 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.EmptyBorder;
 
 /**
- *
- * @author bento
+ * This subclass defines a view-mode implementation of CellsMatrix. View mode is the intended mode 
+ * for viewing the cellsMatrix, and certain changes are made within the constructor to better facilitate this.
+ * 
+ * <p>A protected, view-mode implementation of Cell is also included within this class 
+*    ({@link CellViewMode CellViewMode}); this class is tailor-made to support view-mode.
+ * 
+ * @author Benton Diebold (ceofyeast)
  */
 public class CellsMatrixViewMode extends CellsMatrix {
    /**
-   * This constructor initializes the cellsMatrix in view mode. View mode is the intended mode for viewing a 
-   * representation of screensMatrix as it will appear in the console; this is accomplished using three tricks.
+   * To support view mode, the constructor employs three techniques. 
    * For one, the width and height of the cells are set to the max width and height of a character from the font 
    * being used. Seeing as only mono-spaced fonts are allowed, and that no more or less than one character can 
    * exist in a cell, this ensures that the cells are packed as tightly as possible. This reflects the behavior
@@ -69,10 +73,18 @@ public class CellsMatrixViewMode extends CellsMatrix {
   }
   
   /**
+   * This subclass defines a view-mode implementation of Cell to aid the view-mode implementation of its
+   * container class, {@link CellsMatrixViewMode CellsMatrixViewMode}.
    * 
+   * @author Benton Diebold (ceofyeast)
    */
   protected class CellViewMode extends Cell
   {
+    /**
+     * Override is used to prevent unnecessary scrolling; scrolling isn't required in view mode.
+     * 
+     * @param r Unused param.
+     */
     @Override public void scrollRectToVisible( java.awt.Rectangle r)
     {
       return;
