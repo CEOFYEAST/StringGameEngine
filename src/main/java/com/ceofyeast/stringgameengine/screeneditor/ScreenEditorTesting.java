@@ -13,13 +13,6 @@ import java.awt.event.WindowEvent;
 
   // Used to size cells based on font size
 import java.awt.Font;
-import java.awt.font.TextAttribute;
-import java.text.AttributedCharacterIterator;
-
-import javax.swing.border.EmptyBorder;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import java.io.File;
 
@@ -39,13 +32,35 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     
     initComponents();
     
-    CellsMatrix cellsMatrix = new CellsMatrix( 20, 20 );
-    
-    cellsMatrix.setBackground(Color.red);
-    
+    CellsMatrix cellsMatrix = new CellsMatrix( 20, 20, 20 );
     cellsMatrix.addToContentPane( ( javax.swing.JPanel ) getContentPane() );
     
-    javax.swing.JPanel contentPane = (javax.swing.JPanel) getContentPane();
+    Cell cell = (Cell) cellsMatrix.getComponent(0);
+    java.awt.Dimension cellMaxDimension = cell.getMaximumSize();
+    java.awt.Dimension cellDimension = cell.getSize();
+    java.awt.Dimension cellPreferredDimension = cell.getPreferredSize();
+    int columns = cell.getColumns();
+    //double charWidth = getToolkit().getFontMetrics(cellsMatrix.getFont()).charWidth('@');
+    javax.swing.BoundedRangeModel rangeModel = cell.getHorizontalVisibility();
+    javax.swing.text.Document document = cell.getDocument();
+    
+    for(int i = 0; i < cellsMatrix.getComponents().length; i++)
+    {
+      Cell x = (Cell) cellsMatrix.getComponents()[i];
+      
+      x.setScrollOffset(0);
+      
+      System.out.println("New value: " + x.getHorizontalVisibility().getValue());
+      
+      x.revalidate();
+      x.repaint();
+      
+      System.out.println("Reval. value: " + x.getHorizontalVisibility().getValue());
+    }
+    
+    this.pack();
+    
+    
   }
   
   /*
@@ -101,13 +116,13 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
   
   /**
    * Placeholder method to save code for later.
-   */
+   
   public void displayAvailableFonts()
   {
       /*
       code block constructs JList, with a visible row count of 16, of available font -
       family names (called fontsList) 
-      */
+      * /
     String[] fontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
     javax.swing.JList<String> fontsList = new javax.swing.JList<>( fontFamilyNames );
     fontsList.setVisibleRowCount( 16 );
@@ -123,7 +138,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
 
       this information is used to find the bounds of fontsList as well as the unit increment for the -
       vertical scroll bar
-      */
+      * /
     int displayFontsButtonXPos = displayFontsButton.getX();
     int displayFontsButtonYPos = displayFontsButton.getY();
     int displayFontsButtonWidth = displayFontsButton.getWidth();
@@ -134,7 +149,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
 
       this information is used to set the bounds of fontsList as well as the unit increment for the -
         vertical scroll bar
-      */
+      * /
     int fontsListWidth = fontsList.getPreferredScrollableViewportSize().width;
     int fontsListHeight = fontsList.getPreferredScrollableViewportSize().height;
     int fontsListXPos = displayFontsButtonXPos + displayFontsButtonWidth;
@@ -149,6 +164,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
       fontsListHeight
     );
   }
+  */
   
   /**
    * This method is called from within the constructor to initialize the form.
@@ -161,7 +177,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
 
     jScrollPane1 = new javax.swing.JScrollPane();
     jTextArea1 = new javax.swing.JTextArea();
-    displayFontsButton = new javax.swing.JButton();
+    jTextField1 = new javax.swing.JTextField();
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     closeMenuItem = new javax.swing.JMenuItem();
@@ -173,14 +189,9 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     getContentPane().setLayout(null);
 
-    displayFontsButton.setText("Fonts");
-    displayFontsButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        displayFontsButtonActionPerformed(evt);
-      }
-    });
-    getContentPane().add(displayFontsButton);
-    displayFontsButton.setBounds(100, 330, 72, 23);
+    jTextField1.setText("jTextField1");
+    getContentPane().add(jTextField1);
+    jTextField1.setBounds(210, 110, 70, 22);
 
     fileMenu.setText("File");
 
@@ -203,10 +214,6 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     // TODO add your handling code here:
     this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
   }//GEN-LAST:event_closeActionPerformed
-
-  private void displayFontsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayFontsButtonActionPerformed
-    System.out.println( "displaying fonts" );
-  }//GEN-LAST:event_displayFontsButtonActionPerformed
 
   /**
    * @param args the command line arguments
@@ -245,10 +252,10 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JMenuItem closeMenuItem;
-  private javax.swing.JButton displayFontsButton;
   private javax.swing.JMenu fileMenu;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JTextArea jTextArea1;
+  private javax.swing.JTextField jTextField1;
   private javax.swing.JMenuBar menuBar;
   // End of variables declaration//GEN-END:variables
 }

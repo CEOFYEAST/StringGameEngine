@@ -1,0 +1,24 @@
+-classpath
+'C:/Users/bento/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'C:/Users/bento/Documents/NetBeansProjects/StringGameEngine/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/bento/Documents/NetBeansProjects/StringGameEngine/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'StringGameEngine 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'StringGameEngine 1.0-SNAPSHOT API'

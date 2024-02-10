@@ -4,6 +4,7 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor;
 
+import java.awt.Color;
 import java.awt.Font;
 
 /**
@@ -53,7 +54,7 @@ class CellsMatrix extends javax.swing.JPanel {
   /**
    * Contains the font to be applied to the cells in the cellsMatrix.
    */
-  private Font font = new Font( "DejaVu Sans Mono", Font.PLAIN, 20 );
+  private Font font = new Font( "DejaVu Sans Mono", Font.PLAIN, 19 );
   
   /**
    * Parent of {@link CellsMatrix#cellsMatrixScrollPaneView cellsMatrixScrollPaneView}, and allows the cellMatrix to 
@@ -95,13 +96,21 @@ class CellsMatrix extends javax.swing.JPanel {
 
     this.setLayout( new java.awt.GridLayout( rowCount, columnCount, BORDER_THICKNESS, BORDER_THICKNESS ) );
 
+    String toFillWith = "ceofyeast@LAPTOP-MPS827DS:~$";
+    
     for( int i = 0; i < rowCount * columnCount; i++ )
     {
-      Cell toAdd = new Cell( 'R', font );
+      Cell toAdd;
+      try{
+        toAdd = new Cell( 
+          toFillWith.charAt(i), 
+          font );
+      } catch(Exception e){
+        toAdd = new Cell( ' ', font );
+      }
+      
       this.add( toAdd );
     }
-
-    //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
 
     cellsMatrixScrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
     
@@ -134,13 +143,28 @@ class CellsMatrix extends javax.swing.JPanel {
 
     this.setLayout( new java.awt.GridLayout( rowCount, columnCount, 0, 0 ) );
 
+    String toFillWith = "ceofyeast@LAPTOP-MPS827DS:~$";
+    
     for( int i = 0; i < rowCount * columnCount; i++ )
     {
-      Cell toAdd = new Cell( 'R', font );
+      Cell toAdd;
+      try{
+        toAdd = new Cell( 
+          toFillWith.charAt(i), 
+          font );
+      } catch(Exception e){
+        toAdd = new Cell( ' ', font );
+      }
+      
+      toAdd.setBackground(Color.BLUE);
+      
+      if( i % 2 == 1)
+      {
+        toAdd.setBackground(Color.RED);
+      }
+      
       this.add( toAdd );
     }
-
-    //char[] toFillWith = new char[]{ ' ','c','e','o','f','y','e','a','s','t','@','L','A','P','T','O','P'};
     
     cellsMatrixScrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
     
@@ -196,7 +220,7 @@ class CellsMatrix extends javax.swing.JPanel {
    * content pane; this is because the size of the cellsMatrix must be set before it can be displayed.
    */
   public void setSize( javax.swing.JPanel cellsMatrixContentPane )
-  {
+  { 
       /*
       Sizes the cellsMatrix non-explicitly by forcing it to re-calculate it's own preferred size, which is 
       now based on the preferred size of its children cells.
@@ -237,7 +261,7 @@ class CellsMatrix extends javax.swing.JPanel {
   /**
    * Initializes font using the fontName and fontSize member variables.
    */
-  public void initializeFont()
+  private void initializeFont()
   {
     this.font = new Font( fontName, Font.PLAIN, fontSize );
   }
