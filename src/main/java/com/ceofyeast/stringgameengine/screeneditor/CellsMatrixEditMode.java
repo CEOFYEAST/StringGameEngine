@@ -5,8 +5,17 @@
 package com.ceofyeast.stringgameengine.screeneditor;
 
 import java.awt.Font;
+import java.awt.Insets;
+import java.awt.GridLayout;
+import java.awt.GridBagLayout;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.PlainDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.AttributeSet;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 
 /**
 * This subclass defines an edit-mode implementation of CellsMatrix. Edit mode is the intended mode 
@@ -25,14 +34,18 @@ public class CellsMatrixEditMode extends CellsMatrix {
    * 
    * @param columnCount initializes columnCount member
    * @param rowCount initializes rowCount member
-   * @param BORDER_THICKNESS initializes BORDER_THICKNESS member
+   * @throws IllegalArgumentException if column or row count are >= 0
    */
   public CellsMatrixEditMode( int columnCount, int rowCount )
   {
+    if(columnCount <= 0 || rowCount <= 0 )
+    {
+      throw new IllegalArgumentException();
+    }
     this.columnCount = columnCount;
     this.rowCount = rowCount;
 
-    this.setLayout( new java.awt.GridLayout( rowCount, columnCount, BORDER_THICKNESS, BORDER_THICKNESS ) );
+    this.setLayout( new GridLayout( rowCount, columnCount, BORDER_THICKNESS, BORDER_THICKNESS ) );
 
     String toFillWith = "ceofyeast@LAPTOP-MPS827DS:~$";
     
@@ -50,11 +63,11 @@ public class CellsMatrixEditMode extends CellsMatrix {
       this.add( toAdd );
     }
 
-    cellsMatrixScrollPaneView = new javax.swing.JPanel( new java.awt.GridBagLayout() );
+    cellsMatrixScrollPaneView = new JPanel( new GridBagLayout() );
     
     cellsMatrixScrollPaneView.add( this );
     
-    cellsMatrixScrollPane = new javax.swing.JScrollPane( cellsMatrixScrollPaneView );
+    cellsMatrixScrollPane = new JScrollPane( cellsMatrixScrollPaneView );
   }
   
   /**
@@ -74,19 +87,21 @@ public class CellsMatrixEditMode extends CellsMatrix {
      */
     public CellEditMode( char cellText, Font cellFont )
     { 
-     this.setHorizontalAlignment(CENTER);
+      this.setDocument( new TextFilteredDocument() );
+      
+      this.setHorizontalAlignment(CENTER);
 
-     this.setText( String.valueOf( cellText ) );
+      this.setText( String.valueOf( cellText ) );
 
-     this.setFont( cellFont );
+      this.setFont( cellFont );
 
-     this.setOpaque( true );
+      this.setOpaque( true );
 
-     this.setBorder( new EmptyBorder( 0,0,0,0 ) );
+      this.setBorder( new EmptyBorder( 0,0,0,0 ) );
 
-     this.setColumns( 1 );
+      this.setColumns( 1 );
      
-     this.setMargin( new java.awt.Insets( 0,5,0,5 ) );
+      this.setMargin( new Insets( 0,5,0,5 ) );
     }
   }
 }

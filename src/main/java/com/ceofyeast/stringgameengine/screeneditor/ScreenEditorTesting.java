@@ -32,9 +32,10 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     
     initComponents();
     
-    CellsMatrix cellsMatrix = new CellsMatrixViewMode( 20, 20, 20 );
+    CellsMatrix cellsMatrix = new CellsMatrixEditMode( 20, 20 );
     cellsMatrix.addToContentPane( ( javax.swing.JPanel ) getContentPane() );
     
+    /*
     Cell cell = (Cell) cellsMatrix.getComponent(0);
     java.awt.Dimension cellMaxDimension = cell.getMaximumSize();
     java.awt.Dimension cellDimension = cell.getSize();
@@ -42,25 +43,8 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     int columns = cell.getColumns();
     //double charWidth = getToolkit().getFontMetrics(cellsMatrix.getFont()).charWidth('@');
     javax.swing.BoundedRangeModel rangeModel = cell.getHorizontalVisibility();
-    javax.swing.text.Document document = cell.getDocument();
-    
-    for(int i = 0; i < cellsMatrix.getComponents().length; i++)
-    {
-      Cell x = (Cell) cellsMatrix.getComponents()[i];
-      
-      x.setScrollOffset(0);
-      
-      System.out.println("New value: " + x.getHorizontalVisibility().getValue());
-      
-      x.revalidate();
-      x.repaint();
-      
-      System.out.println("Reval. value: " + x.getHorizontalVisibility().getValue());
-    }
-    
-    this.pack();
-    
-    
+    javax.swing.text.Document document = cell.getDocument();    
+    */
   }
   
   /*

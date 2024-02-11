@@ -4,6 +4,10 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor;
 
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+
 /**
  * Defines a JTextField subclass that represents a cell in the cellsMatrix. As an abstract class, Cell can only
  * be instantiated by its two subclasses, {@link CellEditMode CellEditMode} and {@link CellViewMode CellViewMode}.
@@ -29,4 +33,54 @@ package com.ceofyeast.stringgameengine.screeneditor;
  * 
  * @author Benton Diebold (ceofyeast)
  */
-abstract class Cell extends javax.swing.JTextField {}
+abstract class Cell extends javax.swing.JTextField 
+{
+  /**
+   * When set as a Cell's document, this class acts as a filter for text being added to the Cell.
+   */
+  protected class TextFilteredDocument extends PlainDocument {
+    /**
+     * Overrides insertString, turning it into a text filter that prevents a Cell from containing any more 
+     * text than one character.
+     * 
+     * @param offs the offset at which to insert the string
+     * @param toInsert the string to be inserted
+     * @param a the text attributes of the string to be inserted
+     * 
+     * @throws BadLocationException 
+     */
+    @Override
+    public void insertString(int offs, String toInsert, AttributeSet a) throws BadLocationException {
+      if( toInsert != null )
+      {
+        if( getLength() > 0 )
+        {
+          return;
+        }
+        
+        if( toInsert.length() > 1 )
+        {
+          // Trims toInsert down to it's first character before passing it to insertString
+          toInsert = toInsert.substring( 0, 1 );
+        }
+        
+        super.insertString(offs, toInsert, a);
+      }
+    }
+    
+    /**
+     * Overrides remove, 
+     * 
+     * @param offs
+     * @param len
+     * @throws BadLocationException 
+     */
+    /*
+    @Override
+    public void remove(int offs, int len) throws BadLocationException
+    {
+      
+    }
+    */
+  }
+}

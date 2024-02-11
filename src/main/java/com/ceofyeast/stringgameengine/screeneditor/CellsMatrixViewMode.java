@@ -98,19 +98,21 @@ public class CellsMatrixViewMode extends CellsMatrix {
      */
     public CellViewMode( char cellText, Font cellFont )
     { 
-     this.setHorizontalAlignment(CENTER);
+      this.setDocument( new TextFilteredDocument() );
+      
+      this.setHorizontalAlignment(CENTER);
 
-     this.setText( String.valueOf( cellText ) );
+      this.setText( String.valueOf( cellText ) );
 
-     this.setFont( cellFont );
+      this.setFont( cellFont );
 
-     this.setOpaque( true );
+      this.setOpaque( true );
 
-     this.setBorder( new EmptyBorder( 0,0,0,0 ) );
+      this.setBorder( new EmptyBorder( 0,0,0,0 ) );
 
-     this.setMargin( new java.awt.Insets( 0,0,0,0 ) );
+      this.setMargin( new java.awt.Insets( 0,0,0,0 ) );
 
-     this.setColumns( 1 );
+      this.setColumns( 1 );
     }
   }
 }
