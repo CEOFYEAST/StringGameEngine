@@ -10,9 +10,6 @@ import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.PlainDocument;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.AttributeSet;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -60,6 +57,8 @@ public class CellsMatrixEditMode extends CellsMatrix {
         toAdd = new CellEditMode( ' ', font );
       }
       
+      toAdd.setText( "" );
+      
       this.add( toAdd );
     }
 
@@ -101,7 +100,7 @@ public class CellsMatrixEditMode extends CellsMatrix {
 
       this.setColumns( 1 );
      
-      this.setMargin( new Insets( 0,5,0,5 ) );
+      this.setMargin( new Insets( 0,5,5,0 ) );
     }
   }
 }
