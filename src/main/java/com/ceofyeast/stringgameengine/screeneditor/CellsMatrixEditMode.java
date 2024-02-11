@@ -57,7 +57,7 @@ public class CellsMatrixEditMode extends CellsMatrix {
         toAdd = new CellEditMode( ' ', font );
       }
       
-      toAdd.setText( "" );
+      toAdd.setText(toFillWith);
       
       this.add( toAdd );
     }

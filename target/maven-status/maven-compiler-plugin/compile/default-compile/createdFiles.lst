@@ -9,7 +9,6 @@ com\ceofyeast\stringgameengine\screeneditor\HashMapJsonTesting$2.class
 com\ceofyeast\stringgameengine\screeneditor\CellsMatrixEditMode$CellEditMode.class
 com\ceofyeast\stringgameengine\screeneditor\DirectorySystemTesting$4.class
 com\ceofyeast\stringgameengine\screeneditor\ScreenEditorTesting.class
-com\ceofyeast\stringgameengine\screeneditor\Cell$TextFilteredDocument$InsertListener.class
 com\ceofyeast\stringgameengine\MiniConsole.class
 com\ceofyeast\stringgameengine\screeneditor\DirectorySystemTesting.class
 com\ceofyeast\stringgameengine\screeneditor\ScreenEditorTesting$1.class

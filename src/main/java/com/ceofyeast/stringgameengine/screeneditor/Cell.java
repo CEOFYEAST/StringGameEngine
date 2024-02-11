@@ -7,9 +7,6 @@ package com.ceofyeast.stringgameengine.screeneditor;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import javax.swing.text.AbstractDocument;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.DocumentEvent;
 
 /**
  * Defines a JTextField subclass that represents a cell in the cellsMatrix. As an abstract class, Cell can only
@@ -34,52 +31,21 @@ import javax.swing.event.DocumentEvent;
  *    java swing as long as they're initialized containing a single character from a mono-spaced font with zero 
  *    margin.
  * 
+ * <p>The Cell class also contains a protected implementation of PlainDocument, 
+ *    {@link TextFilteredDocument TextFilteredDocument}, which filters inserted text to make sure the contents
+ *    of a Cell never surpass a single character in length. Both Cell implementations set this as their 
+ *    document upon construction.
+ * 
  * @author Benton Diebold (ceofyeast)
  */
 abstract class Cell extends javax.swing.JTextField 
 { 
   /**
    * When set as a Cell's document, this class acts as a filter for text being added to the Cell.
+   * 
+   * @author Benton Diebold
    */
   protected class TextFilteredDocument extends PlainDocument {
-    private final int MAX_CELL_TEXT_LENGTH = 1;
-    
-    protected TextFilteredDocument()
-    {
-      addDocumentListener( new InsertListener() );
-    }
-    
-    /**
-     * Overrides remove, 
-     * 
-     * @param offs
-     * @param len
-     * @throws BadLocationException 
-     */
-    /*
-    @Override
-    public void remove(int offs, int len) throws BadLocationException
-    {
-      System.out.println( "Starting offset: " + offs );
-      //super.remove(offs, len);
-      replace( 0, 1, " ", getDefaultRootElement().getAttributes() );
-    }
-    */
-    
-    @Override 
-    public void replace( int offs, int length, String text, AttributeSet a ) 
-      throws BadLocationException {
-      
-      if( text.length() > MAX_CELL_TEXT_LENGTH )
-      {
-        length = MAX_CELL_TEXT_LENGTH;
-        
-        text = text.substring( 0, MAX_CELL_TEXT_LENGTH );
-      }
-      
-      super.replace( offs, length, text, a );
-    }
-    
     /**
      * Overrides insertString, turning it into a text filter that prevents a Cell from containing any more 
      * text than one character.
@@ -108,34 +74,6 @@ abstract class Cell extends javax.swing.JTextField
         }
         
         super.insertString( offs, toInsert, a );
-      }
-    }
-    
-    protected class InsertListener implements DocumentListener 
-    {
-      public void changedUpdate( DocumentEvent event ){}
-      
-      public void removeUpdate( DocumentEvent event ){}
-      
-      public void insertUpdate( DocumentEvent event )
-      {
-        try
-        {
-          AbstractDocument callingDocument = (AbstractDocument) event.getDocument();
-          
-          String text = callingDocument.getText(0, callingDocument.getLength());
-          
-          if( callingDocument.getLength() == 0 )
-          {
-            System.out.println( "Empty Insert Attempt" );
-            
-            callingDocument.insertString( 0, " ", callingDocument.getDefaultRootElement().getAttributes());
-          }
-        }
-        catch( BadLocationException e )
-        {
-          e.printStackTrace();
-        }
       }
     }
   }
