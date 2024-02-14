@@ -31,6 +31,7 @@ public class CellsMatrixEditMode extends CellsMatrix {
    * 
    * @param columnCount initializes columnCount member
    * @param rowCount initializes rowCount member
+   * 
    * @throws IllegalArgumentException if column or row count are >= 0
    */
   public CellsMatrixEditMode( int columnCount, int rowCount )

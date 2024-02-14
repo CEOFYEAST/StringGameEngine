@@ -31,7 +31,7 @@ public class CellsMatrixViewMode extends CellsMatrix {
    * 
    * @param columnCount initializes columnCount member
    * @param rowCount initializes rowCount member
-   * @param faceSize initializes faceSize member
+   * @param fontSize initializes fontSize member
    */
   public CellsMatrixViewMode( int columnCount, int rowCount, int fontSize )
   {

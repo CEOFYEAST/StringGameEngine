@@ -10,7 +10,7 @@ import javax.swing.text.PlainDocument;
 
 /**
  * Defines a JTextField subclass that represents a cell in the cellsMatrix. As an abstract class, Cell can only
- * be instantiated by its two subclasses, {@link CellEditMode CellEditMode} and {@link CellViewMode CellViewMode}.
+ * be instantiated by its two subclasses, {@link CellsMatrixEditMode.CellEditMode CellEditMode} and {@link CellsMatrixViewMode.CellViewMode CellViewMode}.
  * These subclasses are built to support two subclasses of {@link CellsMatrix CellsMatrix}, which are 
  * {@link CellsMatrixEditMode CellsMatrixEditMode} and {@link CellsMatrixViewMode CellsMatrixViewMode} 
  * respectively. The Cell subclasses are protected members of these classes, so they can only be used in the 
@@ -38,7 +38,7 @@ import javax.swing.text.PlainDocument;
  * 
  * @author Benton Diebold (ceofyeast)
  */
-abstract class Cell extends javax.swing.JTextField 
+public abstract class Cell extends javax.swing.JTextField 
 { 
   /**
    * When set as a Cell's document, this class acts as a filter for text being added to the Cell.
@@ -54,7 +54,7 @@ abstract class Cell extends javax.swing.JTextField
      * @param toInsert the string to be inserted
      * @param a the text attributes of the string to be inserted
      * 
-     * @throws BadLocationException 
+     * @throws BadLocationException if a bad location is supplied.
      */
     @Override
     public void insertString( int offs, String toInsert, AttributeSet a ) 

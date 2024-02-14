@@ -15,8 +15,8 @@ import java.awt.Font;
  *    ({@link CellsMatrixEditMode CellsMatrixEditMode}, {@link CellsMatrixViewMode CellsMatrixViewMode}).
  *    These subclasses are the only way to instantiate a cellsMatrix. Edit mode is designed for the editing of 
  *    a screen, while view mode is designed for the viewing of a screen as it will look in the console. These
- *    classes then have their own protected Cell implementations, {@link CellViewMode CellViewMode} and 
- *    {@link CellEditMode CellEditMode}; these classes are tailor built to aid their respective console mode.
+ *    classes then have their own protected Cell implementations, {@link CellsMatrixViewMode.CellViewMode CellViewMode} and 
+ *    {@link CellsMatrixEditMode.CellEditMode CellEditMode}; these classes are tailor built to aid their respective console mode.
  * 
  * <p>The cellsMatrix resides in {@link CellsMatrix#cellsMatrixScrollPaneView cellsMatrixScrollPaneView}, a JPanel
  *    with a GridBag layout manager that allows the cellsMatrix to be centered within the scroll pane. This JPanel 
@@ -34,7 +34,7 @@ import java.awt.Font;
  * 
  * @author Benton Diebold (ceofyeast)
  */
-abstract class CellsMatrix extends javax.swing.JPanel {
+public abstract class CellsMatrix extends javax.swing.JPanel {
   /**
    * Specifies number of columns of cells in cellsMatrix; can't be negative or zero.
    */
@@ -127,6 +127,8 @@ abstract class CellsMatrix extends javax.swing.JPanel {
    * as well as the {@link CellsMatrix#cellsMatrixScrollPane scroll pane} that the 
    * cellsMatrixScrollPaneView resides in. This method should be called right after adding the cellsMatrix to the 
    * content pane; this is because the size of the cellsMatrix must be set before it can be displayed.
+   * 
+   * @param cellsMatrixContentPane The content pane that the cellsMatrix resides in.
    */
   public void setSize( javax.swing.JPanel cellsMatrixContentPane )
   { 

@@ -33,9 +33,9 @@ import java.awt.Point; // class representing an (x, y) coordinate
  *    spacing lines as well as line pieces. If an extra line is attempted to be added, a warning will be 
  *    thrown and addLineToLines will return.
  * 
- * @author Benton Diebold
+ * @author Benton Diebold (ceofyeast)
  */
-class MiniConsole 
+public class MiniConsole 
 { 
   /**
    * Width of the display section of the mini-console, including the width offset; the border isn't included.
@@ -203,7 +203,7 @@ class MiniConsole
    *    in this case, lineToAdd is split into smaller lines (called line pieces) that are less than or equal to 
    *    the width of the mini-console.
    * 
-   * @param lineToAdd
+   * @param lineToAdd line to add to lines.
    * @return an ArrayList of integers corresponding to the indices of any lines added to lines. There will be more
    *         than one index in the ArrayList if lineToAdd was split into multiple line pieces, only one index in 
    *         the ArrayList if lineToAdd wasn't split, and no index if no lines were added.
