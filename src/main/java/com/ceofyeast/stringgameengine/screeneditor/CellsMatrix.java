@@ -48,7 +48,7 @@ public abstract class CellsMatrix extends javax.swing.JPanel {
   /**
    * Specifies the font size of the cells (text fields) in cellsMatrix; has a default value of 20.
    */
-  protected int fontSize = 20;
+  protected int fontSize = 30;
 
   /**
    * Specifies the name of the font to be used.
@@ -160,9 +160,8 @@ public abstract class CellsMatrix extends javax.swing.JPanel {
       Code block ensures that using the scrollbar arrows, as well as clicking within the scrollbar area, both 
       increment the scroll bar by the width/height (depends on the scrollbar's orientation) of a single cell 
       */
-    java.awt.FontMetrics fontMetrics = getToolkit().getFontMetrics( font );
-    int cellWidth = (int) Math.floor( fontMetrics.getMaxAdvance() + 1 );
-    int cellHeight = (int) Math.floor( fontMetrics.getAscent() + fontMetrics.getDescent() + 1 );
+    int cellHeight = this.getHeight() / rowCount;
+    int cellWidth = this.getWidth() / columnCount;
     cellsMatrixScrollPane.getHorizontalScrollBar().setUnitIncrement( cellWidth );
     cellsMatrixScrollPane.getHorizontalScrollBar().setBlockIncrement( cellWidth );
     cellsMatrixScrollPane.getVerticalScrollBar().setUnitIncrement( cellHeight );

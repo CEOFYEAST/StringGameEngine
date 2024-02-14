@@ -32,7 +32,7 @@ public class ScreenEditorTesting extends javax.swing.JFrame {
     
     initComponents();
     
-    CellsMatrix cellsMatrix = new CellsMatrixViewMode( 20, 20, 40 );
+    CellsMatrix cellsMatrix = new CellsMatrixEditMode( 20, 20 );
     cellsMatrix.addToContentPane( ( javax.swing.JPanel ) getContentPane() );
     
     /*

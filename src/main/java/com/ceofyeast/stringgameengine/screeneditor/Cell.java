@@ -23,7 +23,7 @@ import javax.swing.text.PlainDocument;
  * 
  * <p>Every console cell inside the console is the same size and can contain, at most, a single character of the 
  *    same font. If a console cell doesn't contain a character, it's sized as if it does. Since the console can 
- *    only use mono-spaced fonts, the console cells' widths and heights are determined by the max width and height 
+ *    only use mono-spaced fonts, the console cells widths and heights are determined by the max width and height 
  *    of a character from the font being used because the characters are all the same size. The console cells are 
  *    then scaled up or down based on the font size.
  *    

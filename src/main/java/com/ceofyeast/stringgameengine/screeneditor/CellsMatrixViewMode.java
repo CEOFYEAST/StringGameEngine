@@ -55,11 +55,17 @@ public class CellsMatrixViewMode extends CellsMatrix {
         toAdd = new CellViewMode( ' ', font );
       }
       
-      toAdd.setBackground(Color.BLUE);
-      
-      if( i % 2 == 1)
+      if( i % 3 == 0 ) // if on even row
       {
         toAdd.setBackground(Color.RED);
+      }
+      else if( i % 3 == 1)
+      {
+        toAdd.setBackground(Color.BLUE);
+      }
+      else
+      {
+        toAdd.setBackground(Color.GREEN);
       }
       
       this.add( toAdd );

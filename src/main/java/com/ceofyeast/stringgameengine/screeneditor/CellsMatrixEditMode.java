@@ -4,12 +4,17 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor;
 
-import java.awt.Font;
-import java.awt.Insets;
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Color;
+
 import static javax.swing.SwingConstants.CENTER;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -40,10 +45,9 @@ public class CellsMatrixEditMode extends CellsMatrix {
     {
       throw new IllegalArgumentException();
     }
+    
     this.columnCount = columnCount;
     this.rowCount = rowCount;
-
-    this.setLayout( new GridLayout( rowCount, columnCount, BORDER_THICKNESS, BORDER_THICKNESS ) );
 
     String toFillWith = "ceofyeast@LAPTOP-MPS827DS:~$";
     
@@ -51,18 +55,18 @@ public class CellsMatrixEditMode extends CellsMatrix {
     {
       Cell toAdd;
       try{
-        toAdd = new CellEditMode( 
-          toFillWith.charAt(i), 
-          font );
+        toAdd = new CellEditMode( toFillWith.charAt(i) );
       } catch(Exception e){
-        toAdd = new CellEditMode( ' ', font );
+        toAdd = new CellEditMode( ' ' );
       }
       
       toAdd.setText(toFillWith);
       
       this.add( toAdd );
     }
-
+    
+    this.setLayout( new GridLayout( rowCount, columnCount, BORDER_THICKNESS, BORDER_THICKNESS ) );
+    
     cellsMatrixScrollPaneView = new JPanel( new GridBagLayout() );
     
     cellsMatrixScrollPaneView.add( this );
@@ -83,25 +87,33 @@ public class CellsMatrixEditMode extends CellsMatrix {
      * legible.
      * 
      * @param cellText fills the cellText member variable
-     * @param cellFont fills the cellFont member variable
      */
-    public CellEditMode( char cellText, Font cellFont )
+    public CellEditMode( char cellText )
     { 
-      this.setDocument( new TextFilteredDocument() );
+      setDocument( new TextFilteredDocument() );
       
-      this.setHorizontalAlignment(CENTER);
+      setColumns( 1 );
+      
+      setHorizontalAlignment( CENTER );
+      
+      setText( String.valueOf( cellText ) );
 
-      this.setText( String.valueOf( cellText ) );
+      setFont( font );
 
-      this.setFont( cellFont );
+      setOpaque( true );
 
-      this.setOpaque( true );
-
-      this.setBorder( new EmptyBorder( 0,0,0,0 ) );
-
-      this.setColumns( 1 );
-     
-      this.setMargin( new Insets( 0,5,5,0 ) );
+        /*
+        Code block adds margin to the cell in order to make the width of the cell equivalent to the height.
+        This involves adding margin to the width, because its generally smaller than the height.
+        */
+      Border line = BorderFactory.createLineBorder( Color.WHITE );
+      FontMetrics fm = getFontMetrics( font );
+      int height = fm.getAscent() + fm.getDescent();
+      int width = fm.getMaxAdvance();
+      int sideMargin = ( height - width ) / 2;
+      Border empty = new EmptyBorder( 0, sideMargin, 0, sideMargin );
+      CompoundBorder marginBorder = new CompoundBorder( line, empty );
+      setBorder( marginBorder );
     }
   }
 }
