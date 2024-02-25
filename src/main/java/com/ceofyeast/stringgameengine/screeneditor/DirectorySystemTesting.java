@@ -7,19 +7,154 @@ package com.ceofyeast.stringgameengine.screeneditor;
 import java.io.File;  
 import java.io.IOException;
 
-/**
- *
- * @author bento
- */
-public class DirectorySystemTesting extends javax.swing.JFrame {
+import java.awt.GridLayout;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+
+/**
+ * Temporary test class representing the file system structure that will be put in place for the project.
+ * 
+ * @author Benton Diebold (ceofyeast)
+ */
+public class DirectorySystemTesting extends JFrame {
+
+  /**
+   * Path to the directory all game files are stored in.
+   */
+  private final String GAMES_DIRECTORY_PATH = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/games/";
+  
   /**
    * Creates new form ScreenEditorJframeTesting
    */
   public DirectorySystemTesting() {
     initComponents();
+  }
+  
+  /**
+   * Class representing a dialog used to display a game file creation menu.
+   * 
+   * @author Benton Diebold (ceofyeast)
+   */
+  private class NewGameDialog extends JPanel {
+    /**
+     * The parent of the dialog, properly initialized by the constructor.
+     */
+    private JFrame parent = null;
     
-    newGamePanel.setVisible( false );
+    /**
+     * The dialog's field containing the new game's name.
+     */
+    private JTextField gameNameField = new JTextField( "" );
+    
+    /**
+     * Constructs a NewGameDialog.
+     * 
+     * @param parent The parent of the dialog.
+     * 
+     * @Throws ArgumentException If parent is null.
+     */
+    public NewGameDialog( JFrame parent )
+    {
+      super( new GridLayout( 0, 1 ) );
+      
+      if( parent == null )
+      {
+        throw( new IllegalArgumentException() );
+      }
+      
+      this.parent = parent;
+      
+      add( new JLabel( "Game Name:" ) );
+      add( gameNameField );
+    }
+    
+    /**
+     * Shows the NewGameDialog. If an error occurs during new game creation, the dialog is re-shown.
+     */
+    public void showDialog()
+    { 
+      int closeOption = JOptionPane.showConfirmDialog( 
+        parent, 
+        this, 
+        "New Game Menu",
+        JOptionPane.OK_CANCEL_OPTION,
+        JOptionPane.PLAIN_MESSAGE
+      );
+      
+      if( closeOption == JOptionPane.OK_OPTION ) 
+      {
+        String gameName = gameNameField.getText();
+        
+        gameNameField.setText("");
+        
+        if( gameName == null || gameName.equals("") )
+        {
+          JOptionPane.showMessageDialog(
+            parent, 
+            "Supplied Name Is Invalid"
+          );
+          
+          showDialog();
+        }
+        else
+        {
+          boolean creationSuccess = createNewGame( gameName );
+          
+          if( creationSuccess == false )
+          {
+            showDialog();
+          }
+        }
+      }
+    }
+    
+    /**
+     * Attempts to create a new game file using the given game name, which is then placed in the directory
+     * located at {@link DirectorySystemTesting:GAMES_DIRECTORY_PATH GAMES_DIRECTORY_PATH}.
+     * 
+     * @param name The name of the game, which will be set to the name of the JSON file representing the game.
+     * 
+     * @return A boolean, with true representing a successful new game creation and false representing a 
+     *         failed one. 
+     */
+    private boolean createNewGame( String name )
+    {
+      try 
+      {
+        File gameFile = new File( GAMES_DIRECTORY_PATH + name + ".json" );
+        
+        if ( gameFile.createNewFile() ) 
+        {
+          System.out.println( "Game File Created w/ Name: " + name + ".json" );
+
+          return true;
+        } 
+        else 
+        {
+          JOptionPane.showMessageDialog(
+            parent, 
+            "Game File w/ Supplied Name: " + name + ".json Already Exists"
+          );
+
+          return false;
+        }
+      } 
+      
+      catch (IOException e) 
+      {
+        JOptionPane.showMessageDialog(
+          parent,
+          e.getMessage(), 
+          "Error", JOptionPane.ERROR_MESSAGE
+        );
+
+        return false;
+      }
+    }
   }
 
   /**
@@ -31,15 +166,6 @@ public class DirectorySystemTesting extends javax.swing.JFrame {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    newGamePanel = new javax.swing.JPanel();
-    infoTip_newGame = new javax.swing.JLabel();
-    optionsPanel_newGame = new javax.swing.JPanel();
-    nameOption_newGame = new javax.swing.JPanel();
-    nameFieldLabel_newGame = new javax.swing.JLabel();
-    nameField_newGame = new javax.swing.JTextField();
-    submissionButtonPanel_newGame = new javax.swing.JPanel();
-    submitButton__newGame = new javax.swing.JButton();
-    cancelButton_newGame = new javax.swing.JButton();
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
     loadGame = new javax.swing.JMenu();
@@ -52,64 +178,6 @@ public class DirectorySystemTesting extends javax.swing.JFrame {
     deleteScreen = new javax.swing.JMenuItem();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-    newGamePanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-    newGamePanel.setToolTipText("");
-    newGamePanel.setPreferredSize(new java.awt.Dimension(320, 214));
-    newGamePanel.setLayout(new java.awt.GridLayout(0, 1));
-
-    infoTip_newGame.setBackground(new java.awt.Color(51, 153, 255));
-    infoTip_newGame.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-    infoTip_newGame.setForeground(new java.awt.Color(255, 255, 255));
-    infoTip_newGame.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    infoTip_newGame.setText("Enter New Game Info.");
-    infoTip_newGame.setAlignmentX(0.5F);
-    infoTip_newGame.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-    infoTip_newGame.setOpaque(true);
-    newGamePanel.add(infoTip_newGame);
-
-    optionsPanel_newGame.setPreferredSize(new java.awt.Dimension(278, 0));
-    optionsPanel_newGame.setLayout(new java.awt.GridBagLayout());
-
-    nameOption_newGame.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 0));
-
-    nameFieldLabel_newGame.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-    nameFieldLabel_newGame.setText("Name:");
-    nameFieldLabel_newGame.setPreferredSize(new java.awt.Dimension(70, 16));
-    nameOption_newGame.add(nameFieldLabel_newGame);
-
-    nameField_newGame.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-    nameField_newGame.setPreferredSize(new java.awt.Dimension(140, 25));
-    nameOption_newGame.add(nameField_newGame);
-
-    optionsPanel_newGame.add(nameOption_newGame, new java.awt.GridBagConstraints());
-
-    newGamePanel.add(optionsPanel_newGame);
-
-    submissionButtonPanel_newGame.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(153, 153, 153)));
-    java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout();
-    flowLayout1.setAlignOnBaseline(true);
-    submissionButtonPanel_newGame.setLayout(flowLayout1);
-
-    submitButton__newGame.setText("Submit");
-    submitButton__newGame.setPreferredSize(new java.awt.Dimension(75, 25));
-    submitButton__newGame.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        submitButton__newGameActionPerformed(evt);
-      }
-    });
-    submissionButtonPanel_newGame.add(submitButton__newGame);
-
-    cancelButton_newGame.setText("Cancel");
-    cancelButton_newGame.setPreferredSize(new java.awt.Dimension(75, 25));
-    cancelButton_newGame.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        cancelButton_newGameActionPerformed(evt);
-      }
-    });
-    submissionButtonPanel_newGame.add(cancelButton_newGame);
-
-    newGamePanel.add(submissionButtonPanel_newGame);
 
     fileMenu.setText("File");
 
@@ -149,64 +217,26 @@ public class DirectorySystemTesting extends javax.swing.JFrame {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addGap(40, 40, 40)
-        .addComponent(newGamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(52, Short.MAX_VALUE))
+      .addGap(0, 372, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addGap(75, 75, 75)
-        .addComponent(newGamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(85, Short.MAX_VALUE))
+      .addGap(0, 273, Short.MAX_VALUE)
     );
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
-
+  
+  /**
+   * Shows a {@link NewGameDialog NewGameDialog} upon clicking the New Game menu item.   
+   * 
+   * @param evt Contains information about the event.
+   */
   private void newGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameActionPerformed
-    // TODO add your handling code here:
-    newGamePanel.setVisible( true );
+    NewGameDialog dialog = new NewGameDialog( this );
+    
+    dialog.showDialog();
   }//GEN-LAST:event_newGameActionPerformed
-
-  private void submitButton__newGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButton__newGameActionPerformed
-    // TODO add your handling code here:
-    String newGameName = nameField_newGame.getText();
-    
-    try 
-    {
-      String gamesFolderPath = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/gamestest/";
-      
-      File myObj = new File( gamesFolderPath + newGameName + ".json" );
-      
-      if (myObj.createNewFile()) 
-      {
-        System.out.println( "File created: " + myObj.getName() );
-        
-        nameField_newGame.setText( "" );
-        
-        newGamePanel.setVisible( false );
-      } 
-      else 
-      {
-        System.out.println( "File already exists." );
-        
-        nameField_newGame.setText( "File already exists." );
-      }
-    } catch (IOException e) {
-      System.out.println( "An error occurred." );
-      
-      e.printStackTrace();
-    }
-  }//GEN-LAST:event_submitButton__newGameActionPerformed
-
-  private void cancelButton_newGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton_newGameActionPerformed
-    // TODO add your handling code here:
-    nameField_newGame.setText( "" );
-    
-    newGamePanel.setVisible( false );
-  }//GEN-LAST:event_cancelButton_newGameActionPerformed
 
   /**
    * @param args the command line arguments
@@ -245,24 +275,15 @@ public class DirectorySystemTesting extends javax.swing.JFrame {
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton cancelButton_newGame;
   private javax.swing.JMenuItem deleteGame;
   private javax.swing.JMenuItem deleteScreen;
   private javax.swing.JMenu fileMenu;
   private javax.swing.JPopupMenu.Separator gameAndScreenSeperator;
-  private javax.swing.JLabel infoTip_newGame;
   private javax.swing.JMenu loadGame;
   private javax.swing.JMenu loadScreen;
   private javax.swing.JMenuBar menuBar;
-  private javax.swing.JLabel nameFieldLabel_newGame;
-  private javax.swing.JTextField nameField_newGame;
-  private javax.swing.JPanel nameOption_newGame;
   private javax.swing.JMenuItem newGame;
-  private javax.swing.JPanel newGamePanel;
   private javax.swing.JMenuItem newScreen;
-  private javax.swing.JPanel optionsPanel_newGame;
   private javax.swing.JMenuItem saveScreen;
-  private javax.swing.JPanel submissionButtonPanel_newGame;
-  private javax.swing.JButton submitButton__newGame;
   // End of variables declaration//GEN-END:variables
 }
