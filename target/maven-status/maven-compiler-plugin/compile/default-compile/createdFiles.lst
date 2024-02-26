@@ -7,7 +7,6 @@ com\ceofyeast\stringgameengine\screeneditor\ScreenEditorTesting$2.class
 com\ceofyeast\stringgameengine\screeneditor\CellsMatrixEditMode.class
 com\ceofyeast\stringgameengine\screeneditor\HashMapJsonTesting$2.class
 com\ceofyeast\stringgameengine\screeneditor\CellsMatrixEditMode$CellEditMode.class
-com\ceofyeast\stringgameengine\screeneditor\DirectorySystemTesting$4.class
 com\ceofyeast\stringgameengine\screeneditor\ScreenEditorTesting.class
 com\ceofyeast\stringgameengine\MiniConsole.class
 com\ceofyeast\stringgameengine\screeneditor\DirectorySystemTesting.class
@@ -18,5 +17,6 @@ com\ceofyeast\stringgameengine\screeneditor\HashMapJsonTesting$1.class
 com\ceofyeast\stringgameengine\screeneditor\CellsMatrixViewMode$CellViewMode.class
 com\ceofyeast\stringgameengine\screeneditor\DirectorySystemTesting$2.class
 com\ceofyeast\stringgameengine\screeneditor\DirectorySystemTesting$NewGameDialog.class
+com\ceofyeast\stringgameengine\screeneditor\DirectorySystemTesting$NewScreenDialog.class
 com\ceofyeast\stringgameengine\screeneditor\CellsMatrixViewMode.class
 com\ceofyeast\stringgameengine\Screen.class

@@ -39,6 +39,9 @@
                 <Property name="text" type="java.lang.String" value="New Screen"/>
                 <Property name="toolTipText" type="java.lang.String" value="NewScreen"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newScreenActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="saveScreen">
               <Properties>

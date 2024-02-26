@@ -8,12 +8,15 @@ import java.io.File;
 import java.io.IOException;
 
 import java.awt.GridLayout;
+import java.awt.Container;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 /**
  * Temporary test class representing the file system structure that will be put in place for the project.
@@ -34,6 +37,100 @@ public class DirectorySystemTesting extends JFrame {
     initComponents();
   }
   
+  private class NewScreenDialog extends JPanel {
+    /**
+     * The parent of the dialog, properly initialized by the constructor.
+     */
+    private Container parent = null;
+    
+    /**
+     * Used to set the name of the new screen being created.
+     */
+    private JTextField screenNameField = new JTextField( "" );
+    
+    /**
+     * Used to set the column count for the new screen being created.
+     */
+    private JSpinner columnCountField = new JSpinner( new SpinnerNumberModel( 1, 1, 1000, 1 ) ); 
+    
+    /**
+     * Used to set the row count for the new screen being created.
+     */
+    private JSpinner rowCountField = new JSpinner( new SpinnerNumberModel( 1, 1, 1000, 1 ) );
+    
+    /**
+     * Constructs a NewScreenDialog.
+     * 
+     * @param parent The parent of the dialog.
+     * 
+     * @Throws ArgumentException If parent is null.
+     */
+    public NewScreenDialog( Container parent )
+    {
+      super( new GridLayout( 0, 1 ) );
+      
+      if( parent == null )
+      {
+        throw( new IllegalArgumentException() );
+      }
+      
+      this.parent = parent;
+      
+      add( new JLabel( "Screen Name:" ) );
+      add( screenNameField );
+      
+      add( new JLabel( "Column Count:" ) );
+      add( columnCountField );
+      
+      add( new JLabel( "Row Count:" ) );
+      add( rowCountField );
+    }
+    
+    /**
+     * Shows the NewScreenDialog. If an error occurs during new game creation, the dialog is re-shown.
+     */
+    public void showDialog()
+    { 
+      int closeOption = JOptionPane.showConfirmDialog( 
+        parent, 
+        this, 
+        "New Game Menu",
+        JOptionPane.OK_CANCEL_OPTION,
+        JOptionPane.PLAIN_MESSAGE
+      );
+      
+      if( closeOption == JOptionPane.OK_OPTION ) 
+      {
+        String screenName = screenNameField.getText();
+        int columnCount = (Integer) columnCountField.getValue();
+        int rowCount = (Integer) rowCountField.getValue();
+        
+        screenNameField.setText("");
+        columnCountField.setValue(0);
+        rowCountField.setValue(0);
+        
+        if( screenName == null || screenName.equals("") )
+        {
+          JOptionPane.showMessageDialog(
+            parent, 
+            "Supplied Name Is Invalid"
+          );
+          
+          showDialog();
+          
+          return;
+        }
+        else
+        {
+          
+        }
+        
+        
+        
+      }
+    }
+  }
+  
   /**
    * Class representing a dialog used to display a game file creation menu.
    * 
@@ -43,10 +140,10 @@ public class DirectorySystemTesting extends JFrame {
     /**
      * The parent of the dialog, properly initialized by the constructor.
      */
-    private JFrame parent = null;
+    private Container parent = null;
     
     /**
-     * The dialog's field containing the new game's name.
+     * Used to set name information for the new game being created.
      */
     private JTextField gameNameField = new JTextField( "" );
     
@@ -57,7 +154,7 @@ public class DirectorySystemTesting extends JFrame {
      * 
      * @Throws ArgumentException If parent is null.
      */
-    public NewGameDialog( JFrame parent )
+    public NewGameDialog( Container parent )
     {
       super( new GridLayout( 0, 1 ) );
       
@@ -99,6 +196,8 @@ public class DirectorySystemTesting extends JFrame {
           );
           
           showDialog();
+          
+          return;
         }
         else
         {
@@ -107,6 +206,8 @@ public class DirectorySystemTesting extends JFrame {
           if( creationSuccess == false )
           {
             showDialog();
+            
+            return;
           }
         }
       }
@@ -201,6 +302,11 @@ public class DirectorySystemTesting extends JFrame {
 
     newScreen.setText("New Screen");
     newScreen.setToolTipText("NewScreen");
+    newScreen.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        newScreenActionPerformed(evt);
+      }
+    });
     fileMenu.add(newScreen);
 
     saveScreen.setText("Save Screen");
@@ -237,6 +343,12 @@ public class DirectorySystemTesting extends JFrame {
     
     dialog.showDialog();
   }//GEN-LAST:event_newGameActionPerformed
+
+  private void newScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScreenActionPerformed
+    NewScreenDialog dialog = new NewScreenDialog( this );
+    
+    dialog.showDialog();
+  }//GEN-LAST:event_newScreenActionPerformed
 
   /**
    * @param args the command line arguments
