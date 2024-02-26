@@ -31,12 +31,18 @@ public class DirectorySystemTesting extends JFrame {
   private final String GAMES_DIRECTORY_PATH = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/games/";
   
   /**
-   * Creates new form ScreenEditorJframeTesting
+   * Creates new form ScreenEditorJframeTesting.
    */
   public DirectorySystemTesting() {
     initComponents();
   }
   
+  /**
+   * Class representing a dialog used to display a screen object creation menu. The class itself represents
+   * a JPanel with various fields, which is then displayed inside JOptionPane upon calling showDialog.
+   * 
+   * @author Benton Diebold (ceofyeast)
+   */
   private class NewScreenDialog extends JPanel {
     /**
      * The parent of the dialog, properly initialized by the constructor.
@@ -87,11 +93,11 @@ public class DirectorySystemTesting extends JFrame {
     }
     
     /**
-     * Shows the NewScreenDialog. If an error occurs during new game creation, the dialog is re-shown.
+     * Shows the NewScreenDialog, calling HandleShowResult upon the dialog returning.
      */
     public void showDialog()
     { 
-      int closeOption = JOptionPane.showConfirmDialog( 
+      int showResult = JOptionPane.showConfirmDialog( 
         parent, 
         this, 
         "New Game Menu",
@@ -99,7 +105,17 @@ public class DirectorySystemTesting extends JFrame {
         JOptionPane.PLAIN_MESSAGE
       );
       
-      if( closeOption == JOptionPane.OK_OPTION ) 
+      handleShowResult( showResult );
+    }
+    
+    /**
+     * Handles the cases after the dialog is closed. 
+     * 
+     * @param showResult The way the dialog was closed, is a JOptionPane option constant.
+     */
+    private void handleShowResult( int showResult )
+    {
+      if( showResult == JOptionPane.OK_OPTION ) 
       {
         String screenName = screenNameField.getText();
         int columnCount = (Integer) columnCountField.getValue();
@@ -117,22 +133,19 @@ public class DirectorySystemTesting extends JFrame {
           );
           
           showDialog();
-          
-          return;
         }
+        
         else
         {
           
         }
-        
-        
-        
       }
     }
   }
   
   /**
-   * Class representing a dialog used to display a game file creation menu.
+   * Class representing a dialog used to display a screen object creation menu. The class itself represents
+   * a JPanel with various fields, which is then displayed inside JOptionPane upon calling showDialog.
    * 
    * @author Benton Diebold (ceofyeast)
    */
@@ -170,11 +183,11 @@ public class DirectorySystemTesting extends JFrame {
     }
     
     /**
-     * Shows the NewGameDialog. If an error occurs during new game creation, the dialog is re-shown.
+     * Shows the NewScreenDialog, calling HandleShowResult upon the dialog returning.
      */
     public void showDialog()
     { 
-      int closeOption = JOptionPane.showConfirmDialog( 
+      int showResult = JOptionPane.showConfirmDialog( 
         parent, 
         this, 
         "New Game Menu",
@@ -182,7 +195,17 @@ public class DirectorySystemTesting extends JFrame {
         JOptionPane.PLAIN_MESSAGE
       );
       
-      if( closeOption == JOptionPane.OK_OPTION ) 
+      handleShowResult( showResult );
+    }
+    
+    /**
+     * Handles the cases after the dialog is closed. 
+     * 
+     * @param showResult The way the dialog was closed, is a JOptionPane option constant.
+     */
+    private void handleShowResult( int showResult )
+    {
+      if( showResult == JOptionPane.OK_OPTION ) 
       {
         String gameName = gameNameField.getText();
         
@@ -196,9 +219,8 @@ public class DirectorySystemTesting extends JFrame {
           );
           
           showDialog();
-          
-          return;
         }
+        
         else
         {
           boolean creationSuccess = createNewGame( gameName );
@@ -206,8 +228,6 @@ public class DirectorySystemTesting extends JFrame {
           if( creationSuccess == false )
           {
             showDialog();
-            
-            return;
           }
         }
       }
