@@ -7,6 +7,7 @@ package com.ceofyeast.stringgameengine.screeneditor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonParseException;
 
 import java.awt.GridLayout;
 import java.awt.Container;
@@ -16,12 +17,14 @@ import java.io.IOException;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.InvalidPathException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.UIManager;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
@@ -40,53 +43,64 @@ public class DirectorySystemTesting extends JFrame {
   private static final String GAMES_DIRECTORY_PATH = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/games/";
   
   /**
-   * 
-   */
-  private static JsonObject loadedGame = null;
-  
-  /**
    * Creates new form ScreenEditorJframeTesting.
    */
   public DirectorySystemTesting() {
     initComponents();
   }
   
-  private static void loadGame( String toLoadName )
+  /**
+   * Attempts to load the JSON game file associated with the given game name into a JsonObject.
+   * 
+   * @param toLoadName The name of the JSON file to load.
+   * @return The JsonObject representation of the file.
+   * 
+   * @throws InvalidPathException If an error occurs when building a path using toLoadName 
+   *         and GAMES_DIRECTORY_PATH
+   * @throws IOException If there's an error fetching/reading the file associated with toLoadName.
+   * @throws JsonParseException If the file associated with toLoadName cannot be parsed into a JsonElement.
+   * @throws IllegalStateException If the JsonElement representation of the file associated with 
+   *         toLoadNamecannot be parsed into a JsonObject.
+   */
+  private static JsonObject loadGame( String toLoadName ) 
+    throws IOException, IllegalStateException, JsonParseException, InvalidPathException
   {
-    try {
-        // Read JSON file content into a String
-      String toLoadJsonString = new String( 
-        Files.readAllBytes( 
-          Paths.get( GAMES_DIRECTORY_PATH + toLoadName + ".json" ) 
-        ) 
-      );
+      // Read JSON file content into a String
+    String toLoadJsonString = new String( 
+      Files.readAllBytes( 
+        Paths.get( GAMES_DIRECTORY_PATH + toLoadName + ".json" ) 
+      ) 
+    );
       
-      JsonElement toLoadJsonElement = JsonParser.parseString( toLoadJsonString );
-      
-      loadedGame = toLoadJsonElement.getAsJsonObject();
-      
-    } catch( IOException e ){
-      System.out.println( e );
-    }
+    JsonElement toLoadJsonElement = JsonParser.parseString( toLoadJsonString );
+
+    return toLoadJsonElement.getAsJsonObject();
   }
   
-  private static void loadGame( File toLoad )
+  /**
+   * Attempts to load the given JSON game file into a JsonObject.
+   * 
+   * @param toLoadName The name of the JSON file to load.
+   * @return The JsonObject representation of the file.
+   * 
+   * @throws InvalidPathException If an error occurs when building a path using toLoad.
+   * @throws IOException If there's an error accessing/reading toLoad.
+   * @throws JsonParseException If toLoad cannot be parsed into a JsonElement.
+   * @throws IllegalStateException If toLoad's JsonElement representation cannot be parsed into a JsonObject.
+   */
+  private static JsonObject loadGame( File toLoad ) 
+    throws InvalidPathException, IOException, JsonParseException, IllegalStateException 
   {
-    try {
-        // Read JSON file content into a String
-      String toLoadJsonString = new String( 
-        Files.readAllBytes( 
-           toLoad.toPath()
-        ) 
-      );
+    // Read JSON file content into a String
+    String toLoadJsonString = new String( 
+      Files.readAllBytes( 
+        toLoad.toPath()
+      ) 
+    );
       
-      JsonElement toLoadJsonElement = JsonParser.parseString( toLoadJsonString );
+    JsonElement toLoadJsonElement = JsonParser.parseString( toLoadJsonString );
       
-      loadedGame = toLoadJsonElement.getAsJsonObject();
-      
-    } catch( IOException e ){
-      System.out.println( e );
-    }
+    return toLoadJsonElement.getAsJsonObject();
   }
   
   /**
@@ -437,18 +451,31 @@ public class DirectorySystemTesting extends JFrame {
   }//GEN-LAST:event_loadScreenActionPerformed
 
   private void loadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameActionPerformed
-  JFileChooser chooser = new JFileChooser( GAMES_DIRECTORY_PATH );
-    
+    UIManager.put("FileChooser.readOnly", Boolean.TRUE);
+    JFileChooser chooser = new JFileChooser( GAMES_DIRECTORY_PATH );
+  
     FileNameExtensionFilter filter = new FileNameExtensionFilter( "JSON", "json" );
     chooser.setFileFilter(filter);
     
     chooser.setAcceptAllFileFilterUsed( false );
     
     int returnVal = chooser.showOpenDialog( this );
-    if(returnVal == JFileChooser.APPROVE_OPTION) {
+    if(returnVal == JFileChooser.APPROVE_OPTION) 
+    {
       File gameFile = chooser.getSelectedFile();
       
-      loadGame( gameFile );
+      try
+      {
+        JsonObject gameJsonObject = loadGame( gameFile );
+      }
+      catch( Exception e )
+      {
+        JOptionPane.showMessageDialog(
+          this,
+          e.getMessage(), 
+          "Error", JOptionPane.ERROR_MESSAGE
+        );
+      }
     }
   }//GEN-LAST:event_loadGameActionPerformed
 
