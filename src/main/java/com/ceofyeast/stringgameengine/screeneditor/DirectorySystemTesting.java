@@ -4,15 +4,24 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor;
 
-import java.io.File;  
-import java.io.IOException;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.awt.GridLayout;
 import java.awt.Container;
 
+import java.io.File;  
+import java.io.IOException;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
@@ -28,13 +37,56 @@ public class DirectorySystemTesting extends JFrame {
   /**
    * Path to the directory all game files are stored in.
    */
-  private final String GAMES_DIRECTORY_PATH = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/games/";
+  private static final String GAMES_DIRECTORY_PATH = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/games/";
+  
+  /**
+   * 
+   */
+  private static JsonObject loadedGame = null;
   
   /**
    * Creates new form ScreenEditorJframeTesting.
    */
   public DirectorySystemTesting() {
     initComponents();
+  }
+  
+  private static void loadGame( String toLoadName )
+  {
+    try {
+        // Read JSON file content into a String
+      String toLoadJsonString = new String( 
+        Files.readAllBytes( 
+          Paths.get( GAMES_DIRECTORY_PATH + toLoadName + ".json" ) 
+        ) 
+      );
+      
+      JsonElement toLoadJsonElement = JsonParser.parseString( toLoadJsonString );
+      
+      loadedGame = toLoadJsonElement.getAsJsonObject();
+      
+    } catch( IOException e ){
+      System.out.println( e );
+    }
+  }
+  
+  private static void loadGame( File toLoad )
+  {
+    try {
+        // Read JSON file content into a String
+      String toLoadJsonString = new String( 
+        Files.readAllBytes( 
+           toLoad.toPath()
+        ) 
+      );
+      
+      JsonElement toLoadJsonElement = JsonParser.parseString( toLoadJsonString );
+      
+      loadedGame = toLoadJsonElement.getAsJsonObject();
+      
+    } catch( IOException e ){
+      System.out.println( e );
+    }
   }
   
   /**
@@ -289,8 +341,8 @@ public class DirectorySystemTesting extends JFrame {
 
     menuBar = new javax.swing.JMenuBar();
     fileMenu = new javax.swing.JMenu();
-    loadGame = new javax.swing.JMenu();
     newGame = new javax.swing.JMenuItem();
+    loadGame = new javax.swing.JMenuItem();
     deleteGame = new javax.swing.JMenuItem();
     gameAndScreenSeperator = new javax.swing.JPopupMenu.Separator();
     loadScreen = new javax.swing.JMenu();
@@ -302,9 +354,6 @@ public class DirectorySystemTesting extends JFrame {
 
     fileMenu.setText("File");
 
-    loadGame.setText("Load Game");
-    fileMenu.add(loadGame);
-
     newGame.setText("New Game");
     newGame.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -313,11 +362,24 @@ public class DirectorySystemTesting extends JFrame {
     });
     fileMenu.add(newGame);
 
+    loadGame.setText("Load Game");
+    loadGame.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        loadGameActionPerformed(evt);
+      }
+    });
+    fileMenu.add(loadGame);
+
     deleteGame.setText("Delete Game");
     fileMenu.add(deleteGame);
     fileMenu.add(gameAndScreenSeperator);
 
     loadScreen.setText("Load Screen");
+    loadScreen.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        loadScreenActionPerformed(evt);
+      }
+    });
     fileMenu.add(loadScreen);
 
     newScreen.setText("New Screen");
@@ -343,11 +405,11 @@ public class DirectorySystemTesting extends JFrame {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 372, Short.MAX_VALUE)
+      .addGap(0, 610, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 273, Short.MAX_VALUE)
+      .addGap(0, 359, Short.MAX_VALUE)
     );
 
     pack();
@@ -369,6 +431,26 @@ public class DirectorySystemTesting extends JFrame {
     
     dialog.showDialog();
   }//GEN-LAST:event_newScreenActionPerformed
+
+  private void loadScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadScreenActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_loadScreenActionPerformed
+
+  private void loadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameActionPerformed
+  JFileChooser chooser = new JFileChooser( GAMES_DIRECTORY_PATH );
+    
+    FileNameExtensionFilter filter = new FileNameExtensionFilter( "JSON", "json" );
+    chooser.setFileFilter(filter);
+    
+    chooser.setAcceptAllFileFilterUsed( false );
+    
+    int returnVal = chooser.showOpenDialog( this );
+    if(returnVal == JFileChooser.APPROVE_OPTION) {
+      File gameFile = chooser.getSelectedFile();
+      
+      loadGame( gameFile );
+    }
+  }//GEN-LAST:event_loadGameActionPerformed
 
   /**
    * @param args the command line arguments
@@ -411,7 +493,7 @@ public class DirectorySystemTesting extends JFrame {
   private javax.swing.JMenuItem deleteScreen;
   private javax.swing.JMenu fileMenu;
   private javax.swing.JPopupMenu.Separator gameAndScreenSeperator;
-  private javax.swing.JMenu loadGame;
+  private javax.swing.JMenuItem loadGame;
   private javax.swing.JMenu loadScreen;
   private javax.swing.JMenuBar menuBar;
   private javax.swing.JMenuItem newGame;
