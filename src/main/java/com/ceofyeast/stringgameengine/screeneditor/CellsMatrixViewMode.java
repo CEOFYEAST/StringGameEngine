@@ -14,7 +14,7 @@ import javax.swing.border.EmptyBorder;
  * for viewing the cellsMatrix, and certain changes are made within the constructor to better facilitate this.
  * 
  * <p>A protected, view-mode implementation of Cell is also included within this class 
-*    ({@link CellViewMode CellViewMode}); this class is tailor-made to support view-mode.
+ *    ({@link CellViewMode CellViewMode}); this class is tailor-made to support view-mode.
  * 
  * @author Benton Diebold (ceofyeast)
  */
