@@ -4,10 +4,12 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor.directorysystem;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import java.nio.file.FileSystemAlreadyExistsException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import java.awt.Point;
 
@@ -35,12 +38,19 @@ import javax.swing.UIManager;
  * @author Benton Diebold (ceofyeast)
  */
 public class DirectorySystemTesting extends JFrame {
-
   /**
    * Path to the directory all game files are stored in.
    */
   private static final String GAMES_DIRECTORY_PATH = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/games/";
-
+  
+  private static final Gson GSON = new Gson();
+  
+  public static java.lang.reflect.Type gameType = new TypeToken< HashMap<String, Object> >(){}.getType();
+  
+  public static java.lang.reflect.Type screenType = new TypeToken< HashMap<String, HashMap<String, Object>> >(){}.getType();
+  
+  public static java.lang.reflect.Type metaDataType = new TypeToken< HashMap<String, String> >(){}.getType();
+  
   /**
    * Creates new form ScreenEditorJframeTesting.
    */
@@ -56,7 +66,7 @@ public class DirectorySystemTesting extends JFrame {
    * @return The JsonObject representation of the file.
    *
    * @throws InvalidPathException If an error occurs when building a path using
-   * toLoadName and GAMES_DIRECTORY_PATH
+   * toLoadName and GAMES_DIRECTORY_PATH.
    * @throws IOException If there's an error fetching/reading the file
    * associated with toLoadName.
    * @throws JsonParseException If the file associated with toLoadName cannot be
@@ -104,6 +114,11 @@ public class DirectorySystemTesting extends JFrame {
 
     return toLoadJsonElement.getAsJsonObject();
   }
+  
+  public static JsonObject loadScreen(HashMap<String, Object> game, String toLoadName)
+  {
+    
+  }
 
   /**
    * Attempts to create a new game file using the given game name, which is then
@@ -138,23 +153,72 @@ public class DirectorySystemTesting extends JFrame {
    * 
    * @return The new screen hash map.
    */
-  public static HashMap<String, Object> createNewScreen()
+  public static Map createNewScreen()
   {
-    HashMap<String, Object> toReturn = new HashMap<String, Object>();
+    HashMap toReturn = new HashMap<String, Object>();
+    
+      // initializes the meta-data hash map
+    HashMap metaDataHashMap = new HashMap<String, String>();
+    metaDataHashMap.put("name", null);
     
       // initializes the sizing hash map
-    Map<String, Integer> sizingHashMap = new HashMap<>();
+    HashMap sizingHashMap = new HashMap<String, Integer>();
     sizingHashMap.put("rowCount", null);
     sizingHashMap.put("colCount", null);
 
       // initializes the cells hash map
-    Map<Point, Map<String, Object>> cellsHashMap = new HashMap<>();
+    HashMap cellsHashMap = new HashMap<Point, HashMap<String, Object>>();
     
+    toReturn.put( "metaData", metaDataHashMap );
     toReturn.put( "sizingData", sizingHashMap );
     toReturn.put( "cellsData", cellsHashMap );
     
     return toReturn;
   }
+  
+  @FunctionalInterface
+  public interface JsonObjectParser<T, U, V> {
+    public V apply(T t, U u) throws IllegalStateException, NoSuchElementException;
+  }
+  
+  public static JsonObjectParser< JsonObject, Boolean, ? > getSizingData = 
+  ( container, asJsonObject ) -> {
+      
+      // grabs java object representation of screen 
+    JsonObject sizingDataJsonObject = container.get( "sizingData" ).getAsJsonObject();
+    
+      // simply returns JsonObject representation if asJsonObject is true
+    if( asJsonObject ) { return sizingDataJsonObject; }
+    
+      // returns meta data as java object, type casted, after converting it from a Json Object
+    return GSON.fromJson( sizingDataJsonObject, sizingDataType );
+  };
+  
+  public static JsonObjectParser< JsonObject, Boolean, ? > getMetaData = 
+  ( container, asJsonObject ) -> {
+      
+      // grabs java object representation of metaData 
+    JsonObject metaDataJsonObject = container.get( "metaData" ).getAsJsonObject();
+    
+      // simply returns JsonObject representation if asJsonObject is true
+    if( asJsonObject ) { return metaDataJsonObject; }
+    
+      // returns meta data as java object, type casted, after converting it from a Json Object
+    return GSON.fromJson( metaDataJsonObject, metaDataType );
+  };
+  
+  public static JsonObjectParser< JsonObject, Boolean, ? > getCellsData = 
+  ( container, asJsonObject ) -> {
+      
+      // grabs java object representation of screen 
+    JsonObject cellsDataJsonObject = container.get( "cellsData" ).getAsJsonObject();
+    
+      // simply returns JsonObject representation if asJsonObject is true
+    if( asJsonObject ) { return cellsDataJsonObject; }
+    
+      // returns meta data as java object, type casted, after converting it from a Json Object
+    return GSON.fromJson( cellsDataJsonObject, cellsDataType );
+  };
 
   /**
    * This method is called from within the constructor to initialize the form.
@@ -277,7 +341,7 @@ public class DirectorySystemTesting extends JFrame {
       File gameFile = chooser.getSelectedFile();
 
       try {
-        JsonObject gameJsonObject = loadGame(gameFile);
+        loadGame(gameFile);
       } catch (Exception e) {
         JOptionPane.showMessageDialog(
           this,
