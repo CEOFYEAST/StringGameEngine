@@ -32,14 +32,14 @@
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="gameAndScreenSeperator">
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="loadScreen">
+            <MenuItem class="javax.swing.JMenuItem" name="loadScreen">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Load Screen"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loadScreenActionPerformed"/>
               </Events>
-            </Menu>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="newScreen">
               <Properties>
                 <Property name="text" type="java.lang.String" value="New Screen"/>

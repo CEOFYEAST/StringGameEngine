@@ -16,8 +16,9 @@ import javax.swing.SpinnerNumberModel;
 
 /**
  * Class representing a dialog used to display a screen object creation menu.
- * The class itself represents a JPanel with various fields, which is then
- * displayed inside JOptionPane upon calling showDialog.
+ * 
+ * <p>The class itself represents a JPanel with various fields, which is then
+ *    displayed inside JOptionPane upon calling showDialog.
  *
  * @author Benton Diebold (ceofyeast)
  */

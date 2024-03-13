@@ -14,8 +14,9 @@ import javax.swing.JTextField;
 
 /**
  * Class representing a dialog used to display a screen object creation menu.
- * The class itself represents a JPanel with various fields, which is then
- * displayed inside JOptionPane upon calling showDialog.
+ * 
+ * <p>The class itself represents a JPanel with various fields, which is then
+ *    displayed inside JOptionPane upon calling showDialog.
  *
  * @author Benton Diebold (ceofyeast)
  */
@@ -87,10 +88,9 @@ public class NewGameDialog extends JPanel {
 
         showDialog();
       } else {
-        boolean creationSuccess = false;
 
         try {
-          creationSuccess = DirectorySystemTesting.createNewGame(gameName);
+          DirectorySystemTesting.createNewGame(gameName);
         } catch (Exception e) {
           e.printStackTrace();
           
@@ -99,9 +99,7 @@ public class NewGameDialog extends JPanel {
             e.getMessage(),
             "Error", JOptionPane.ERROR_MESSAGE
           );
-        }
-
-        if (creationSuccess == false) {
+          
           showDialog();
         }
       }

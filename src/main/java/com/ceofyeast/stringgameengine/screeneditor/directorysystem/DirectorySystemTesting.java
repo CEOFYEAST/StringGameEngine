@@ -21,7 +21,6 @@ import java.nio.file.FileSystemAlreadyExistsException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import java.awt.Point;
 
@@ -45,11 +44,14 @@ public class DirectorySystemTesting extends JFrame {
   
   private static final Gson GSON = new Gson();
   
-  public static java.lang.reflect.Type gameType = new TypeToken< HashMap<String, Object> >(){}.getType();
+  public static JsonObject loadedGame = null;
+  public static JsonObject loadedScreen = null;
   
-  public static java.lang.reflect.Type screenType = new TypeToken< HashMap<String, HashMap<String, Object>> >(){}.getType();
-  
-  public static java.lang.reflect.Type metaDataType = new TypeToken< HashMap<String, String> >(){}.getType();
+  private static final java.lang.reflect.Type GAME_TYPE = new TypeToken< HashMap<String, Object> >(){}.getType();
+  private static final java.lang.reflect.Type SCREEN_TYPE = new TypeToken< HashMap<String, HashMap<String, Object>> >(){}.getType();
+  private static final java.lang.reflect.Type META_DATA_TYPE = new TypeToken< HashMap<String, String> >(){}.getType();
+  private static final java.lang.reflect.Type SIZING_DATA_TYPE = new TypeToken< HashMap<String, Integer> >(){}.getType();
+  private static final java.lang.reflect.Type CELLS_DATA_TYPE = new TypeToken< Map<Point, Map<String, Object>> >(){}.getType();
   
   /**
    * Creates new form ScreenEditorJframeTesting.
@@ -74,7 +76,7 @@ public class DirectorySystemTesting extends JFrame {
    * @throws IllegalStateException If the JsonElement representation of the file
    * associated with toLoadNamecannot be parsed into a JsonObject.
    */
-  private static JsonObject loadGame(String toLoadName)
+  private static void loadGame(String toLoadName)
     throws IOException, IllegalStateException, JsonParseException, InvalidPathException {
     // Read JSON file content into a String
     String toLoadJsonString = new String(
@@ -85,7 +87,7 @@ public class DirectorySystemTesting extends JFrame {
 
     JsonElement toLoadJsonElement = JsonParser.parseString(toLoadJsonString);
 
-    return toLoadJsonElement.getAsJsonObject();
+    loadedGame = toLoadJsonElement.getAsJsonObject();
   }
 
   /**
@@ -101,7 +103,7 @@ public class DirectorySystemTesting extends JFrame {
    * @throws IllegalStateException If toLoad's JsonElement representation cannot
    * be parsed into a JsonObject.
    */
-  public static JsonObject loadGame(File toLoad)
+  public static void loadGame(File toLoad)
     throws InvalidPathException, IOException, JsonParseException, IllegalStateException {
     // Read JSON file content into a String
     String toLoadJsonString = new String(
@@ -112,12 +114,22 @@ public class DirectorySystemTesting extends JFrame {
 
     JsonElement toLoadJsonElement = JsonParser.parseString(toLoadJsonString);
 
-    return toLoadJsonElement.getAsJsonObject();
+    loadedGame = toLoadJsonElement.getAsJsonObject();
   }
   
-  public static JsonObject loadScreen(HashMap<String, Object> game, String toLoadName)
+  /**
+   * Loads a screen with the given name into the loadedScreen member variable; the screen is grabbed from 
+   * loadedGame.
+   * 
+   * @param game The game file to load the screen from.
+   * @param toLoadName The name of the screen to load.
+   * @return A JsonObject representation of the loaded screen.
+   */
+  public static void loadScreen(JsonObject game, String toLoadName)
+    throws IllegalStateException, NullPointerException
   {
-    
+      // grabs java object representation of screen
+    loadedScreen = game.get( toLoadName ).getAsJsonObject();
   }
 
   /**
@@ -127,21 +139,19 @@ public class DirectorySystemTesting extends JFrame {
    *
    * @param name The name of the game, which will be set to the name of the JSON
    * file representing the game.
-   * @return A boolean, with true representing a successful new game creation
-   * and false representing a failed one.
    *
    * @throws IOException If there's an error during file creation.
    * @throws FileSystemAlreadyExistsException If a game file with the given name
    * already exists inside the game files directory.
    */
-  public static boolean createNewGame(String name)
+  public static void createNewGame(String name)
     throws IOException, FileSystemAlreadyExistsException {
+    
     File gameFile = new File(GAMES_DIRECTORY_PATH + name + ".json");
 
     if (gameFile.createNewFile()) {
       System.out.println("Game File Created w/ Name: " + name + ".json");
 
-      return true;
     } else {
       throw (new FileSystemAlreadyExistsException("Game File w/ Name: " + name + ".json Already Exists"));
     }
@@ -177,47 +187,18 @@ public class DirectorySystemTesting extends JFrame {
   }
   
   @FunctionalInterface
-  public interface JsonObjectParser<T, U, V> {
-    public V apply(T t, U u) throws IllegalStateException, NoSuchElementException;
+  public interface JsonObjectParser<T, R> {
+    public R apply(T t) throws IllegalStateException, NullPointerException;
   }
   
-  public static JsonObjectParser< JsonObject, Boolean, ? > getSizingData = 
-  ( container, asJsonObject ) -> {
-      
-      // grabs java object representation of screen 
-    JsonObject sizingDataJsonObject = container.get( "sizingData" ).getAsJsonObject();
+  public static JsonObjectParser< Boolean, ? > getMetaData = 
+  ( asJsonObject ) -> {
     
-      // simply returns JsonObject representation if asJsonObject is true
-    if( asJsonObject ) { return sizingDataJsonObject; }
+    JsonObject jsonObject = loadedScreen.get( "metaData" ).getAsJsonObject();
     
-      // returns meta data as java object, type casted, after converting it from a Json Object
-    return GSON.fromJson( sizingDataJsonObject, sizingDataType );
-  };
-  
-  public static JsonObjectParser< JsonObject, Boolean, ? > getMetaData = 
-  ( container, asJsonObject ) -> {
-      
-      // grabs java object representation of metaData 
-    JsonObject metaDataJsonObject = container.get( "metaData" ).getAsJsonObject();
+    if( asJsonObject ) { return jsonObject; }
     
-      // simply returns JsonObject representation if asJsonObject is true
-    if( asJsonObject ) { return metaDataJsonObject; }
-    
-      // returns meta data as java object, type casted, after converting it from a Json Object
-    return GSON.fromJson( metaDataJsonObject, metaDataType );
-  };
-  
-  public static JsonObjectParser< JsonObject, Boolean, ? > getCellsData = 
-  ( container, asJsonObject ) -> {
-      
-      // grabs java object representation of screen 
-    JsonObject cellsDataJsonObject = container.get( "cellsData" ).getAsJsonObject();
-    
-      // simply returns JsonObject representation if asJsonObject is true
-    if( asJsonObject ) { return cellsDataJsonObject; }
-    
-      // returns meta data as java object, type casted, after converting it from a Json Object
-    return GSON.fromJson( cellsDataJsonObject, cellsDataType );
+    return GSON.fromJson( jsonObject, META_DATA_TYPE );
   };
 
   /**
@@ -235,7 +216,7 @@ public class DirectorySystemTesting extends JFrame {
     loadGame = new javax.swing.JMenuItem();
     deleteGame = new javax.swing.JMenuItem();
     gameAndScreenSeperator = new javax.swing.JPopupMenu.Separator();
-    loadScreen = new javax.swing.JMenu();
+    loadScreen = new javax.swing.JMenuItem();
     newScreen = new javax.swing.JMenuItem();
     saveScreen = new javax.swing.JMenuItem();
     deleteScreen = new javax.swing.JMenuItem();
@@ -323,10 +304,6 @@ public class DirectorySystemTesting extends JFrame {
     dialog.showDialog();
   }//GEN-LAST:event_newScreenActionPerformed
 
-  private void loadScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadScreenActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_loadScreenActionPerformed
-
   private void loadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameActionPerformed
     UIManager.put("FileChooser.readOnly", Boolean.TRUE);
     JFileChooser chooser = new JFileChooser(GAMES_DIRECTORY_PATH);
@@ -351,6 +328,12 @@ public class DirectorySystemTesting extends JFrame {
       }
     }
   }//GEN-LAST:event_loadGameActionPerformed
+
+  private void loadScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadScreenActionPerformed
+    LoadScreenDialog dialog = new LoadScreenDialog(this);
+
+    dialog.showDialog();
+  }//GEN-LAST:event_loadScreenActionPerformed
 
   /**
    * @param args the command line arguments
@@ -394,7 +377,7 @@ public class DirectorySystemTesting extends JFrame {
   private javax.swing.JMenu fileMenu;
   private javax.swing.JPopupMenu.Separator gameAndScreenSeperator;
   private javax.swing.JMenuItem loadGame;
-  private javax.swing.JMenu loadScreen;
+  private javax.swing.JMenuItem loadScreen;
   private javax.swing.JMenuBar menuBar;
   private javax.swing.JMenuItem newGame;
   private javax.swing.JMenuItem newScreen;
