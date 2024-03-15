@@ -231,7 +231,7 @@ public class DirectorySystemTesting extends JFrame {
     String json = gson.toJson( loadedGame );
     
     FileWriter writer = new FileWriter( 
-      GAMES_DIRECTORY_PATH + "Working.json"
+      loadedGameFilePath
     );
 
       // performs the overwrite action
@@ -239,7 +239,7 @@ public class DirectorySystemTesting extends JFrame {
     writer.flush();
     writer.close();
 
-    System.out.println("Write Successful");
+    System.out.println( "Write Successful" );
   }
   
   /**
