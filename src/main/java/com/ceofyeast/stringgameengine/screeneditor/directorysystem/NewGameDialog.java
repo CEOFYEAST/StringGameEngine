@@ -6,6 +6,7 @@ package com.ceofyeast.stringgameengine.screeneditor.directorysystem;
 
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.nio.file.FileSystemAlreadyExistsException;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -75,33 +76,33 @@ public class NewGameDialog extends JPanel {
    * constant.
    */
   private void handleShowResult(int showResult) {
-    if (showResult == JOptionPane.OK_OPTION) {
+    if ( showResult == JOptionPane.OK_OPTION ) 
+    {
       String gameName = gameNameField.getText();
 
-      gameNameField.setText("");
-
-      if (gameName == null || gameName.equals("")) {
+      try {
+        DirectorySystemTesting.createNewGame(gameName);
+      }
+      catch( FileSystemAlreadyExistsException | IllegalArgumentException e) {
+        e.printStackTrace();
+          
         JOptionPane.showMessageDialog(
-          parent,
-          "Supplied Name Is Invalid"
+          this,
+          e.getMessage()
         );
 
         showDialog();
-      } else {
+      }
+      catch( Exception e ) {
+        e.printStackTrace();
+          
+        JOptionPane.showMessageDialog(
+          this,
+          e.getMessage(),
+          "Error", JOptionPane.ERROR_MESSAGE
+        );
 
-        try {
-          DirectorySystemTesting.createNewGame(gameName);
-        } catch (Exception e) {
-          e.printStackTrace();
-          
-          JOptionPane.showMessageDialog(
-            this,
-            e.getMessage(),
-            "Error", JOptionPane.ERROR_MESSAGE
-          );
-          
-          showDialog();
-        }
+        showDialog();
       }
     }
   }

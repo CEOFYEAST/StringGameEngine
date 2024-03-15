@@ -93,24 +93,33 @@ public class NewScreenDialog extends JPanel {
    * constant.
    */
   private void handleShowResult(int showResult) {
-    if (showResult == JOptionPane.OK_OPTION) {
+    if (showResult == JOptionPane.OK_OPTION) 
+    {
       String screenName = screenNameField.getText();
-      int columnCount = (Integer) columnCountField.getValue();
       int rowCount = (Integer) rowCountField.getValue();
-
-      screenNameField.setText("");
-      columnCountField.setValue(0);
-      rowCountField.setValue(0);
-
-      if (screenName == null || screenName.equals("")) {
+      int columnCount = (Integer) columnCountField.getValue();
+      
+      try {
+        DirectorySystemTesting.createNewScreen( screenName, rowCount, columnCount );
+      }
+      catch( IllegalArgumentException e ) {
+        e.printStackTrace();
+          
         JOptionPane.showMessageDialog(
-          parent,
-          "Supplied Name Is Invalid"
+          this,
+          e.getMessage()
         );
 
         showDialog();
-      } else {
+      }
+      catch( Exception e ) {
+        JOptionPane.showMessageDialog(
+          parent,
+          e.getMessage(),
+          "Error", JOptionPane.ERROR_MESSAGE
+        );
 
+        showDialog();
       }
     }
   }

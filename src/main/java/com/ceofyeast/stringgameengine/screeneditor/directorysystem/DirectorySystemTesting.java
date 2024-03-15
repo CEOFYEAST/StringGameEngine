@@ -5,24 +5,26 @@
 package com.ceofyeast.stringgameengine.screeneditor.directorysystem;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
+import java.awt.Point;
+
 import java.io.File;
-import java.io.IOException;
+import java.io.FileWriter;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.InvalidPathException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystemAlreadyExistsException;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import java.awt.Point;
+import java.util.Set;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -40,10 +42,11 @@ public class DirectorySystemTesting extends JFrame {
   /**
    * Path to the directory all game files are stored in.
    */
-  private static final String GAMES_DIRECTORY_PATH = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/games/";
+  public static final String GAMES_DIRECTORY_PATH = "src/main/java/com/ceofyeast/stringgameengine/screeneditor/games/";
   
-  private static final Gson GSON = new Gson();
+  public static final Gson GSON = new Gson();
   
+  public static String loadedGameFilePath = null;
   public static JsonObject loadedGame = null;
   public static JsonObject loadedScreen = null;
   
@@ -65,23 +68,21 @@ public class DirectorySystemTesting extends JFrame {
    * into a JsonObject.
    *
    * @param toLoadName The name of the JSON file to load.
-   * @return The JsonObject representation of the file.
    *
-   * @throws InvalidPathException If an error occurs when building a path using
-   * toLoadName and GAMES_DIRECTORY_PATH.
-   * @throws IOException If there's an error fetching/reading the file
-   * associated with toLoadName.
-   * @throws JsonParseException If the file associated with toLoadName cannot be
-   * parsed into a JsonElement.
-   * @throws IllegalStateException If the JsonElement representation of the file
-   * associated with toLoadNamecannot be parsed into a JsonObject.
+   * @throws Exception Potential exceptions aren't caught within the method.
    */
-  private static void loadGame(String toLoadName)
-    throws IOException, IllegalStateException, JsonParseException, InvalidPathException {
+  public static void loadGame(String toLoadName)
+    throws Exception 
+  {
+    
+    String path = GAMES_DIRECTORY_PATH + toLoadName + ".json";
+    
+    loadedGameFilePath = path;  
+      
     // Read JSON file content into a String
     String toLoadJsonString = new String(
       Files.readAllBytes(
-        Paths.get(GAMES_DIRECTORY_PATH + toLoadName + ".json")
+        Paths.get( path )
       )
     );
 
@@ -93,18 +94,15 @@ public class DirectorySystemTesting extends JFrame {
   /**
    * Attempts to load the given JSON game file into a JsonObject.
    *
-   * @param toLoadName The name of the JSON file to load.
-   * @return The JsonObject representation of the file.
+   * @param toLoad The JSON file to load.
    *
-   * @throws InvalidPathException If an error occurs when building a path using
-   * toLoad.
-   * @throws IOException If there's an error accessing/reading toLoad.
-   * @throws JsonParseException If toLoad cannot be parsed into a JsonElement.
-   * @throws IllegalStateException If toLoad's JsonElement representation cannot
-   * be parsed into a JsonObject.
+   * @throws Exception Potential exceptions aren't caught within the method.
    */
-  public static void loadGame(File toLoad)
-    throws InvalidPathException, IOException, JsonParseException, IllegalStateException {
+  public static void loadGame( File toLoad )
+    throws Exception {
+    
+    loadedGameFilePath = toLoad.getPath();
+    
     // Read JSON file content into a String
     String toLoadJsonString = new String(
       Files.readAllBytes(
@@ -121,15 +119,21 @@ public class DirectorySystemTesting extends JFrame {
    * Loads a screen with the given name into the loadedScreen member variable; the screen is grabbed from 
    * loadedGame.
    * 
-   * @param game The game file to load the screen from.
    * @param toLoadName The name of the screen to load.
-   * @return A JsonObject representation of the loaded screen.
+   * 
+   * @throws Exception Potential exceptions aren't caught within the method.
    */
-  public static void loadScreen(JsonObject game, String toLoadName)
-    throws IllegalStateException, NullPointerException
+  public static void loadScreen( String toLoadName )
+    throws Exception
   {
+    
+    if( toLoadName == null || toLoadName.equals( "" ) )
+    {
+      throw( new IllegalArgumentException( "Supplied Screen Name Is Invalid" ) );
+    }
+    
       // grabs java object representation of screen
-    loadedScreen = game.get( toLoadName ).getAsJsonObject();
+    loadedScreen = loadedGame.get( toLoadName ).getAsJsonObject();
   }
 
   /**
@@ -140,55 +144,126 @@ public class DirectorySystemTesting extends JFrame {
    * @param name The name of the game, which will be set to the name of the JSON
    * file representing the game.
    *
-   * @throws IOException If there's an error during file creation.
-   * @throws FileSystemAlreadyExistsException If a game file with the given name
-   * already exists inside the game files directory.
+   * @throws Exception Potential exceptions aren't caught within the method.
    */
   public static void createNewGame(String name)
-    throws IOException, FileSystemAlreadyExistsException {
+    throws Exception 
+  {
     
-    File gameFile = new File(GAMES_DIRECTORY_PATH + name + ".json");
+    if( name == null || name.equals( "" ) )
+    {
+      throw( new IllegalArgumentException( "Supplied Game Name Is Invalid" ) );
+    }
+    
+    File gameFile = new File( GAMES_DIRECTORY_PATH + name + ".json" );
 
-    if (gameFile.createNewFile()) {
-      System.out.println("Game File Created w/ Name: " + name + ".json");
+    if ( gameFile.createNewFile() ) {
+      System.out.println( "Game File Created w/ Name: " + name + ".json" );
 
+      Files.write( gameFile.toPath(), "{}".getBytes( StandardCharsets.UTF_8 ) );
+      
     } else {
-      throw (new FileSystemAlreadyExistsException("Game File w/ Name: " + name + ".json Already Exists"));
+      throw ( new FileSystemAlreadyExistsException( "Game File w/ Name: " + name + ".json Already Exists" ) );
     }
   }
   
   /**
-   * Creates a new screen hash map, itself containing two hash maps that represent the screen's sizing
-   * and cell data.
+   * Creates a new, empty screen and appends said screen to loadedGame.
+   *   
+   * @param name The name of the new screen.
+   * @param rowCount The row count of the new screen.
+   * @param columnCount The column count of the new screen.
    * 
-   * @return The new screen hash map.
+   * @throws Exception Potential exceptions aren't caught within the method.
    */
-  public static Map createNewScreen()
+  public static void createNewScreen( String name, int rowCount, int columnCount )
+    throws Exception
   {
-    HashMap toReturn = new HashMap<String, Object>();
+    if( name == null || name.equals( "" ) )
+    {
+      throw( new IllegalArgumentException("Invalid Name") );
+    }
+    
+    if( rowCount <= 0 || columnCount <= 0 )
+    {
+      throw( new IllegalArgumentException("Invalid Row Or Col. Count") );
+    }
+    
+    if( Arrays.asList( getScreenNames() ).contains( name ) )
+    {
+      throw( new IllegalArgumentException("Screen With Name: " + name + " Already Exists In loadedGame") );
+    }
+    
+    HashMap newScreen = new HashMap<String, Object>();
     
       // initializes the meta-data hash map
     HashMap metaDataHashMap = new HashMap<String, String>();
-    metaDataHashMap.put("name", null);
+    metaDataHashMap.put( "name", name );
     
       // initializes the sizing hash map
     HashMap sizingHashMap = new HashMap<String, Integer>();
-    sizingHashMap.put("rowCount", null);
-    sizingHashMap.put("colCount", null);
+    sizingHashMap.put( "rowCount", rowCount );
+    sizingHashMap.put( "columnCount", columnCount );
 
       // initializes the cells hash map
     HashMap cellsHashMap = new HashMap<Point, HashMap<String, Object>>();
     
-    toReturn.put( "metaData", metaDataHashMap );
-    toReturn.put( "sizingData", sizingHashMap );
-    toReturn.put( "cellsData", cellsHashMap );
+    newScreen.put( "metaData", metaDataHashMap );
+    newScreen.put( "sizingData", sizingHashMap );
+    newScreen.put( "cellsData", cellsHashMap );
     
-    return toReturn;
+    JsonElement jsonElement = GSON.toJsonTree( newScreen );
+    JsonObject jsonObject = ( JsonObject ) jsonElement;
+    
+    loadedGame.add( name, jsonObject );
+  }
+  
+  /**
+   * Writes the contents of loadedGame to its game file.
+   * 
+   * @throws Exception Potential exceptions aren't caught within the method.
+   */
+  public static void writeGame()
+    throws Exception
+  {
+        // writes loadedGame to json String using Gsonbuilder
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    String json = gson.toJson( loadedGame );
+    
+    FileWriter writer = new FileWriter( 
+      GAMES_DIRECTORY_PATH + "Working.json"
+    );
+
+      // performs the overwrite action
+    writer.write( json );
+    writer.flush();
+    writer.close();
+
+    System.out.println("Write Successful");
+  }
+  
+  /**
+   * Gets all the names of the screens inside loadedGame.
+   * 
+   * @return A String array containing the names of every screen inside loadedGame.
+   */
+  public static String[] getScreenNames()
+  {
+    if( loadedGame == null )
+    {
+      return null;
+    }
+    
+    Set<String> availableScreenNames = DirectorySystemTesting.loadedGame.keySet();
+    
+    return availableScreenNames.toArray( 
+      new String[availableScreenNames.size()] 
+    );
   }
   
   @FunctionalInterface
   public interface JsonObjectParser<T, R> {
-    public R apply(T t) throws IllegalStateException, NullPointerException;
+    public R apply(T t);
   }
   
   public static JsonObjectParser< Boolean, ? > getMetaData = 

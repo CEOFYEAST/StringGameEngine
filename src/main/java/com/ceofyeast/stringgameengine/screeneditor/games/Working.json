@@ -1,1 +1,12 @@
-{}
+{
+  "chuzzer": {
+    "metaData": {
+      "name": "chuzzer"
+    },
+    "sizingData": {
+      "rowCount": 1,
+      "columnCount": 1
+    },
+    "cellsData": {}
+  }
+}

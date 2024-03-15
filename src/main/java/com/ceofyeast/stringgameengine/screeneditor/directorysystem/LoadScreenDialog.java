@@ -8,12 +8,9 @@ import java.awt.Container;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JTextField;
-
-import java.util.Set;
 import javax.swing.JOptionPane;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
 
 /**
  * Class representing a dialog used to display a screen object loading menu.
@@ -29,11 +26,6 @@ public class LoadScreenDialog extends JPanel {
    * The parent of the dialog, properly initialized by the constructor.
    */
   private Container parent = null;
-  
-  /**
-   * Displays the name of the screen currently selected to be loaded. 
-   */
-  private JTextField screenSelected = new JTextField("");
   
   /**
    * Contains the names of the screens in the loaded game in button form.
@@ -60,9 +52,9 @@ public class LoadScreenDialog extends JPanel {
 
     this.parent = parent;
    
-    String[] availableScreenNames = (String[]) DirectorySystemTesting.loadedGame.keySet().toArray();
-    availableScreens = new JList<>( availableScreenNames );
+    availableScreens = new JList<>( DirectorySystemTesting.getScreenNames() );
     availableScreens.setVisibleRowCount( 10 );
+    availableScreens.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     
       // constructs scroll pane, used to scroll vertically through fontsList
     javax.swing.JScrollPane availableScreensScrollPane = new javax.swing.JScrollPane( availableScreens );
@@ -72,8 +64,6 @@ public class LoadScreenDialog extends JPanel {
       javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER 
     );
     
-    
-    add(new JLabel("Available Screens"));
     add(availableScreensScrollPane);
   }
   
@@ -89,7 +79,46 @@ public class LoadScreenDialog extends JPanel {
       JOptionPane.OK_CANCEL_OPTION,
       JOptionPane.PLAIN_MESSAGE
     );
+    
+    handleShowResult(showResult);
+  }
+  
+  /**
+   * Handles the cases after the dialog is closed.
+   *
+   * @param showResult The way the dialog was closed, is a JOptionPane option
+   * constant.
+   */
+  private void handleShowResult(int showResult)
+  {
+    if (showResult == JOptionPane.OK_OPTION) 
+    {
+      String selectedScreenName = (String) availableScreens.getSelectedValue();
 
-    //handleShowResult(showResult);
+      try {
+        DirectorySystemTesting.loadScreen( selectedScreenName );
+      } 
+      catch( IllegalArgumentException e ) {
+        e.printStackTrace();
+        
+        JOptionPane.showMessageDialog(
+          this,
+          "No screen was selected."
+        );
+  
+        showDialog();
+      }
+      catch( Exception e ) {
+        e.printStackTrace();
+
+        JOptionPane.showMessageDialog(
+          this,
+          e.getMessage(),
+          "Error", JOptionPane.ERROR_MESSAGE
+        );
+
+        showDialog();
+      }
+    }
   }
 }
