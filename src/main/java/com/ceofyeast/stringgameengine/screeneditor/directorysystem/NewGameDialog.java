@@ -4,7 +4,6 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor.directorysystem;
 
-import java.awt.Container;
 import java.awt.GridLayout;
 import java.nio.file.FileSystemAlreadyExistsException;
 
@@ -14,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * Class representing a dialog used to display a screen object creation menu.
+ * Singleton class representing a dialog used to display a screen object creation menu.
  * 
  * <p>The class itself represents a JPanel with various fields, which is then
  *    displayed inside JOptionPane upon calling showDialog.
@@ -24,42 +23,47 @@ import javax.swing.JTextField;
 public class NewGameDialog extends JPanel {
 
   /**
-   * The parent of the dialog, properly initialized by the constructor.
+   * The singleton instance of the dialog used in the showDialog method. 
    */
-  private Container parent = null;
+  private static NewGameDialog singletonInstance = null;
 
   /**
    * Used to set name information for the new game being created.
    */
-  private JTextField gameNameField = new JTextField("");
+  private final JTextField gameNameField = new JTextField("");
 
   /**
    * Constructs a NewGameDialog.
-   *
-   * @param parent The parent of the dialog.
-   *
-   * @Throws ArgumentException If parent is null.
    */
-  public NewGameDialog(Container parent) {
+  private NewGameDialog() {
     super(new GridLayout(0, 1));
-
-    if (parent == null) {
-      throw (new IllegalArgumentException());
-    }
-
-    this.parent = parent;
 
     add(new JLabel("Game Name:"));
     add(gameNameField);
   }
 
   /**
-   * Shows the NewScreenDialog, calling HandleShowResult upon the dialog
+   * Shows the NewGameDialog.
+   */
+  public static void showDialog()
+  {
+    if( singletonInstance == null )
+    {
+      singletonInstance = new NewGameDialog();
+    }
+    
+    singletonInstance.handleShowDialog();
+    
+    singletonInstance = null;
+  }
+  
+  /**
+   * Performs the actual work of showing the NewGameDialog, and calls handleShowResult upon the dialog
    * returning.
    */
-  public void showDialog() {
+  private void handleShowDialog() {
     int showResult = JOptionPane.showConfirmDialog(
-      parent,
+      null,
       this,
       "New Game Menu",
       JOptionPane.OK_CANCEL_OPTION,
@@ -91,7 +95,7 @@ public class NewGameDialog extends JPanel {
           e.getMessage()
         );
 
-        showDialog();
+        handleShowDialog();
       }
       catch( Exception e ) {
         e.printStackTrace();
@@ -102,7 +106,7 @@ public class NewGameDialog extends JPanel {
           "Error", JOptionPane.ERROR_MESSAGE
         );
 
-        showDialog();
+        handleShowDialog();
       }
     }
   }

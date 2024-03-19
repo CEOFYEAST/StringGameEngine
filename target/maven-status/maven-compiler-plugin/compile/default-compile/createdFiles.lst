@@ -13,6 +13,7 @@ com\ceofyeast\stringgameengine\screeneditor\directorysystem\DirectorySystemTesti
 com\ceofyeast\stringgameengine\screeneditor\CellsMatrixViewMode$CellViewMode.class
 com\ceofyeast\stringgameengine\screeneditor\directorysystem\NewGameDialog.class
 com\ceofyeast\stringgameengine\screeneditor\directorysystem\DirectorySystemTesting$10.class
+com\ceofyeast\stringgameengine\screeneditor\directorysystem\LoadGameDialog.class
 com\ceofyeast\stringgameengine\Screen.class
 com\ceofyeast\stringgameengine\screeneditor\directorysystem\DirectorySystemTesting$5.class
 com\ceofyeast\stringgameengine\screeneditor\Cell.class

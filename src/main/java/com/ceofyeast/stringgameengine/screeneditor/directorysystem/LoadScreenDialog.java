@@ -4,7 +4,6 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor.directorysystem;
 
-import java.awt.Container;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
@@ -13,7 +12,7 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 /**
- * Class representing a dialog used to display a screen object loading menu.
+ * Singleton class representing a dialog used to display a screen object loading menu.
  * 
  * <p>The class itself represents a JPanel with various fields, which is then
  *    displayed inside JOptionPane upon calling showDialog.
@@ -21,11 +20,10 @@ import javax.swing.ListSelectionModel;
  * @author Benton Diebold (ceofyeast)
  */
 public class LoadScreenDialog extends JPanel {
-  
   /**
-   * The parent of the dialog, properly initialized by the constructor.
+   * The singleton instance of the dialog that's used in the showDialog method. 
    */
-  private Container parent = null;
+  private static LoadScreenDialog singletonInstance = null;
   
   /**
    * Contains the names of the screens in the loaded game in button form.
@@ -34,27 +32,14 @@ public class LoadScreenDialog extends JPanel {
   
   /**
    * Constructs a NewGameDialog.
-   * 
-   * @param parent The parent of the dialog.
-   * 
-   * @throws IllegalArgumentException If the supplied parent is null.
-   * @throws NullPointerException If no game has been loaded.
    */
-  public LoadScreenDialog(Container parent) 
-    throws IllegalArgumentException, NullPointerException  
+  private LoadScreenDialog()   
   {
-    
-    super(new GridLayout(0, 1));
-
-    if (parent == null) {
-      throw (new IllegalArgumentException());
-    }
-
-    this.parent = parent;
+    super( new GridLayout( 0, 1 ) );
    
     availableScreens = new JList<>( DirectorySystemTesting.getScreenNames() );
     availableScreens.setVisibleRowCount( 10 );
-    availableScreens.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    availableScreens.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
     
       // constructs scroll pane, used to scroll vertically through fontsList
     javax.swing.JScrollPane availableScreensScrollPane = new javax.swing.JScrollPane( availableScreens );
@@ -67,20 +52,32 @@ public class LoadScreenDialog extends JPanel {
     add(availableScreensScrollPane);
   }
   
+  public static void showDialog()
+  {
+    if( singletonInstance == null )
+    {
+      singletonInstance = new LoadScreenDialog();
+    }
+    
+    singletonInstance.handleShowDialog();
+    
+    singletonInstance = null;
+  }
+  
   /**
    * Shows the NewScreenDialog, calling HandleShowResult upon the dialog
    * returning.
    */
-  public void showDialog() {
+  private void handleShowDialog() {
     int showResult = JOptionPane.showConfirmDialog(
-      parent,
+      null,
       this,
       "Load Screen Menu",
       JOptionPane.OK_CANCEL_OPTION,
       JOptionPane.PLAIN_MESSAGE
     );
     
-    handleShowResult(showResult);
+    handleShowResult( showResult );
   }
   
   /**
@@ -89,7 +86,7 @@ public class LoadScreenDialog extends JPanel {
    * @param showResult The way the dialog was closed, is a JOptionPane option
    * constant.
    */
-  private void handleShowResult(int showResult)
+  private void handleShowResult( int showResult )
   {
     if (showResult == JOptionPane.OK_OPTION) 
     {
@@ -106,7 +103,7 @@ public class LoadScreenDialog extends JPanel {
           "No screen was selected."
         );
   
-        showDialog();
+        handleShowDialog();
       }
       catch( Exception e ) {
         e.printStackTrace();
@@ -117,7 +114,7 @@ public class LoadScreenDialog extends JPanel {
           "Error", JOptionPane.ERROR_MESSAGE
         );
 
-        showDialog();
+        handleShowDialog();
       }
     }
   }

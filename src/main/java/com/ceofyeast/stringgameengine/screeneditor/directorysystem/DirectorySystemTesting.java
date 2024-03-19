@@ -27,10 +27,6 @@ import java.util.Set;
 import java.util.Arrays;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.UIManager;
 
 /**
  * Temporary test class representing the file system structure that will be put
@@ -368,46 +364,19 @@ public class DirectorySystemTesting extends JFrame {
    * @param evt Contains information about the event.
    */
   private void newGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameActionPerformed
-    NewGameDialog dialog = new NewGameDialog(this);
-
-    dialog.showDialog();
+    NewGameDialog.showDialog();
   }//GEN-LAST:event_newGameActionPerformed
 
   private void newScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScreenActionPerformed
-    NewScreenDialog dialog = new NewScreenDialog(this);
-
-    dialog.showDialog();
+    NewScreenDialog.showDialog();
   }//GEN-LAST:event_newScreenActionPerformed
 
   private void loadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameActionPerformed
-    UIManager.put("FileChooser.readOnly", Boolean.TRUE);
-    JFileChooser chooser = new JFileChooser(GAMES_DIRECTORY_PATH);
-
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON", "json");
-    chooser.setFileFilter(filter);
-
-    chooser.setAcceptAllFileFilterUsed(false);
-
-    int returnVal = chooser.showOpenDialog(this);
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-      File gameFile = chooser.getSelectedFile();
-
-      try {
-        loadGame(gameFile);
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(
-          this,
-          e.getMessage(),
-          "Error", JOptionPane.ERROR_MESSAGE
-        );
-      }
-    }
+    LoadGameDialog.showDialog();
   }//GEN-LAST:event_loadGameActionPerformed
 
   private void loadScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadScreenActionPerformed
-    LoadScreenDialog dialog = new LoadScreenDialog(this);
-
-    dialog.showDialog();
+    LoadScreenDialog.showDialog();
   }//GEN-LAST:event_loadScreenActionPerformed
 
   /**

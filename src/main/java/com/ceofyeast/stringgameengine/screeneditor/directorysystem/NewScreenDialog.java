@@ -4,7 +4,6 @@
  */
 package com.ceofyeast.stringgameengine.screeneditor.directorysystem;
 
-import java.awt.Container;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -15,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 /**
- * Class representing a dialog used to display a screen object creation menu.
+ * Singleton class representing a dialog used to display a screen object creation menu.
  * 
  * <p>The class itself represents a JPanel with various fields, which is then
  *    displayed inside JOptionPane upon calling showDialog.
@@ -25,40 +24,30 @@ import javax.swing.SpinnerNumberModel;
 public class NewScreenDialog extends JPanel {
 
   /**
-   * The parent of the dialog, properly initialized by the constructor.
+   * The singleton instance of the dialog used in the showDialog method. 
    */
-  private Container parent = null;
+  private static NewScreenDialog singletonInstance = null;
 
   /**
    * Used to set the name of the new screen being created.
    */
-  private JTextField screenNameField = new JTextField("");
+  private final JTextField screenNameField = new JTextField("");
 
   /**
    * Used to set the column count for the new screen being created.
    */
-  private JSpinner columnCountField = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
+  private final JSpinner columnCountField = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
 
   /**
    * Used to set the row count for the new screen being created.
    */
-  private JSpinner rowCountField = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
+  private final JSpinner rowCountField = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
 
   /**
    * Constructs a NewScreenDialog.
-   *
-   * @param parent The parent of the dialog.
-   *
-   * @Throws ArgumentException If parent is null.
    */
-  public NewScreenDialog(Container parent) {
+  private NewScreenDialog() {
     super(new GridLayout(0, 1));
-
-    if (parent == null) {
-      throw (new IllegalArgumentException());
-    }
-
-    this.parent = parent;
 
     add(new JLabel("Screen Name:"));
     add(screenNameField);
@@ -70,13 +59,25 @@ public class NewScreenDialog extends JPanel {
     add(rowCountField);
   }
 
+  public static void showDialog()
+  {
+    if( singletonInstance == null )
+    {
+      singletonInstance = new NewScreenDialog();
+    }
+    
+    singletonInstance.handleShowDialog();
+    
+    singletonInstance = null;
+  }
+  
   /**
    * Shows the NewScreenDialog, calling HandleShowResult upon the dialog
    * returning.
    */
-  public void showDialog() {
+  private void handleShowDialog() {
     int showResult = JOptionPane.showConfirmDialog(
-      parent,
+      null,
       this,
       "New Game Menu",
       JOptionPane.OK_CANCEL_OPTION,
@@ -110,16 +111,16 @@ public class NewScreenDialog extends JPanel {
           e.getMessage()
         );
 
-        showDialog();
+        handleShowDialog();
       }
       catch( Exception e ) {
         JOptionPane.showMessageDialog(
-          parent,
+          null,
           e.getMessage(),
           "Error", JOptionPane.ERROR_MESSAGE
         );
 
-        showDialog();
+        handleShowDialog();
       }
     }
   }
